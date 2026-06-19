@@ -188,6 +188,14 @@ details.expl .body{padding:0 0 16px;font-size:14px;color:#5b5448}
 .lawlist .row:last-child{border-bottom:none}
 .lawlist .art{font-weight:700;color:#245f43}
 .lawlist q{font-style:italic;color:#6b6356}
+.enpf-cmp{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}
+@media(max-width:560px){.enpf-cmp{grid-template-columns:1fr}}
+.enpf-col{border:1px solid var(--line);border-radius:12px;padding:14px;background:#fffefb}
+.enpf-col.ok{border-color:var(--green);background:var(--green-soft)}
+.enpf-col .t{font-size:12.5px;color:var(--muted);font-weight:600}
+.enpf-col .big{font-size:20px;font-weight:800;margin:5px 0;letter-spacing:-.02em}
+.enpf-col.ok .big{color:var(--green-d)}
+.enpf-col .d{font-size:12.5px;color:#5b5448;line-height:1.5}
 </style>
 </head>
 <body>
@@ -361,6 +369,15 @@ details.expl .body{padding:0 0 16px;font-size:14px;color:#5b5448}
       <div class="chartbox"><canvas id="chartYears"></canvas></div>
     </div>
 
+    <!-- chart: annuity vs ЕНПФ schedule -->
+    <div class="card">
+      <h2>Аннуитет или забрать из ЕНПФ по графику?</h2>
+      <p class="muted small" style="margin-top:2px">Сравнение на ваши накопления: аннуитет платит пожизненно, а выплаты из ЕНПФ по графику со временем заканчиваются.</p>
+      <div class="chartbox"><canvas id="chartEnpf"></canvas></div>
+      <div class="legendrow"><span><span class="dot" style="background:#2f7a55"></span>аннуитет — пожизненно</span><span><span class="dot" style="background:#c1933b"></span>выплаты ЕНПФ по графику</span></div>
+      <div id="enpfSummary" class="small" style="margin-top:12px"></div>
+    </div>
+
     <!-- table -->
     <div class="card">
       <h2>Таблица выплат по годам</h2>
@@ -517,7 +534,7 @@ function showToast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('s
 function plural(n,one,few,many){const m10=n%10,m100=n%100;if(m10===1&&m100!==11)return one;if(m10>=2&&m10<=4&&(m100<10||m100>=20))return few;return many;}
 
 /* ================= РЕНДЕР РЕЗУЛЬТАТОВ ================= */
-let chCum=null, chY=null, chCompare=null;
+let chCum=null, chY=null, chCompare=null, chEnpf=null;
 
 function showErr(msg){const e=$('#errbox');e.textContent=msg;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),5000);}
 
@@ -577,6 +594,7 @@ function render(){
   renderLife(r);
   /* charts */
   drawCharts(r);
+  drawEnpf(r);
   /* table */
   renderTable(r);
   /* joint */
@@ -686,6 +704,57 @@ function drawCharts(r){
         y:{grid:{color:GRID},ticks:{color:AX,callback:v=>v>=1e6?(v/1e6).toFixed(1)+' млн':Math.round(v/1000)+'k'}}}},
     plugins:[gpEndIdx>0?vGpLine(gpEndIdx,'конец гарантии'):{id:'noop'}]});
   }catch(e){console.error('chart error',e);}
+}
+
+function graphEnpf(r){
+  const arr=mortArr(r.dis,r.oppv,r.g);
+  const startAge=r.startAge;
+  const ax=factorE2(arr,startAge,0,r.idx);
+  const payFirst=Math.max(Math.round(r.sav/(12*ax)), PARAM.min_pen);
+  let rem=r.sav, payM=payFirst, exhaustAge=null;
+  const series=[];
+  for(let age=startAge; age<=PARAM.seriesEnd; age++){
+    if(rem<=0){ series.push({age,monthly:0,rem:0}); continue; }
+    const grown=rem*(1+PARAM.i);
+    const payY=payM*12;
+    let monthlyShown, remEnd;
+    if(payY>=grown){ monthlyShown=Math.round(grown/12); remEnd=0; if(exhaustAge===null)exhaustAge=age; }
+    else { monthlyShown=payM; remEnd=grown-payY; }
+    series.push({age,monthly:monthlyShown,rem:Math.max(0,Math.round(remEnd))});
+    rem=remEnd; payM=Math.round(payM*(1+r.idx));
+  }
+  if(exhaustAge===null) exhaustAge=PARAM.seriesEnd;
+  return {payFirst,exhaustAge,series};
+}
+
+function drawEnpf(r){
+  const sum=$('#enpfSummary'); if(!sum)return;
+  const g=graphEnpf(r);
+  const annMonthly=r.series.map(y=>({age:y.age,m:y.monthly}));
+  const labels=r.series.map(y=>y.age);
+  const enpfMap={}; g.series.forEach(x=>enpfMap[x.age]=x.monthly);
+  const enpfData=labels.map(a=>enpfMap[a]!=null?enpfMap[a]:0);
+  const exIdx=labels.indexOf(g.exhaustAge);
+  if(typeof Chart!=='undefined'){
+    try{
+      if(chEnpf)chEnpf.destroy();
+      chEnpf=new Chart($('#chartEnpf'),{type:'line',
+        data:{labels,datasets:[
+          {label:'аннуитет',data:annMonthly.map(x=>x.m),borderColor:'#2f7a55',backgroundColor:'rgba(47,122,85,.10)',fill:true,tension:.3,borderWidth:2.5,pointRadius:0},
+          {label:'ЕНПФ по графику',data:enpfData,borderColor:'#c1933b',backgroundColor:'rgba(193,147,59,.08)',fill:true,tension:.3,borderWidth:2.5,pointRadius:0,borderDash:[5,3]}
+        ]},
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},
+          tooltip:{callbacks:{label:c=>c.dataset.label+': '+(c.raw>0?fmt(c.raw)+' ₸/мес':'выплаты закончились')}}},
+          scales:{x:{grid:{display:false},ticks:{color:'#a99e8d',maxTicksLimit:10,maxRotation:0}},
+            y:{grid:{color:'#ece2d2'},ticks:{color:'#a99e8d',callback:v=>v>=1e6?(v/1e6).toFixed(1)+' млн':Math.round(v/1000)+'k'}}}},
+        plugins:[ exIdx>0?vGpLine(exIdx,'ЕНПФ закончился'):{id:'noop2'} ]});
+    }catch(e){console.error('enpf chart',e);}
+  }
+  sum.innerHTML='<div class="enpf-cmp"><div class="enpf-col ok"><div class="t">Пенсионный аннуитет</div>'+
+    '<div class="big">'+fmt(r.payFirst)+' ₸/мес</div><div class="d">пожизненно, не закончится'+(r.bonus>0?'<br>+ бонус '+fmt(r.bonus)+' ₸ сверху':'')+'</div></div>'+
+    '<div class="enpf-col"><div class="t">Выплаты из ЕНПФ по графику</div>'+
+    '<div class="big">'+fmt(g.payFirst)+' ₸/мес</div><div class="d">закончатся к <b>'+g.exhaustAge+' годам</b><br>дальше — только госбазовая и солидарная пенсия</div></div></div>'+
+    '<div class="tiny muted" style="margin-top:8px">Расчёт ЕНПФ по графику — по официальной методике РК (доходность 9%, индексация 8%). Это ориентир; точную выплату по графику показывает калькулятор ЕНПФ.</div>';
 }
 
 function renderTable(r){
