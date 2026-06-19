@@ -329,7 +329,8 @@ details.expl .body{padding:0 0 16px;font-size:14px;color:#5b5448}
         <div class="grid2">
           <div class="field" style="margin-top:0">
             <label>Супруг(а)</label>
-            <div class="seg green" id="seg-sg"><button data-v="f" class="on">женщина</button><button data-v="m">мужчина</button></div>
+            <div id="sp-gender" style="display:inline-flex;align-items:center;padding:11px 16px;border:1.5px solid var(--line);border-radius:12px;background:#f7faf8;font-weight:600">женщина</div>
+            <div class="hint" style="margin-top:6px">противоположный пол — аннуитет на двоих оформляется на супругов</div>
           </div>
           <div class="field" style="margin-top:0">
             <label>Возраст супруга(и)</label>
@@ -486,6 +487,12 @@ function factorE2(arr,startAge,gp,idx){
   return E2;
 }
 /* основной расчёт; возвращает {ok, ...} или {ok:false,error} */
+function femPensionAge(age){
+  const by=2026-age;
+  const reqIn=y=> y<=2017?58 : (y>=2031?63 : ({2018:58.5,2019:59,2020:59.5,2021:60,2022:60.5,2023:61,2024:61,2025:61,2026:61,2027:61,2028:61.5,2029:62,2030:62.5})[y]||61);
+  for(let a=58;a<=63;a+=0.5){ const yr=Math.floor(by+a); if(a>=reqIn(yr)) return Math.round(a); }
+  return 63;
+}
 function engineCalc(IN){
   const g=IN.g, dis=IN.dis||'none', oppv=IN.oppv?1:0, age=IN.age;
   const gp=IN.gp!=null?IN.gp:0, idx=IN.idx!=null?IN.idx:0.08, bon=IN.bon!=null?IN.bon:0.11;
@@ -525,7 +532,7 @@ function engineCalc(IN){
   const bonusAtThr=Math.round(thrCur*bon);
   const shortAmt=Math.max(0,thrCur-sav);
   const almostEnough = !enough && shortAmt>0 && shortAmt<=bonusAtThr;
-  const pensionAge = g==='m'?63:61;
+  const pensionAge = g==='m'?63:femPensionAge(age);
   let gotBeforePension=0;
   if(startAge<pensionAge){ const rb=series.filter(y=>y.age<pensionAge); gotBeforePension=rb.length?rb[rb.length-1].acc:0; }
   return {ok:true, g,dis,oppv,age,defer,startAge,gp,idx,bon,sav,
@@ -737,13 +744,14 @@ function drawCharts(r){
 
 function graphEnpf(r){
   const arr=mortArr(r.dis,r.oppv,r.g);
-  const startAge=r.startAge;
-  const ax=factorE2(arr,startAge,0,r.idx);
-  const savStart=r.sav*Math.pow(1+PARAM.i, r.defer||0);
+  const enpfStart=Math.max(r.age, r.pensionAge);
+  const ax=factorE2(arr,enpfStart,0,r.idx);
+  const savStart=r.sav*Math.pow(1+PARAM.i, enpfStart-r.age);
   const payFirst=Math.max(Math.round(savStart/(12*ax)), PARAM.min_pen);
   let rem=savStart, payM=payFirst, exhaustAge=null;
   const series=[];
-  for(let age=startAge; age<=PARAM.seriesEnd; age++){
+  for(let age=r.startAge; age<=PARAM.seriesEnd; age++){
+    if(age<enpfStart){ series.push({age,monthly:0,rem:Math.round(r.sav*Math.pow(1+PARAM.i,age-r.age))}); continue; }
     if(rem<=0){ series.push({age,monthly:0,rem:0}); continue; }
     const grown=rem*(1+PARAM.i);
     const payY=payM*12;
@@ -754,7 +762,7 @@ function graphEnpf(r){
     rem=remEnd; payM=Math.round(payM*(1+r.idx));
   }
   if(exhaustAge===null) exhaustAge=PARAM.seriesEnd;
-  return {payFirst,exhaustAge,series};
+  return {payFirst,exhaustAge,enpfStart,series};
 }
 
 function drawEnpf(r){
@@ -783,7 +791,7 @@ function drawEnpf(r){
   sum.innerHTML='<div class="enpf-cmp"><div class="enpf-col ok"><div class="t">Если оформить аннуитет</div>'+
     '<div class="big">'+fmt(r.payFirst)+' ₸/мес</div><div class="d">Платит страховая — <b>пожизненно</b>: сумма не закончится и каждый год растёт'+(r.bonus>0?'.<br>Плюс единовременный бонус <b>'+fmt(r.bonus)+' ₸</b>':'')+'.</div></div>'+
     '<div class="enpf-col"><div class="t">Если забирать из ЕНПФ по графику</div>'+
-    '<div class="big">'+fmt(g.payFirst)+' ₸/мес</div><div class="d">Столько можно снимать из <b>своих</b> накоплений каждый месяц, не оформляя аннуитет. Но это конечные деньги: к <b>'+g.exhaustAge+' годам</b> накопления в ЕНПФ исчерпаются, и выплаты из фонда прекратятся — останется только государственная пенсия.</div></div></div>'+
+    '<div class="big">'+fmt(g.payFirst)+' ₸/мес</div><div class="d">'+(g.enpfStart>r.startAge?'Доступно только с <b>'+g.enpfStart+' лет</b> (пенсионный возраст) — на '+(g.enpfStart-r.startAge)+' '+plural(g.enpfStart-r.startAge,'год','года','лет')+' позже, чем аннуитет. ':'')+'Это снятие <b>своих</b> накоплений частями. Деньги конечны: к <b>'+g.exhaustAge+' годам</b> они исчерпаются — останется только государственная пенсия.</div></div></div>'+
     '<div class="tiny muted" style="margin-top:8px">Государственная пенсия (базовая + солидарная) назначается отдельно, по стажу, и сохраняется в обоих случаях — аннуитет идёт <b>сверх</b> неё. Разница в том, что выплаты из ЕНПФ со временем заканчиваются, а аннуитет — нет. Расчёт по графику — по официальной методике РК (доходность 9%, индексация 8%), это ориентир.</div>';
 }
 
@@ -819,7 +827,10 @@ function bindSeg(id,key,cast){
     };
   });
 }
-bindSeg('seg-g','g'); bindSeg('seg-dis','dis'); bindSeg('seg-oppv','oppv',v=>+v); bindSeg('seg-sg','sg');
+bindSeg('seg-g','g'); bindSeg('seg-dis','dis'); bindSeg('seg-oppv','oppv',v=>+v);
+function syncSpouse(){ ST.sg = ST.g==='m'?'f':'m'; const el=$('#sp-gender'); if(el)el.textContent = ST.sg==='f'?'женщина':'мужчина'; }
+document.querySelectorAll('#seg-g button').forEach(b=>b.addEventListener('click',()=>{syncSpouse(); if(ST.joint&&ST.shown)renderJoint(ST.lastR);}));
+syncSpouse();
 
 function fmtField(el){const d=digits(el.value); el.value=d?(+d).toLocaleString('ru-RU').replace(/,/g,' '):'';}
 $('#in-sav').addEventListener('input',e=>fmtField(e.target));
@@ -890,7 +901,7 @@ function buildReport(r, mode){
   const sumCompare=card2('Вы переводите в страховую: <b>'+fmt(r.premium)+' ₸</b>.<br>'+mile.map(a=>{const gg=accAt(a)+r.bonus;return 'К '+a+' годам получите выплатами: <b>'+fmt(gg)+' ₸</b> — в '+(gg/r.premium).toFixed(1)+' раза больше вложенного.';}).join('<br>')+'<br><span style="color:#8a8073;font-size:12px">С учётом единовременного бонуса '+fmt(r.bonus)+' ₸.</span>');
   const sumCum=card2('Вложено: <b>'+fmt(r.premium)+' ₸</b>.'+(r.be!=null?(' Полностью возвращается выплатами к <b>'+r.be+' годам</b> — дальше всё идёт сверх вложенного, пожизненно.'):'')+' К '+mile[1]+' годам получено всего: <b>'+fmt(accAt(mile[1]))+' ₸</b>.');
   const sumY=card2('Первая выплата: <b>'+fmt(r.payFirst)+' ₸/мес</b>'+(r.type==='delayed'?' (с '+r.startAge+' лет)':'')+'. Через 10 лет — <b>'+fmt(Math.round(r.payFirst*Math.pow(1+r.idx,10)))+' ₸/мес</b>, через 20 — <b>'+fmt(Math.round(r.payFirst*Math.pow(1+r.idx,20)))+' ₸/мес</b> за счёт индексации '+(r.idx*100)+'% в год.');
-  const sumEnpf=card2('<b>Если оформить аннуитет:</b> '+fmt(r.payFirst)+' ₸/мес — страховая платит пожизненно, сумма растёт каждый год'+(r.bonus>0?', плюс единовременный бонус '+fmt(r.bonus)+' ₸':'')+'.<br><b>Если забирать из ЕНПФ по графику:</b> '+fmt(g.payFirst)+' ₸/мес — это снятие <b>своих</b> накоплений частями. Но деньги конечны: к <b>'+g.exhaustAge+' годам</b> накопления в ЕНПФ исчерпаются, и останется только государственная пенсия.<br><span style="color:#8a8073;font-size:12px">Государственная пенсия (базовая + солидарная) есть в обоих случаях — аннуитет идёт сверх неё.</span>');
+  const sumEnpf=card2('<b>Если оформить аннуитет:</b> '+fmt(r.payFirst)+' ₸/мес'+(r.type==='delayed'?' уже с '+r.startAge+' лет':'')+' — страховая платит пожизненно, сумма растёт каждый год'+(r.bonus>0?', плюс единовременный бонус '+fmt(r.bonus)+' ₸':'')+'.<br><b>Если забирать из ЕНПФ по графику:</b> '+fmt(g.payFirst)+' ₸/мес, но '+(g.enpfStart>r.startAge?'только с <b>'+g.enpfStart+' лет</b> (пенсионный возраст) — это на '+(g.enpfStart-r.startAge)+' '+plural(g.enpfStart-r.startAge,'год','года','лет')+' позже аннуитета; ':'')+'это снятие <b>своих</b> накоплений частями, и деньги конечны: к <b>'+g.exhaustAge+' годам</b> исчерпаются.<br><span style="color:#8a8073;font-size:12px">Государственная пенсия (базовая + солидарная) есть в обоих случаях — аннуитет идёт сверх неё.</span>');
 
   const head='<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Расчёт пенсионного аннуитета</title>'+
     '<style>body{font-family:Manrope,Segoe UI,system-ui,sans-serif;color:#22201c;line-height:1.55;max-width:760px;margin:0 auto;padding:28px 18px;background:#fff}h1{font-size:24px}h2{font-size:17px;margin:24px 0 8px}h3{font-size:14px;margin:16px 0 4px;color:#0e9a61}table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}th,td{padding:7px 8px;border-bottom:1px solid #e9e0d2}th{text-align:right;color:#8a8073;font-size:11px;text-transform:uppercase}th:first-child,td:first-child{text-align:left}.kp{display:flex;gap:12px;flex-wrap:wrap;margin:14px 0}.kp>div{flex:1;min-width:140px;background:#fffefb;border:1px solid #e9e0d2;border-radius:10px;padding:12px}.kp .l{font-size:12px;color:#8a8073}.kp .v{font-size:19px;font-weight:800;margin-top:3px}ul{margin:6px 0;padding-left:20px}li{margin:5px 0}.muted{color:#8a8073;font-size:12px}.expl p{font-size:13.5px;color:#3b3a36;margin:4px 0 12px}.legrow{font-size:12px;color:#8a8073;margin:6px 0}.legrow span{margin-right:14px}.dot{display:inline-block;width:10px;height:10px;border-radius:2px;vertical-align:middle;margin-right:4px}.law .row{padding:8px 0;border-bottom:1px solid #f0e9dc;font-size:13px;color:#5b5448;line-height:1.5}.law .art{font-weight:700;color:#0e9a61}.law q{font-style:italic;color:#6b6356}</style></head><body>';
