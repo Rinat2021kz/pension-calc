@@ -180,6 +180,14 @@ details.expl[open] summary::after{content:'–'}
 details.expl .body{padding:0 0 16px;font-size:14px;color:#5b5448}
 .spouse{display:none;margin-top:14px;padding:16px;border:1px dashed var(--line);border-radius:14px;background:#fbf7ef}
 .spouse.on{display:block}
+.law{font-size:11.5px;color:#8a8073;margin-top:9px;padding-top:8px;border-top:1px dashed #e9e0d2;line-height:1.5}
+.law b{color:#5b5448;font-weight:700}
+.law q{font-style:italic;color:#6b6356}
+.lawlist{margin-top:6px}
+.lawlist .row{padding:9px 0;border-bottom:1px solid #f0e9dc;font-size:13px;color:#5b5448;line-height:1.5}
+.lawlist .row:last-child{border-bottom:none}
+.lawlist .art{font-weight:700;color:#245f43}
+.lawlist q{font-style:italic;color:#6b6356}
 </style>
 </head>
 <body>
@@ -234,12 +242,12 @@ details.expl .body{padding:0 0 16px;font-size:14px;color:#5b5448}
         <div><b>ОППВ 60 мес+</b><span class="qmark" onclick="tip('tip-oppv')">?</span></div>
         <div class="seg" id="seg-oppv"><button data-v="0" class="on">Нет</button><button data-v="1">Да</button></div>
       </div>
-      <div class="tipbox" id="tip-oppv">ОППВ — обязательные профессиональные пенсионные взносы; работодатель перечисляет их за труд во вредных условиях. При стаже таких взносов от 60 месяцев аннуитет доступен раньше и при меньшей сумме.</div>
+      <div class="tipbox" id="tip-oppv">ОППВ — обязательные профессиональные пенсионные взносы; работодатель перечисляет их за труд во вредных условиях. При стаже таких взносов от 60 месяцев аннуитет доступен раньше и при меньшей сумме.<div class="law"><b>Закон:</b> право на аннуитет с 40 лет, если ОППВ уплачены <q>в совокупности не менее шестидесяти календарных месяцев</q> — ст. 221, п. 1, пп. 4 Социального кодекса РК.</div></div>
       <div class="row">
         <div><b>Инвалидность</b><span class="qmark" onclick="tip('tip-dis')">?</span></div>
         <div class="seg" id="seg-dis"><button data-v="none" class="on">Нет</button><button data-v="III">III</button><button data-v="II">II</button><button data-v="I">I</button></div>
       </div>
-      <div class="tipbox" id="tip-dis">Засчитывается только <b>бессрочная</b> инвалидность — без даты переосвидетельствования. Она уменьшает сумму, необходимую для заключения договора.</div>
+      <div class="tipbox" id="tip-dis">Засчитывается только <b>бессрочная</b> инвалидность — без даты переосвидетельствования. Она уменьшает сумму, необходимую для заключения договора.<div class="law"><b>Закон:</b> учитывается инвалидность <q>первой и второй групп, если инвалидность установлена бессрочно</q> — ст. 220–221 Социального кодекса РК.</div></div>
     </div>
 
     <button class="btn block" id="btn-calc">Проверить →</button>
@@ -283,7 +291,7 @@ details.expl .body{padding:0 0 16px;font-size:14px;color:#5b5448}
         <div class="slrow">
           <div class="top"><span class="name">Гарантийный период <span class="qmark" onclick="tip('tip-gp')">?</span></span><span class="v" id="lab-gp">1 год</span></div>
           <input type="range" id="rng-gp" min="1" max="30" step="1" value="1">
-          <div class="tipbox" id="tip-gp">Период, на который выплаты закреплены за договором. Если застрахованный уходит из жизни в эти годы, невыплаченный остаток переходит наследникам. Чем дольше период — тем немного меньше ежемесячная сумма.</div>
+          <div class="tipbox" id="tip-gp">Период, на который выплаты закреплены за договором. Если застрахованный уходит из жизни в эти годы, невыплаченный остаток переходит наследникам. Чем дольше период — тем немного меньше ежемесячная сумма.<div class="law"><b>Закон:</b> при уходе из жизни пенсионные накопления и остаток <q>наследуются в порядке, установленном законодательством</q> — ст. 221, п. 3 Социального кодекса РК.</div></div>
         </div>
         <div class="slrow">
           <div class="top"><span class="name">Индексация в год <span class="qmark" onclick="tip('tip-idx')">?</span></span><span class="v" id="lab-idx">8%</span></div>
@@ -303,7 +311,7 @@ details.expl .body{padding:0 0 16px;font-size:14px;color:#5b5448}
         <div><b>Совместный аннуитет (на супругов)</b><span class="qmark" onclick="tip('tip-jt')">?</span></div>
         <div class="seg" id="seg-jt"><button id="jt-off" class="on">Нет</button><button id="jt-on">Да</button></div>
       </div>
-      <div class="tipbox" id="tip-jt">Оформляется на супругов или близких родственников: накопления складываются, и договор возможен, если общей суммы хватает на минимальные выплаты обоим. Здесь — предварительная проверка; точный расчёт делает специалист.</div>
+      <div class="tipbox" id="tip-jt">Оформляется на супругов или близких родственников: накопления складываются, и договор возможен, если общей суммы хватает на минимальные выплаты обоим. Здесь — предварительная проверка; точный расчёт делает специалист.<div class="law"><b>Закон:</b> договор может заключаться двумя застрахованными — <q>супругами или близкими родственниками</q>; выплата паре — не ниже <q>1,4-кратного размера прожиточного минимума</q> — ст. 225, п. 2 и ст. 226, п. 2 СК РК.</div></div>
       <div class="spouse" id="spouse">
         <div class="grid2">
           <div class="field" style="margin-top:0">
@@ -398,6 +406,21 @@ details.expl .body{padding:0 0 16px;font-size:14px;color:#5b5448}
       </div>
     </div>
   </div><!-- /results -->
+
+  <details class="expl" style="margin-top:18px">
+  <summary>Правовая основа расчёта</summary>
+  <div class="body">
+    <p style="margin:0 0 4px;color:#8a8073;font-size:12.5px">Калькулятор опирается на Социальный кодекс РК (№ 224-VII). Основные нормы:</p>
+    <div class="lawlist">
+      <div class="row"><span class="art">Ст. 225, п. 2.</span> Размер выплаты <q>не может быть ниже 70 процентов от величины прожиточного минимума (1,4-кратного размера прожиточного минимума в случае заключения договора двумя лицами)</q>.</div>
+      <div class="row"><span class="art">Ст. 220, п. 1, пп. 4.</span> Аннуитет — <q>по достижении сорокапятилетнего возраста при достаточности пенсионных накоплений</q> для выплаты не ниже 70% прожиточного минимума.</div>
+      <div class="row"><span class="art">Ст. 221, п. 1, пп. 4.</span> При вредном стаже — <q>по достижении сорокалетнего возраста</q>, если ОППВ уплачены <q>не менее шестидесяти календарных месяцев</q>.</div>
+      <div class="row"><span class="art">Ст. 207, п. 1.</span> Пенсионный возраст: <q>мужчинам по достижении 63 лет</q>; для женщин повышается поэтапно (с 2023 — 61 год, с 2031 — 63 года).</div>
+      <div class="row"><span class="art">Ст. 226, п. 8.</span> Сменить страховую можно <q>не ранее двух лет с даты</q> договора; выкупная сумма — <q>не менее суммы уплаченной страховой премии за вычетом суммы осуществленных страховых выплат и расходов</q>.</div>
+    </div>
+    <p style="margin:10px 0 0;color:#a99e8d;font-size:11.5px">Цитаты приведены по Социальному кодексу РК в редакции на 2026 год. Точные условия договора подтверждает страховая компания (КСЖ).</p>
+  </div>
+</details>
 
   <div class="foot" id="foot">
     Калькулятор носит справочный характер. Итоговые суммы подтверждает страховая компания (КСЖ) при оформлении договора.<br>
