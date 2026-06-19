@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>Калькулятор пенсионного аннуитета</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#f6f2ea; --card:#ffffff; --ink:#22201c; --muted:#8a8073; --line:#e9e0d2;
+  --green:#2f7a55; --green-d:#245f43; --green-soft:#e7f1ea;
+  --gold:#c1933b; --gold-soft:#f6ecd6; --red:#b4452f; --red-soft:#f6e3dd;
+  --shadow:0 1px 2px rgba(40,30,15,.04),0 8px 30px rgba(40,30,15,.06);
+  --radius:18px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:'Manrope',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;font-size:16px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:920px;margin:0 auto;padding:0 16px 80px}
+a{color:var(--green);text-decoration:none}
+h1,h2,h3{line-height:1.2;font-weight:800;letter-spacing:-.01em}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+.tiny{font-size:12px}
+
+/* header */
+header.top{padding:22px 16px 8px;max-width:920px;margin:0 auto;display:flex;align-items:center;gap:12px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:15px}
+.logo .mark{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--green),var(--green-d));display:grid;place-items:center;color:#fff;font-size:18px;box-shadow:var(--shadow)}
+.clock{margin-left:auto;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+
+/* hero */
+.hero{padding:18px 0 6px}
+.hero h1{font-size:30px;margin-bottom:8px}
+.hero p.lead{color:var(--muted);font-size:16px;max-width:620px}
+
+/* card */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px;margin-top:18px}
+.card h2{font-size:19px;margin-bottom:4px}
+.card h2.sec{font-size:15px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700}
+
+/* how-to */
+.howto{background:linear-gradient(180deg,#fff,#fffdf9);border:1px dashed var(--line)}
+.howto ol{margin:10px 0 0 0;padding-left:0;list-style:none;counter-reset:s}
+.howto li{counter-increment:s;position:relative;padding:7px 0 7px 38px;border-bottom:1px solid var(--line);font-size:14.5px}
+.howto li:last-child{border-bottom:none}
+.howto li::before{content:counter(s);position:absolute;left:0;top:6px;width:26px;height:26px;border-radius:50%;background:var(--green-soft);color:var(--green-d);font-weight:800;font-size:13px;display:grid;place-items:center}
+
+/* fields */
+.field{margin-top:18px}
+.field>label{display:block;font-weight:700;font-size:14.5px;margin-bottom:7px}
+.field .hint{font-size:12.5px;color:var(--muted);font-weight:500}
+.seg{display:inline-flex;background:#f1ebe0;border-radius:12px;padding:4px;gap:4px;flex-wrap:wrap}
+.seg button{border:none;background:transparent;padding:9px 18px;border-radius:9px;font:inherit;font-weight:600;font-size:14px;color:var(--muted);cursor:pointer;transition:.15s}
+.seg button.on{background:#fff;color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.seg.green button.on{background:var(--green);color:#fff}
+input[type=text],input[type=number]{width:100%;padding:13px 14px;border:1.5px solid var(--line);border-radius:12px;font:inherit;font-size:16px;background:#fffefb;transition:.15s}
+input[type=text]:focus,input[type=number]:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 4px var(--green-soft)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:560px){.grid2{grid-template-columns:1fr}.hero h1{font-size:25px}}
+.suffix{position:relative}
+.suffix input{padding-right:42px}
+.suffix .u{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--muted);font-weight:600}
+
+/* special grounds */
+.grounds{margin-top:18px;padding:16px;background:#fbf7ef;border:1px solid var(--line);border-radius:14px}
+.grounds .row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:12px}
+.grounds .row:first-child{margin-top:0}
+.qmark{display:inline-grid;place-items:center;width:18px;height:18px;border-radius:50%;background:var(--muted);color:#fff;font-size:11px;font-weight:700;cursor:help;vertical-align:middle;margin-left:5px}
+.tipbox{display:none;margin-top:8px;padding:11px 13px;background:#fff;border:1px solid var(--line);border-radius:10px;font-size:13px;color:#5b5448}
+.tipbox.show{display:block}
+
+/* button */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;border-radius:13px;padding:15px 26px;font:inherit;font-weight:700;font-size:16px;cursor:pointer;transition:.15s;background:var(--green);color:#fff;box-shadow:0 6px 18px rgba(47,122,85,.28)}
+.btn:hover{background:var(--green-d);transform:translateY(-1px)}
+.btn:active{transform:translateY(0)}
+.btn.block{width:100%;margin-top:22px;font-size:17px;padding:17px}
+.btn.ghost{background:#fff;color:var(--ink);border:1.5px solid var(--line);box-shadow:none}
+.btn.ghost:hover{background:#faf6ef;border-color:var(--green)}
+.btn.gold{background:var(--gold);box-shadow:0 6px 18px rgba(193,147,59,.3)}
+.btn.gold:hover{background:#a87f2f}
+.btn.sm{padding:10px 16px;font-size:14px;border-radius:10px}
+
+.err{display:none;margin-top:14px;padding:13px 15px;background:var(--red-soft);border:1px solid #e6c3b8;color:#8a3422;border-radius:12px;font-size:14px;font-weight:600}
+.err.show{display:block}
+
+/* results */
+#results{display:none}
+#results.show{display:block}
+.statusbig{display:flex;align-items:flex-start;gap:16px;padding:20px;border-radius:16px;margin-bottom:4px}
+.statusbig.ok{background:var(--green-soft)}
+.statusbig.no{background:var(--red-soft)}
+.statusbig .ic{font-size:30px;line-height:1}
+.statusbig h2{font-size:21px;margin-bottom:4px}
+.statusbig.ok h2{color:var(--green-d)}
+.statusbig.no h2{color:#8a3422}
+.statusbig p{font-size:14.5px;color:#5b5448}
+
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:18px}
+@media(max-width:680px){.kpis{grid-template-columns:1fr 1fr}}
+.kpi{background:#fffefb;border:1px solid var(--line);border-radius:14px;padding:15px}
+.kpi .lab{font-size:12.5px;color:var(--muted);font-weight:600;margin-bottom:6px;min-height:32px}
+.kpi .val{font-size:21px;font-weight:800;letter-spacing:-.02em}
+.kpi .val small{font-size:13px;font-weight:600;color:var(--muted)}
+.kpi.accent{background:linear-gradient(160deg,var(--green),var(--green-d));border:none;color:#fff}
+.kpi.accent .lab{color:rgba(255,255,255,.85)}
+.kpi.gold{background:linear-gradient(160deg,#d3a857,#b8862f);color:#fff}
+.kpi.gold2{background:var(--gold-soft);border-color:#ecdcb8}
+
+/* sliders */
+.sliders{margin-top:8px}
+.slrow{margin-top:20px}
+.slrow .top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px;gap:10px}
+.slrow .top .name{font-weight:700;font-size:14.5px}
+.slrow .top .v{font-weight:800;color:var(--green-d);font-variant-numeric:tabular-nums}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:7px;border-radius:6px;background:linear-gradient(var(--green),var(--green)) no-repeat,#e9e0d2;background-size:var(--pct,50%) 100%;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:#fff;border:2px solid var(--green);box-shadow:0 2px 6px rgba(0,0,0,.18);cursor:pointer}
+input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:#fff;border:2px solid var(--green);box-shadow:0 2px 6px rgba(0,0,0,.18);cursor:pointer}
+.premchips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.premchips button{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:8px 14px;font:inherit;font-size:13.5px;font-weight:600;cursor:pointer;color:var(--muted);transition:.15s}
+.premchips button.on{border-color:var(--green);background:var(--green-soft);color:var(--green-d)}
+.checkline{display:flex;align-items:center;gap:10px;margin-top:12px;font-size:14px;font-weight:600}
+.checkline input{width:18px;height:18px;accent-color:var(--green)}
+
+/* charts */
+.chartbox{margin-top:14px;position:relative;height:300px}
+.legendrow{display:flex;gap:18px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-top:10px}
+.legendrow .dot{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:middle}
+
+/* lifetime cards */
+.life{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:14px}
+@media(max-width:680px){.life{grid-template-columns:1fr 1fr}}
+.lifecell{text-align:center;padding:16px 10px;border:1px solid var(--line);border-radius:14px;background:#fffefb}
+.lifecell .age{font-size:12.5px;color:var(--muted);font-weight:600}
+.lifecell .amt{font-size:19px;font-weight:800;margin-top:5px;color:var(--green-d)}
+
+/* table */
+table{width:100%;border-collapse:collapse;margin-top:14px;font-size:13.5px;font-variant-numeric:tabular-nums}
+th,td{padding:9px 8px;text-align:right;border-bottom:1px solid var(--line)}
+th:first-child,td:first-child{text-align:left}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);font-weight:700}
+tr.guar td{background:var(--gold-soft)}
+.tblwrap{max-height:360px;overflow:auto;border:1px solid var(--line);border-radius:12px;margin-top:12px}
+.tblwrap.collapsed{max-height:230px}
+.showall{margin-top:10px}
+
+/* visit card */
+.vcard{margin-top:8px}
+.vcard .grid2{margin-top:0}
+
+/* export */
+.exprow{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#22201c;color:#fff;padding:13px 22px;border-radius:12px;font-weight:600;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:50}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.divider{height:1px;background:var(--line);margin:26px 0}
+.foot{margin-top:30px;text-align:center;color:var(--muted);font-size:12.5px;line-height:1.7}
+details.expl{margin-top:16px;border:1px solid var(--line);border-radius:12px;padding:0 16px;background:#fffefb}
+details.expl summary{padding:14px 0;font-weight:700;cursor:pointer;font-size:14.5px;list-style:none;display:flex;justify-content:space-between}
+details.expl summary::after{content:'+';color:var(--green);font-weight:800}
+details.expl[open] summary::after{content:'–'}
+details.expl .body{padding:0 0 16px;font-size:14px;color:#5b5448}
+.spouse{display:none;margin-top:14px;padding:16px;border:1px dashed var(--line);border-radius:14px;background:#fbf7ef}
+.spouse.on{display:block}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="logo"><span class="mark">₸</span><span>Пенсионный аннуитет<br><span class="tiny muted" style="font-weight:600">расчёт за 20 секунд</span></span></div>
+  <div class="clock" id="clock"></div>
+</header>
+
+<div class="wrap">
+  <div class="hero">
+    <h1>Калькулятор пенсионного аннуитета</h1>
+    <p class="lead">Хватает ли накоплений и сколько вы будете получать — пожизненно. Расчёт на официальных данных страховых компаний Казахстана на 2026 год.</p>
+  </div>
+
+  <div class="card howto">
+    <h2 class="sec">Как пользоваться</h2>
+    <ol>
+      <li>Выберите пол и впишите возраст.</li>
+      <li>Укажите сумму накоплений в ЕНПФ.</li>
+      <li>Если есть вредный стаж (ОППВ) или инвалидность — отметьте: нужная сумма станет меньше.</li>
+      <li>Нажмите «Проверить» — увидите, хватает ли денег и сколько будете получать.</li>
+      <li>Подвигайте ползунки и скачайте готовый расчёт для клиента.</li>
+    </ol>
+  </div>
+
+  <!-- INPUT -->
+  <div class="card" id="inputCard">
+    <div class="grid2">
+      <div class="field" style="margin-top:0">
+        <label>Пол</label>
+        <div class="seg green" id="seg-g">
+          <button data-v="m" class="on">Мужчина</button>
+          <button data-v="f">Женщина</button>
+        </div>
+      </div>
+      <div class="field" style="margin-top:0">
+        <label>Возраст</label>
+        <div class="suffix"><input type="number" id="in-age" min="40" max="73" placeholder="например, 58"><span class="u">лет</span></div>
+        <div class="hint" style="margin-top:6px">полных лет (40–73)</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Накопления в ЕНПФ</label>
+      <div class="suffix"><input type="text" id="in-sav" inputmode="numeric" placeholder="например, 12 000 000"><span class="u">₸</span></div>
+      <div class="hint" style="margin-top:6px">всё, что накоплено в ЕНПФ</div>
+    </div>
+
+    <div class="grounds">
+      <div class="small muted" style="font-weight:600">Особые основания — отметьте, только если есть (сильно снижают нужную сумму):</div>
+      <div class="row">
+        <div><b>ОППВ 60 мес+</b><span class="qmark" onclick="tip('tip-oppv')">?</span></div>
+        <div class="seg" id="seg-oppv"><button data-v="0" class="on">Нет</button><button data-v="1">Да</button></div>
+      </div>
+      <div class="tipbox" id="tip-oppv">ОППВ — обязательные профессиональные пенсионные взносы. Их платит работодатель за работу во вредных условиях. Если их платили 60 месяцев и больше — аннуитет можно оформить раньше и с меньшей суммой.</div>
+      <div class="row">
+        <div><b>Инвалидность</b><span class="qmark" onclick="tip('tip-dis')">?</span></div>
+        <div class="seg" id="seg-dis"><button data-v="none" class="on">Нет</button><button data-v="III">III</button><button data-v="II">II</button><button data-v="I">I</button></div>
+      </div>
+      <div class="tipbox" id="tip-dis">Учитывается инвалидность, установленная <b>бессрочно</b> (без срока пересмотра). Снижает сумму, нужную для оформления.</div>
+    </div>
+
+    <button class="btn block" id="btn-calc">Проверить →</button>
+    <div class="err" id="errbox"></div>
+  </div>
+
+  <details class="expl">
+    <summary>Что такое пенсионный аннуитет?</summary>
+    <div class="body">Вы переводите свои пенсионные накопления из ЕНПФ в страховую компанию (КСЖ), а она выплачивает вам деньги каждый месяц <b>пожизненно</b> — даже когда переведённая сумма уже закончилась бы. Эти выплаты называют <b>аннуитетными выплатами</b>.</div>
+  </details>
+  <details class="expl">
+    <summary>Насколько точны цифры?</summary>
+    <div class="body">Расчёт сделан по официальной методике (таблицы смертности, ставка дисконтирования, минимальный размер выплаты и пороги достаточности на 2026 год). Это точный ориентир — итоговую сумму страховая подтверждает при оформлении договора.</div>
+  </details>
+
+  <!-- RESULTS -->
+  <div id="results">
+    <div class="card">
+      <div class="statusbig ok" id="statusbig">
+        <div class="ic" id="status-ic">✓</div>
+        <div><h2 id="status-h">—</h2><p id="status-p">—</p></div>
+      </div>
+      <div class="kpis" id="kpis"></div>
+    </div>
+
+    <!-- conditions -->
+    <div class="card">
+      <h2>Условия договора</h2>
+      <p class="muted small" style="margin-top:2px">Подвигайте и смотрите, как меняется результат.</p>
+      <div class="sliders">
+        <div class="slrow">
+          <div class="top"><span class="name">Сколько перевести в страховую</span></div>
+          <div class="premchips" id="premchips">
+            <button data-m="min" class="on">Только достаточную</button>
+            <button data-m="all">Всю сумму</button>
+          </div>
+          <input type="range" id="rng-prem" min="0" max="100" step="1000" value="0">
+          <div class="small muted" id="lab-prem" style="margin-top:8px">Переводите: <b>—</b></div>
+          <label class="checkline"><input type="checkbox" id="chk-reserve"> Заложить запас на смену страховой через 2 года</label>
+        </div>
+        <div class="slrow">
+          <div class="top"><span class="name">Гарантийный период <span class="qmark" onclick="tip('tip-gp')">?</span></span><span class="v" id="lab-gp">15 лет</span></div>
+          <input type="range" id="rng-gp" min="0" max="30" step="1" value="15">
+          <div class="tipbox" id="tip-gp">Срок, в течение которого выплаты гарантированы. Если человек уходит из жизни в этот период — остаток выплат получают наследники. Чем длиннее период, тем чуть ниже выплата.</div>
+        </div>
+        <div class="slrow">
+          <div class="top"><span class="name">Индексация в год <span class="qmark" onclick="tip('tip-idx')">?</span></span><span class="v" id="lab-idx">8%</span></div>
+          <input type="range" id="rng-idx" min="7" max="9" step="0.5" value="8">
+          <div class="tipbox" id="tip-idx">На сколько процентов выплата увеличивается каждый год, чтобы успевать за ростом цен. Чем выше индексация — тем ниже первая выплата, но быстрее рост дальше.</div>
+        </div>
+        <div class="slrow">
+          <div class="top"><span class="name">Единовременный бонус <span class="qmark" onclick="tip('tip-bon')">?</span></span><span class="v" id="lab-bon">11%</span></div>
+          <input type="range" id="rng-bon" min="0" max="15" step="0.5" value="11">
+          <div class="tipbox" id="tip-bon">Деньги, которые страховая начисляет <b>сверху</b> при переводе накоплений. Бонус не уменьшает вашу выплату и не вычитается из накоплений — это дополнительные деньги вам.</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <h2 style="font-size:16px">Оформляете на двоих? Проверьте совместный аннуитет</h2>
+      <div class="row" style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px;flex-wrap:wrap">
+        <div><b>Совместный аннуитет (на супругов)</b><span class="qmark" onclick="tip('tip-jt')">?</span></div>
+        <div class="seg" id="seg-jt"><button id="jt-off" class="on">Нет</button><button id="jt-on">Да</button></div>
+      </div>
+      <div class="tipbox" id="tip-jt">Совместный пенсионный аннуитет оформляется на супругов (близких родственников). Накопления объединяются; договор доступен, если суммы пары хватает на минимальные выплаты обоим. Точный расчёт делает специалист — здесь только предварительная проверка доступности.</div>
+      <div class="spouse" id="spouse">
+        <div class="grid2">
+          <div class="field" style="margin-top:0">
+            <label>Супруг(а)</label>
+            <div class="seg green" id="seg-sg"><button data-v="f" class="on">женщина</button><button data-v="m">мужчина</button></div>
+          </div>
+          <div class="field" style="margin-top:0">
+            <label>Возраст супруга(и)</label>
+            <div class="suffix"><input type="number" id="sp-age" min="40" max="80"><span class="u">лет</span></div>
+          </div>
+        </div>
+        <div class="field">
+          <label>Накопления супруга(и) в ЕНПФ</label>
+          <div class="suffix"><input type="text" id="sp-sav" inputmode="numeric"><span class="u">₸</span></div>
+        </div>
+        <div id="jointResult" class="small" style="margin-top:14px"></div>
+      </div>
+    </div>
+
+    <!-- lifetime -->
+    <div class="card">
+      <h2>Сколько денег вы получите за всю жизнь</h2>
+      <p class="muted small" style="margin-top:2px">Сумма всех аннуитетных выплат, если доживёте до указанного возраста. Даже по короткому сроку видно — вы забираете заметно больше, чем вложили.</p>
+      <div class="life" id="lifecells"></div>
+    </div>
+
+    <!-- chart cumulative -->
+    <div class="card">
+      <h2>Когда вернутся ваши деньги</h2>
+      <p class="muted small" style="margin-top:2px">Столбики — сколько всего вы получили выплатами (нарастающим итогом). Линия — сумма, которую вы перевели. Где столбик выше линии — вы уже получили больше, чем вложили, а выплаты продолжаются пожизненно.</p>
+      <div class="chartbox"><canvas id="chartCum"></canvas></div>
+      <div class="legendrow"><span><span class="dot" style="background:#2f7a55"></span>получено всего (зелёное — больше вложенного)</span><span><span class="dot" style="background:#b4452f"></span>вы перевели</span></div>
+    </div>
+
+    <!-- chart by years -->
+    <div class="card">
+      <h2>Сколько будете получать каждый год</h2>
+      <p class="muted small" style="margin-top:2px">Аннуитетные выплаты за год. Каждый год сумма растёт за счёт индексации. Светлая заливка — гарантийный период (эти годы защищены для наследников).</p>
+      <div class="chartbox"><canvas id="chartYears"></canvas></div>
+    </div>
+
+    <!-- table -->
+    <div class="card">
+      <h2>Таблица выплат по годам</h2>
+      <div class="tblwrap collapsed" id="tblwrap">
+        <table id="payTable"><thead><tr><th>Возраст</th><th>Выплата/мес</th><th>За год</th><th>Получено всего</th><th>Остаток в КСЖ</th></tr></thead><tbody></tbody></table>
+      </div>
+      <button class="btn ghost sm showall" id="btn-showall">Показать все годы — до 100 лет ↓</button>
+    </div>
+
+    <!-- visit card -->
+    <div class="card vcard">
+      <h2>Визитка консультанта</h2>
+      <p class="muted small" style="margin-top:2px">Необязательно — попадёт в расчёт для клиента.</p>
+      <div class="grid2" style="margin-top:14px">
+        <div class="field" style="margin-top:0"><label>Имя</label><input type="text" id="c-name" placeholder="Ваше имя"></div>
+        <div class="field" style="margin-top:0"><label>Телефон</label><input type="text" id="c-phone" placeholder="+7 ___ ___ __ __"></div>
+        <div class="field" style="margin-top:0"><label>E-mail</label><input type="text" id="c-email" placeholder="email@example.com"></div>
+        <div class="field" style="margin-top:0"><label>Город</label><input type="text" id="c-city" placeholder="Город"></div>
+      </div>
+      <button class="btn ghost sm" id="btn-clearcard" style="margin-top:14px">Очистить</button>
+    </div>
+
+    <!-- export -->
+    <div class="card">
+      <h2>Скачать расчёт для клиента</h2>
+      <p class="muted small" style="margin-top:2px">Файл включает визитку, результат, выгоды, шаги оформления, графики и таблицу.</p>
+      <div class="exprow">
+        <button class="btn gold" id="dl-html">🌐 HTML</button>
+        <button class="btn ghost" id="dl-word">📝 Word</button>
+        <button class="btn ghost" id="dl-print">📄 PDF / печать</button>
+        <button class="btn ghost" id="btn-reset">↺ Новый расчёт</button>
+      </div>
+      <div class="divider"></div>
+      <h2 style="font-size:16px">Отправить клиенту расчёт</h2>
+      <p class="muted small" style="margin-top:2px">Клиент получит ссылку с его расчётом — все данные внутри ссылки, на сервере ничего не хранится.</p>
+      <div class="field" style="margin-top:12px">
+        <label>Телефон клиента (для WhatsApp)</label>
+        <div class="suffix" style="max-width:280px"><input type="text" id="cl-phone" inputmode="numeric" placeholder="+7 ___ ___ __ __"></div>
+      </div>
+      <div class="exprow" style="margin-top:12px">
+        <button class="btn gold" id="share-wa">💬 Отправить в WhatsApp</button>
+        <button class="btn ghost" id="share-copy">🔗 Скопировать ссылку</button>
+      </div>
+    </div>
+  </div><!-- /results -->
+
+  <div class="foot" id="foot">
+    Калькулятор носит справочный характер. Итоговые суммы подтверждает страховая компания (КСЖ) при оформлении договора.<br>
+    Расчёт по официальной методике пенсионного аннуитета РК · данные на 2026 год.
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script>
+const DATA = {"MORT":{"std_m":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5.06324,5.41322,5.78732,6.1872,6.61461,7.07133,7.55957,8.08139,8.5615,9.11608,9.74127,10.43421,11.19231,12.12124,13.05795,14.00278,15.01191,15.96719,16.92128,17.87294,18.82189,19.76891,20.67111,21.61884,22.56598,23.51273,25.5164,27.81936,30.48121,33.57435,37.18733,39.42173,42.40343,45.27532,48.33681,51.5997,55.07533,58.77769,62.72054,66.91831,71.38613,76.13984,81.19598,86.57181,93.25468,101.49249,111.60518,124.0055,139.22717,156.32075,175.5169,197.07469,221.28032,248.47002,279.00683,313.30354,351.82396,395.0892,443.68478,498.26864,559.58003,628.44965,705.82143,792.72471,878.92804,1000],"std_f":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1.05021,1.15314,1.26615,1.39024,1.52647,1.67605,1.84026,2.02055,2.21848,2.43578,2.67434,2.93622,3.22371,3.53929,3.88571,4.26596,4.68334,5.14145,5.64423,6.19604,6.8016,7.46613,8.19532,8.9954,9.87319,10.83618,11.89253,13.05117,14.32187,15.71531,17.24312,18.91804,20.75393,22.7659,24.97042,27.3821,30.02636,32.92159,36.09071,39.55854,43.35197,47.5,52.03393,56.98741,62.39659,68.30019,74.73955,81.75869,90.42079,101.10721,114.31587,130.6999,151.12112,174.73764,202.05015,233.6379,270.16395,312.41675,361.28724,417.81337,483.19612,558.82516,646.3198,747.51993,850.71915,1000],"g3_m":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.30256,0.45407,0.68143,1.02265,1.53472,2.30321,3.45651,3.54148,3.62853,3.71772,3.80911,3.90274,4.16934,4.45416,4.75842,5.08348,5.43073,5.80501,6.20507,6.63271,7.08982,7.57844,8.25321,8.98806,9.78835,10.65989,11.60903,12.48372,13.42432,14.43579,15.52347,16.6931,18.33085,20.12926,22.10412,24.27273,26.6541,28.79133,31.09993,33.59365,36.28732,39.19697,41.38025,43.68513,46.1184,48.6872,51.39908,53.81452,56.34346,58.99125,61.76346,64.66595,68.37958,72.30648,76.45888,80.84976,85.49279,89.65247,94.89967,99.53972,105.10103,111.026,117.6045,125.11164,132.22667,139.64632,150.50754,164.04189,170.82488,183.47276,192.6464,202.27856,212.39244,223.01227,234.1623,258.1647,284.62627,313.80103,345.96516,381.42644,420.52324,463.62658,511.14756,563.54049,621.30395,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000],"g3_f":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.23238,0.34874,0.52337,0.78544,1.17873,1.76896,2.65474,2.72,2.78686,2.85537,2.92555,2.99747,3.20223,3.42098,3.65467,3.90432,4.17103,4.45848,4.76575,5.0942,5.44528,5.82055,6.3388,6.9032,7.51785,8.18723,8.91621,9.58801,10.31043,11.08728,11.92267,12.82099,14.07885,15.46011,16.97688,18.64246,20.47145,22.11293,23.88603,25.80131,27.87016,30.10489,31.78174,33.55199,35.42083,37.39378,39.47662,41.33177,43.2741,45.30771,47.43689,49.66612,52.51834,55.53436,58.72358,62.09595,65.66199,68.85679,72.88686,76.45061,80.72193,85.27255,90.32511,96.0909,101.55553,107.25413,115.59599,125.99094,131.20055,140.91465,147.96038,155.35828,163.12615,171.28262,179.8463,198.28114,218.60471,241.01213,265.71551,292.95123,322.97919,356.08433,392.58241,432.82234,477.18706,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000],"g2_m":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.94797,1.3926,2.04576,3.00529,4.41486,6.48556,9.52748,9.55545,9.58351,9.61165,9.63987,9.66817,10.21267,10.78783,11.39539,12.03716,12.71508,13.5455,14.43015,15.37258,16.37655,17.4461,18.79605,20.25047,21.81742,23.50563,25.32446,26.80728,28.37691,30.03845,31.79728,33.65909,36.29079,39.12825,42.18757,45.48609,49.0425,52.00546,55.14743,58.47922,62.01231,65.75885,68.30443,70.94854,73.69502,76.54781,79.51104,82.28989,85.16586,88.14235,91.22286,94.41103,99.38364,104.61816,110.12838,115.92882,122.03477,127.97241,135.46241,142.08575,150.02412,158.48159,167.87192,178.58782,188.744,199.33502,214.83862,234.15794,243.84016,261.8941,274.9888,288.73802,303.17484,318.33388,334.24975,368.51144,406.28342,447.92828,493.84024,544.45866,600.2665,661.79341,729.62618,804.4133,886.86645,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000],"g2_f":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.78185,1.14857,1.68728,2.47866,3.64123,5.34908,7.85795,7.88103,7.90417,7.92737,7.95065,7.97399,8.42308,8.89745,9.39855,9.92786,10.48699,11.17189,11.90152,12.6788,13.50685,14.38897,15.50238,16.70193,17.9943,19.38668,20.8868,22.10977,23.40435,24.77474,26.22536,27.76092,29.93146,32.27171,34.79494,37.51545,40.44866,42.89241,45.48381,48.23176,51.14574,54.23576,56.33527,58.51605,60.78126,63.13415,65.57812,67.87003,70.24204,72.69694,75.23765,77.86715,81.9684,86.28566,90.83031,95.61432,100.65031,105.54749,111.72499,117.18771,123.73502,130.71046,138.4553,147.29343,155.66992,164.40505,177.19191,193.12586,201.11144,216.00174,226.80183,238.14173,250.04876,262.55144,275.67833,303.93626,335.08936,369.43669,407.30338,449.0518,495.0803,545.8257,601.77196,663.45394,731.45863,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000],"g1_m":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1.59063,2.33668,3.43266,5.04268,7.40784,10.88235,15.98649,16.03343,16.0805,16.12772,16.17507,16.22256,17.1362,18.10128,19.12073,20.19758,21.33508,22.72847,24.21285,25.79418,27.47879,29.27342,31.53856,33.97897,36.60822,39.44092,42.49281,44.98087,47.61461,50.40257,53.35377,56.47777,60.89359,65.65467,70.788,76.3227,82.29013,87.26178,92.5338,98.12433,104.05262,110.33908,114.61039,119.04705,123.65545,128.44225,133.41435,138.07709,142.90278,147.89713,153.06603,158.41558,162.51476,166.72001,171.03408,175.45978,180,188.75796,199.80563,209.57498,221.284,233.75867,247.60931,263.41515,278.39542,294.01706,316.8847,345.38049,359.66167,386.29103,405.60558,425.88553,447.1797,469.53912,493.01486,543.5505,599.26376,660.68949,728.40916,803.07078,885.38677,976.13831,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000],"g1_f":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2.38595,3.50503,5.14899,7.56402,11.11177,16.32352,23.97974,24.05014,24.12076,24.19158,24.26261,24.33384,25.70429,27.15193,28.68109,30.29637,32.00262,34.0927,36.31928,38.69128,41.21819,43.91013,47.30784,50.96846,54.91233,59.16138,63.73921,67.4713,71.42192,75.60385,80.03065,84.71665,91.34038,98.482,106.182,114.48405,123.4352,130.89267,138.8007,147.1865,156.07893,165.50861,171.91558,178.57057,185.48318,192.66338,200.12153,207.11563,214.35417,221.8457,229.59904,237.62337,243.77214,250.08002,256.55112,263.18967,270,283.13695,299.70845,314.36247,331.926,350.63801,371.41397,395.12273,417.59312,441.02558,475.32705,518.07074,539.49251,579.43655,608.40838,638.8283,670.76954,704.30869,739.52229,815.32575,898.89564,991.03424,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000],"oppv_m":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.19041,0.28808,0.43583,0.65937,0.99755,1.5092,2.28327,2.35835,2.43591,2.51602,2.59876,2.68423,2.89083,3.11334,3.35298,3.61106,3.889,4.19072,4.51584,4.86619,5.24372,5.65054,6.12258,6.63406,7.18826,7.78876,8.43943,8.9408,9.47195,10.03465,10.63079,11.26233,12.15709,13.12293,14.16551,15.29092,16.50573,17.62208,18.81394,20.08641,21.44494,22.89535,24.20524,25.59008,27.05414,28.60196,30.23834,32.37041,34.65281,37.09614,39.71174,42.51177,47.28883,52.60268,58.51365,65.08885,72.40289,75.92568,80.36948,84.29908,89.0089,94.02669,99.59795,105.95566,111.9813,118.26492,127.46316,138.92526,144.6697,155.38105,163.1501,171.30747,179.8728,188.86662,198.30946,218.63682,241.04683,265.75461,292.99406,323.02582,356.13646,392.64021,432.8852,477.25619,526.17542,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000],"oppv_f":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.09521,0.14404,0.21791,0.32968,0.49878,0.7546,1.14163,1.17918,1.21796,1.25801,1.29938,1.34211,1.44542,1.55667,1.67649,1.80553,1.9445,2.09536,2.25792,2.43309,2.62186,2.82527,3.06129,3.31703,3.59413,3.89438,4.21972,4.4704,4.73597,5.01733,5.31539,5.63117,6.07855,6.56147,7.08275,7.64546,8.25287,8.81104,9.40697,10.0432,10.72247,11.44767,12.10262,12.79504,13.52707,14.30098,15.11917,16.18521,17.32641,18.54807,19.85587,21.25588,23.64441,26.30134,29.25683,32.54442,36.20145,37.96284,40.18474,42.14954,44.50445,47.01334,49.79897,52.97783,55.99065,59.13246,63.73158,69.46263,72.33485,77.69052,81.57505,85.65373,89.9364,94.43331,99.15473,109.31841,120.52342,132.87731,146.49703,161.51291,178.06823,196.3201,216.4426,238.6281,263.08771,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000]},"DEFER":{"none_0":{"45":[10,10],"46":[9,9],"47":[8,8],"48":[7,7],"49":[6,6],"50":[5,4],"51":[4,2],"52":[3,1],"53":[2,0],"54":[1,0],"55":[0,0],"56":[0,0],"57":[0,0],"58":[0,0],"59":[0,0],"60":[0,0],"61":[0,0],"62":[0,0],"63":[0,0],"64":[0,0],"65":[0,0],"66":[0,0],"67":[0,0],"68":[0,0],"69":[0,0],"70":[0,0],"71":[0,0],"72":[0,0],"73":[0,0]},"none_1":{"40":[10,10],"41":[9,9],"42":[8,8],"43":[7,7],"44":[6,6],"45":[5,5],"46":[4,4],"47":[3,3],"48":[2,2],"49":[1,1],"50":[0,0],"51":[0,0],"52":[0,0],"53":[0,0],"54":[0,0],"55":[0,0],"56":[0,0],"57":[0,0],"58":[0,0],"59":[0,0],"60":[0,0],"61":[0,0],"62":[0,0],"63":[0,0],"64":[0,0],"65":[0,0],"66":[0,0],"67":[0,0],"68":[0,0],"69":[0,0],"70":[0,0],"71":[0,0],"72":[0,0],"73":[0,0]},"g3_0":{"45":[10,10],"46":[9,9],"47":[8,8],"48":[7,7],"49":[6,6],"50":[5,4],"51":[4,2],"52":[3,1],"53":[2,0],"54":[1,0],"55":[0,0],"56":[0,0],"57":[0,0],"58":[0,0],"59":[0,0],"60":[0,0],"61":[0,0],"62":[0,0],"63":[0,0],"64":[0,0],"65":[0,0],"66":[0,0],"67":[0,0],"68":[0,0],"69":[0,0],"70":[0,0],"71":[0,0],"72":[0,0],"73":[0,0]},"g3_1":{"40":[10,10],"41":[9,9],"42":[8,8],"43":[7,7],"44":[6,6],"45":[5,5],"46":[4,4],"47":[3,3],"48":[2,2],"49":[1,1],"50":[0,0],"51":[0,0],"52":[0,0],"53":[0,0],"54":[0,0],"55":[0,0],"56":[0,0],"57":[0,0],"58":[0,0],"59":[0,0],"60":[0,0],"61":[0,0],"62":[0,0],"63":[0,0],"64":[0,0],"65":[0,0],"66":[0,0],"67":[0,0],"68":[0,0],"69":[0,0],"70":[0,0],"71":[0,0],"72":[0,0],"73":[0,0]},"g2_0":{"45":[10,10],"46":[9,9],"47":[8,8],"48":[7,7],"49":[6,6],"50":[5,4],"51":[4,2],"52":[3,1],"53":[2,0],"54":[1,0],"55":[0,0],"56":[0,0],"57":[0,0],"58":[0,0],"59":[0,0],"60":[0,0],"61":[0,0],"62":[0,0],"63":[0,0],"64":[0,0],"65":[0,0],"66":[0,0],"67":[0,0],"68":[0,0],"69":[0,0],"70":[0,0],"71":[0,0],"72":[0,0],"73":[0,0]},"g2_1":{"40":[10,10],"41":[9,9],"42":[8,8],"43":[7,7],"44":[6,6],"45":[5,5],"46":[4,4],"47":[3,3],"48":[2,2],"49":[1,1],"50":[0,0],"51":[0,0],"52":[0,0],"53":[0,0],"54":[0,0],"55":[0,0],"56":[0,0],"57":[0,0],"58":[0,0],"59":[0,0],"60":[0,0],"61":[0,0],"62":[0,0],"63":[0,0],"64":[0,0],"65":[0,0],"66":[0,0],"67":[0,0],"68":[0,0],"69":[0,0],"70":[0,0],"71":[0,0],"72":[0,0],"73":[0,0]},"g1_0":{"45":[10,10],"46":[9,9],"47":[8,8],"48":[7,7],"49":[6,6],"50":[5,4],"51":[4,2],"52":[3,1],"53":[2,0],"54":[1,0],"55":[0,0],"56":[0,0],"57":[0,0],"58":[0,0],"59":[0,0],"60":[0,0],"61":[0,0],"62":[0,0],"63":[0,0],"64":[0,0],"65":[0,0],"66":[0,0],"67":[0,0],"68":[0,0],"69":[0,0],"70":[0,0],"71":[0,0],"72":[0,0],"73":[0,0]},"g1_1":{"40":[10,10],"41":[9,9],"42":[8,8],"43":[7,7],"44":[6,6],"45":[5,5],"46":[4,4],"47":[3,3],"48":[2,2],"49":[1,1],"50":[0,0],"51":[0,0],"52":[0,0],"53":[0,0],"54":[0,0],"55":[0,0],"56":[0,0],"57":[0,0],"58":[0,0],"59":[0,0],"60":[0,0],"61":[0,0],"62":[0,0],"63":[0,0],"64":[0,0],"65":[0,0],"66":[0,0],"67":[0,0],"68":[0,0],"69":[0,0],"70":[0,0],"71":[0,0],"72":[0,0],"73":[0,0]}}};
+
+/* ================= АКТУАРНЫЙ ДВИЖОК (методика РК 2026) ================= */
+const PARAM = { i:0.09, gamma:0.03, betta:0.015, ann:12, min_pen:35596, maxAge:110, seriesEnd:100 };
+const LOADING = (1+PARAM.gamma)/(1-PARAM.betta);
+const PADJ = (PARAM.ann-1)/(2*PARAM.ann);
+const MORT = DATA.MORT, DEFER = DATA.DEFER;
+
+function normDis(d){ return d==='none'?'none':(d==='III'?'g3':d==='II'?'g2':d==='I'?'g1':d); }
+function mortArr(dis,oppv,g){
+  const n=normDis(dis);
+  let key;
+  if(n==='g3')key='g3'; else if(n==='g2')key='g2'; else if(n==='g1')key='g1';
+  else if(oppv)key='oppv'; else key='std';
+  return MORT[key+'_'+g];
+}
+function qx(arr,age){ if(age<0)return 0; if(age>=arr.length)return 1; return (arr[age]||0)/1000; }
+function deferOf(dis,oppv,age,g){
+  const cat=normDis(dis)+'_'+(oppv?1:0);
+  const t=DEFER[cat]; if(!t||!t[age])return null;
+  return t[age][g==='m'?0:1];
+}
+function factorE2(arr,startAge,gp,idx){
+  let E2=0,F=1; const n=PARAM.maxAge-startAge;
+  for(let t=0;t<=n;t++){
+    if(t>0)F*=(1-qx(arr,startAge+t-1));
+    const G=(t<gp)?1:F;
+    E2 += Math.pow(1+idx,t)*Math.pow(1+PARAM.i,-t)*G;
+  }
+  return E2;
+}
+/* основной расчёт; возвращает {ok, ...} или {ok:false,error} */
+function engineCalc(IN){
+  const g=IN.g, dis=IN.dis||'none', oppv=IN.oppv?1:0, age=IN.age;
+  const gp=IN.gp!=null?IN.gp:0, idx=IN.idx!=null?IN.idx:0.08, bon=IN.bon!=null?IN.bon:0.11;
+  const sav=IN.sav||0;
+  if(!age||age<40) return {ok:false,error:'age_low'};
+  const defer=deferOf(dis,oppv,age,g);
+  if(defer==null) return {ok:false,error:'no_data', minAge:(oppv?40:45)};
+  const startAge=age+defer;
+  const arr=mortArr(dis,oppv,g);
+  const E2=factorE2(arr,startAge,gp,idx), E3=E2-PADJ;
+  const deferF=Math.pow((1+idx)/(1+PARAM.i),defer);
+  const E5=E3*deferF*LOADING;
+  const E5_0=(factorE2(arr,startAge,0,idx)-PADJ)*deferF*LOADING;
+  const thrJ=Math.ceil(E5_0*PARAM.min_pen*PARAM.ann);
+  const thrCur=Math.ceil(E5*PARAM.min_pen*PARAM.ann);
+  const thrNext=Math.round(thrCur*1.1);
+  const reserveAmt=Math.round(thrCur*1.21);
+  const maxPrem=Math.max(sav,thrCur);
+  // премия по режиму
+  let premium, mode=IN.premMode||'min';
+  if(mode==='all') premium=maxPrem;
+  else if(mode==='reserve') premium=Math.min(reserveAmt,maxPrem);
+  else if(mode==='custom') premium=Math.min(Math.max(IN.premium||thrCur,thrCur),maxPrem);
+  else premium=thrCur;
+  const idxDefer=Math.pow(1+idx,defer);
+  const payFirst=Math.round((premium/E5/12)*idxDefer);
+  // серия startAge..100
+  const series=[]; let acc=0, be=null;
+  for(let k=1; startAge+k-1<=PARAM.seriesEnd; k++){
+    const mEx=payFirst*Math.pow(1+idx,k-1);
+    const annual=Math.round(mEx*12); acc+=annual;
+    const a=startAge+k-1;
+    series.push({age:a,yr:k,monthly:Math.round(mEx),annual,acc,rem:Math.round(premium-acc),guar:k<=gp});
+    if(be===null && acc>=premium) be=a;
+  }
+  const enough = sav>=thrCur;
+  return {ok:true, g,dis,oppv,age,defer,startAge,gp,idx,bon,sav,
+    type:defer>0?'delayed':'immediate', E2,E3,E5,
+    thrJ,thrCur,thrNext,reserveAmt,maxPrem,premium,premMode:mode,
+    payFirst, bonus:Math.round(premium*bon), enpfLeft:Math.max(0,sav-premium),
+    shortToThr:Math.max(0,thrCur-sav), be, series, enough};
+}
+
+/* ================= СОСТОЯНИЕ И УТИЛИТЫ ================= */
+const ST={g:'m',dis:'none',oppv:0,age:null,sav:null,gp:15,idx:0.08,bon:0.11,
+  premMode:'min',premium:0,joint:false,sg:'f',spage:null,spsav:null,shown:false,lastR:null};
+const $=s=>document.querySelector(s);
+const fmt=n=>Math.round(n).toLocaleString('ru-RU').replace(/ /g,' ').replace(/,/g,' ');
+const fmtM=n=>{const m=n/1e6; return (m>=10?m.toFixed(1):m.toFixed(2))+' млн';};
+function tip(id){const e=$('#'+id);if(e)e.classList.toggle('show');}
+function digits(s){return (s||'').toString().replace(/\D/g,'');}
+function showToast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
+function plural(n,one,few,many){const m10=n%10,m100=n%100;if(m10===1&&m100!==11)return one;if(m10>=2&&m10<=4&&(m100<10||m100>=20))return few;return many;}
+
+/* ================= РЕНДЕР РЕЗУЛЬТАТОВ ================= */
+let chCum=null, chY=null;
+
+function showErr(msg){const e=$('#errbox');e.textContent=msg;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),5000);}
+
+function gatherInput(){
+  ST.age=parseInt(digits($('#in-age').value))||null;
+  ST.sav=parseInt(digits($('#in-sav').value))||0;
+  return {g:ST.g,dis:ST.dis,oppv:ST.oppv,age:ST.age,sav:ST.sav,gp:ST.gp,idx:ST.idx,bon:ST.bon,premMode:ST.premMode,premium:ST.premium};
+}
+
+function render(){
+  const IN=gatherInput();
+  const r=engineCalc(IN);
+  if(!r.ok){
+    if(r.error==='no_data'){ showErr('В этом возрасте без особых оснований аннуитет не оформляется. Минимальный возраст: '+(r.minAge||45)+(IN.oppv?'':' лет (или 40 при ОППВ)')+'.'); }
+    else if(r.error==='age_low'){ showErr('Впишите возраст (от 40 лет).'); }
+    else showErr('Проверьте введённые данные.');
+    return;
+  }
+  ST.lastR=r; ST.shown=true; ST.useGP=r.gp;
+  $('#results').classList.add('show');
+
+  /* статус */
+  const sb=$('#statusbig');
+  if(r.enough){
+    sb.className='statusbig ok'; $('#status-ic').textContent='✓';
+    $('#status-h').textContent='Накоплений хватает';
+    $('#status-p').innerHTML='Вы можете оформить пенсионный аннуитет'+(r.type==='delayed'?' — выплаты начнутся в '+r.startAge+' лет':'')+'. Минимально для оформления: <b>'+fmt(r.thrCur)+' ₸</b>.';
+  } else {
+    sb.className='statusbig no'; $('#status-ic').textContent='○';
+    $('#status-h').textContent='Пока не хватает';
+    $('#status-p').innerHTML='До оформления не хватает <b>'+fmt(r.shortToThr)+' ₸</b>. Нужный минимум: <b>'+fmt(r.thrCur)+' ₸</b>, у вас: '+fmt(r.sav)+' ₸.';
+  }
+
+  /* KPI */
+  const kp=$('#kpis');
+  const payCell = r.enough
+    ? `<div class="kpi accent"><div class="lab">Ваша выплата в месяц${r.type==='delayed'?' (с '+r.startAge+' лет)':''}</div><div class="val">${fmt(r.payFirst)} <small>₸</small></div></div>`
+    : `<div class="kpi accent"><div class="lab">Выплата при минимуме</div><div class="val">${fmt(PARAM.min_pen)} <small>₸/мес</small></div></div>`;
+  kp.innerHTML = payCell +
+    `<div class="kpi"><div class="lab">Нужно для оформления</div><div class="val">${fmt(r.thrCur)} <small>₸</small></div></div>`+
+    `<div class="kpi gold"><div class="lab">Единовременный бонус сверху</div><div class="val">${fmt(r.bonus)} <small>₸</small></div></div>`+
+    (r.enough
+      ? `<div class="kpi"><div class="lab">Остаётся в ЕНПФ</div><div class="val">${fmt(r.enpfLeft)} <small>₸</small></div></div>`
+      : `<div class="kpi"><div class="lab">Не хватает</div><div class="val" style="color:var(--red)">${fmt(r.shortToThr)} <small>₸</small></div></div>`);
+
+  /* premium slider bounds */
+  const rp=$('#rng-prem');
+  rp.min=r.thrCur; rp.max=Math.max(r.maxPrem,r.thrCur); rp.step=1000;
+  if(ST.premMode==='custom'){ rp.value=Math.min(Math.max(r.premium,r.thrCur),r.maxPrem); }
+  else { rp.value=r.premium; }
+  setRange(rp);
+  $('#lab-prem').innerHTML='Переводите: <b>'+fmt(r.premium)+' ₸</b>'+(r.premium>=r.maxPrem?' (вся сумма)':'');
+  document.querySelectorAll('#premchips button').forEach(b=>b.classList.toggle('on', b.dataset.m===ST.premMode && ST.premMode!=='custom' && ST.premMode!=='reserve'));
+  $('#chk-reserve').checked = (ST.premMode==='reserve');
+
+  /* lifetime */
+  renderLife(r);
+  /* charts */
+  drawCharts(r);
+  /* table */
+  renderTable(r);
+  /* joint */
+  if(ST.joint) renderJoint(r);
+
+  if(ST._scroll){ const rb=$('#results'); if(rb.scrollIntoView)rb.scrollIntoView({behavior:'smooth',block:'start'}); ST._scroll=false; }
+}
+
+function renderLife(r){
+  const accAt=a=>{const row=r.series.find(x=>x.age===a)||r.series[r.series.length-1];return row?row.acc:0;};
+  const targets=[r.startAge+10, r.startAge+15, r.startAge+20, r.startAge+25].filter(a=>a<=100);
+  while(targets.length<4) targets.push(Math.min(100,targets[targets.length-1]+5));
+  $('#lifecells').innerHTML=targets.map(a=>{
+    const total=accAt(a)+r.bonus;
+    return `<div class="lifecell"><div class="age">к ${a} годам</div><div class="amt">${fmtM(total)}</div><div class="tiny muted">${fmt(total)} ₸</div></div>`;
+  }).join('');
+}
+
+function setRange(el){const mn=+el.min,mx=+el.max;el.style.setProperty('--pct',(mx>mn?((el.value-mn)/(mx-mn)*100):0)+'%');}
+
+/* плагины для линий на графике */
+function refLine(yVal,label){return {id:'ref'+Math.random(),afterDraw(c){
+  const {ctx,chartArea:{left,right},scales:{y}}=c; if(!y)return; const yy=y.getPixelForValue(yVal);
+  ctx.save();ctx.strokeStyle='#b4452f';ctx.lineWidth=2;ctx.setLineDash([6,4]);
+  ctx.beginPath();ctx.moveTo(left,yy);ctx.lineTo(right,yy);ctx.stroke();
+  ctx.setLineDash([]);ctx.fillStyle='#b4452f';ctx.font='600 11px Manrope,sans-serif';ctx.textAlign='right';
+  ctx.fillText(label,right-4,yy-6);ctx.restore();
+}};}
+function vBar(idx,label){return {id:'vb'+Math.random(),afterDraw(c){
+  if(idx<0)return; const {ctx,chartArea:{top,bottom},scales:{x}}=c; if(!x)return; const xx=x.getPixelForValue(idx);
+  ctx.save();ctx.strokeStyle='#2f7a55';ctx.lineWidth=2;ctx.setLineDash([4,3]);
+  ctx.beginPath();ctx.moveTo(xx,top);ctx.lineTo(xx,bottom);ctx.stroke();
+  ctx.setLineDash([]);ctx.fillStyle='#2f7a55';ctx.font='700 11px Manrope,sans-serif';ctx.textAlign='center';
+  ctx.fillText(label,xx,top+12);ctx.restore();
+}};}
+
+function drawCharts(r){
+  const S=r.series, labels=S.map(y=>y.age), cap=r.premium;
+  const beIdx = r.be!=null ? S.findIndex(y=>y.age===r.be) : -1;
+  if(chCum)chCum.destroy();
+  chCum=new Chart($('#chartCum'),{type:'bar',
+    data:{labels,datasets:[{data:S.map(y=>y.acc),backgroundColor:S.map(y=>y.acc>=cap?'rgba(47,122,85,.85)':'rgba(193,147,59,.6)'),borderRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},
+      tooltip:{callbacks:{label:c=>fmt(c.raw)+' ₸ получено к '+c.label+' годам'}}},
+      scales:{x:{grid:{display:false},ticks:{color:'#a99e8d',maxTicksLimit:12,maxRotation:0}},
+        y:{grid:{color:'#ece2d2'},ticks:{color:'#a99e8d',callback:v=>(v/1e6).toFixed(0)+' млн'}}}},
+    plugins:[refLine(cap,'вы перевели '+fmt(cap)+' ₸'),vBar(beIdx,'деньги вернулись')]});
+  if(chY)chY.destroy();
+  chY=new Chart($('#chartYears'),{type:'bar',
+    data:{labels,datasets:[{data:S.map(y=>y.annual),backgroundColor:S.map(y=>y.guar?'rgba(193,147,59,.35)':'rgba(47,122,85,.8)'),borderRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},
+      tooltip:{callbacks:{label:c=>fmt(c.raw)+' ₸ за год в '+c.label+' лет'}}},
+      scales:{x:{grid:{display:false},ticks:{color:'#a99e8d',maxTicksLimit:12,maxRotation:0}},
+        y:{grid:{color:'#ece2d2'},ticks:{color:'#a99e8d',callback:v=>(v/1e6).toFixed(1)+' млн'}}}}});
+}
+
+function renderTable(r){
+  const tb=$('#payTable').querySelector('tbody');
+  tb.innerHTML=r.series.map(y=>`<tr class="${y.guar?'guar':''}"><td>${y.age}</td><td>${fmt(y.monthly)}</td><td>${fmt(y.annual)}</td><td>${fmt(y.acc)}</td><td>${fmt(Math.max(0,y.rem))}</td></tr>`).join('');
+}
+
+function renderJoint(rMain){
+  const out=$('#jointResult');
+  ST.spage=parseInt(digits($('#sp-age').value))||null;
+  ST.spsav=parseInt(digits($('#sp-sav').value))||0;
+  if(!ST.spage){ out.innerHTML='<span class="muted">Впишите возраст и накопления супруга(и) для предварительной проверки.</span>'; return; }
+  const r2=engineCalc({g:ST.sg,dis:'none',oppv:0,age:ST.spage,sav:ST.spsav,gp:ST.gp,idx:ST.idx,bon:ST.bon,premMode:'min'});
+  if(!r2.ok){ out.innerHTML='<span class="muted">Для супруга(и) в этом возрасте предварительный расчёт недоступен ('+(r2.minAge?('мин. возраст '+r2.minAge):'проверьте данные')+').</span>'; return; }
+  const need=rMain.thrCur+r2.thrCur, have=(rMain.sav||0)+(ST.spsav||0);
+  const ok=have>=need;
+  out.innerHTML=`<div class="statusbig ${ok?'ok':'no'}" style="padding:14px"><div class="ic">${ok?'✓':'○'}</div><div>
+    <h2 style="font-size:16px">${ok?'Паре хватает на совместный аннуитет':'Паре пока не хватает'}</h2>
+    <p>Нужно на двоих: <b>${fmt(need)} ₸</b>, у пары: <b>${fmt(have)} ₸</b>. ${ok?'':'Не хватает <b>'+fmt(need-have)+' ₸</b>.'}<br>
+    <span class="tiny muted">Совместный аннуитет — предварительная проверка. Точные суммы и условия рассчитывает специалист КСЖ.</span></p></div></div>`;
+}
+
+/* ================= СОБЫТИЯ ================= */
+function bindSeg(id,key,cast){
+  document.querySelectorAll('#'+id+' button').forEach(b=>{
+    b.onclick=()=>{
+      document.querySelectorAll('#'+id+' button').forEach(x=>x.classList.remove('on'));
+      b.classList.add('on');
+      ST[key]=cast?cast(b.dataset.v):b.dataset.v;
+      if(ST.shown && key!=='sg') render();
+      if(key==='sg' && ST.joint) renderJoint(ST.lastR);
+    };
+  });
+}
+bindSeg('seg-g','g'); bindSeg('seg-dis','dis'); bindSeg('seg-oppv','oppv',v=>+v); bindSeg('seg-sg','sg');
+
+function fmtField(el){const d=digits(el.value); el.value=d?(+d).toLocaleString('ru-RU').replace(/,/g,' '):'';}
+$('#in-sav').addEventListener('input',e=>fmtField(e.target));
+$('#sp-sav').addEventListener('input',e=>{fmtField(e.target); if(ST.joint&&ST.shown)renderJoint(ST.lastR);});
+$('#sp-age').addEventListener('input',()=>{if(ST.joint&&ST.shown)renderJoint(ST.lastR);});
+
+$('#btn-calc').onclick=()=>{ ST._scroll=true; render(); };
+[ 'in-age','in-sav' ].forEach(id=>$('#'+id).addEventListener('keydown',e=>{if(e.key==='Enter'){ST._scroll=true;render();}}));
+
+let _t;
+$('#rng-gp').addEventListener('input',e=>{ST.gp=+e.target.value;setRange(e.target);$('#lab-gp').textContent=e.target.value+' '+plural(+e.target.value,'год','года','лет');clearTimeout(_t);_t=setTimeout(()=>{if(ST.shown)render();},120);});
+$('#rng-idx').addEventListener('input',e=>{ST.idx=(+e.target.value)/100;setRange(e.target);$('#lab-idx').textContent=e.target.value+'%';clearTimeout(_t);_t=setTimeout(()=>{if(ST.shown)render();},120);});
+$('#rng-bon').addEventListener('input',e=>{ST.bon=(+e.target.value)/100;setRange(e.target);$('#lab-bon').textContent=e.target.value+'%';clearTimeout(_t);_t=setTimeout(()=>{if(ST.shown)render();},120);});
+$('#rng-prem').addEventListener('input',e=>{ST.premMode='custom';ST.premium=+e.target.value;setRange(e.target);$('#lab-prem').innerHTML='Переводите: <b>'+fmt(ST.premium)+' ₸</b>';clearTimeout(_t);_t=setTimeout(()=>{if(ST.shown)render();},180);});
+
+document.querySelectorAll('#premchips button').forEach(b=>{b.onclick=()=>{ST.premMode=b.dataset.m;ST.premium=0;$('#chk-reserve').checked=false;if(ST.shown)render();};});
+$('#chk-reserve').onchange=e=>{ST.premMode=e.target.checked?'reserve':'min';ST.premium=0;if(ST.shown)render();};
+
+$('#jt-on').onclick=()=>{ST.joint=true;$('#jt-on').classList.add('on');$('#jt-off').classList.remove('on');$('#spouse').classList.add('on');if(ST.shown)renderJoint(ST.lastR);};
+$('#jt-off').onclick=()=>{ST.joint=false;$('#jt-on').classList.remove('on');$('#jt-off').classList.add('on');$('#spouse').classList.remove('on');};
+
+$('#btn-showall').onclick=()=>{const w=$('#tblwrap');w.classList.toggle('collapsed');$('#btn-showall').textContent=w.classList.contains('collapsed')?'Показать все годы — до 100 лет ↓':'Свернуть ↑';};
+$('#btn-clearcard').onclick=()=>{['c-name','c-phone','c-email','c-city'].forEach(id=>$('#'+id).value='');};
+$('#btn-reset').onclick=()=>{location.href=location.origin+location.pathname;};
+
+function card(){return {name:$('#c-name').value.trim(),phone:$('#c-phone').value.trim(),email:$('#c-email').value.trim(),city:$('#c-city').value.trim()};}
+
+/* ================= ОТЧЁТ ДЛЯ КЛИЕНТА ================= */
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+
+function buildReport(r){
+  const c=card();
+  let imgCum='',imgY='';
+  try{ if(chCum)imgCum='<img src="'+chCum.toBase64Image()+'" style="width:100%;border:1px solid #e9e0d2;border-radius:10px">'; }catch(e){}
+  try{ if(chY)imgY='<img src="'+chY.toBase64Image()+'" style="width:100%;border:1px solid #e9e0d2;border-radius:10px">'; }catch(e){}
+  let rows='';
+  r.series.forEach(y=>{ rows+='<tr style="background:'+(y.guar?'#f6ecd6':'#fff')+'"><td>'+y.age+'</td><td style="text-align:right">'+fmt(y.monthly)+'</td><td style="text-align:right">'+fmt(y.annual)+'</td><td style="text-align:right">'+fmt(y.acc)+'</td><td style="text-align:right">'+fmt(Math.max(0,y.rem))+'</td></tr>'; });
+  const adv=card();
+  const consultant = (adv.name||adv.phone||adv.email||adv.city)
+    ? '<div style="background:#f6f2ea;border:1px solid #e9e0d2;border-radius:12px;padding:16px;margin-bottom:20px"><div style="font-weight:800;font-size:15px">'+esc(adv.name||'Ваш консультант')+'</div><div style="color:#6b6356;font-size:13px;margin-top:4px">'+[esc(adv.phone),esc(adv.email),esc(adv.city)].filter(Boolean).join(' · ')+'</div></div>'
+    : '';
+  const statusBlock = r.enough
+    ? '<div style="background:#e7f1ea;border-radius:12px;padding:18px;margin:16px 0"><div style="font-size:18px;font-weight:800;color:#245f43">✓ Накоплений хватает на пенсионный аннуитет</div><div style="color:#5b5448;margin-top:6px">Минимально для оформления: <b>'+fmt(r.thrCur)+' ₸</b>'+(r.type==='delayed'?'. Выплаты начнутся в '+r.startAge+' лет':'')+'.</div></div>'
+    : '<div style="background:#f6e3dd;border-radius:12px;padding:18px;margin:16px 0"><div style="font-size:18px;font-weight:800;color:#8a3422">До оформления не хватает '+fmt(r.shortToThr)+' ₸</div><div style="color:#5b5448;margin-top:6px">Нужный минимум: <b>'+fmt(r.thrCur)+' ₸</b>, накоплено: '+fmt(r.sav)+' ₸.</div></div>';
+  const genderTxt = r.g==='m'?'Мужчина':'Женщина';
+  const disTxt = r.dis==='none'?'':(', инвалидность '+r.dis+' группы');
+  const head = '<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Расчёт пенсионного аннуитета</title>'+
+    '<style>body{font-family:Manrope,Segoe UI,system-ui,sans-serif;color:#22201c;line-height:1.55;max-width:760px;margin:0 auto;padding:28px 18px;background:#fff}h1{font-size:24px}h2{font-size:17px;margin:24px 0 8px}table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}th,td{padding:7px 8px;border-bottom:1px solid #e9e0d2}th{text-align:right;color:#8a8073;font-size:11px;text-transform:uppercase}th:first-child,td:first-child{text-align:left}.kp{display:flex;gap:12px;flex-wrap:wrap;margin:14px 0}.kp>div{flex:1;min-width:140px;background:#fffefb;border:1px solid #e9e0d2;border-radius:10px;padding:12px}.kp .l{font-size:12px;color:#8a8073}.kp .v{font-size:19px;font-weight:800;margin-top:3px}ul{margin:6px 0;padding-left:20px}li{margin:5px 0}.muted{color:#8a8073;font-size:12px}</style></head><body>';
+  const benefits='<h2>Почему пенсионный аннуитет — это выгодно</h2><ul>'+
+    '<li><b>Пожизненные выплаты.</b> Деньги приходят каждый месяц до конца жизни — даже когда переведённая сумма математически закончилась бы.</li>'+
+    '<li><b>Ежегодная индексация '+(r.idx*100)+'%.</b> Выплата растёт каждый год и успевает за ростом цен.</li>'+
+    '<li><b>Бонус '+fmt(r.bonus)+' ₸ сверху.</b> Страховая начисляет его дополнительно — он не уменьшает выплату.</li>'+
+    '<li><b>Защита наследников.</b> В гарантийный период ('+r.gp+' лет) выплаты получают близкие, если что-то случится.</li>'+
+    (r.enpfLeft>0?'<li><b>Остаток остаётся вам.</b> В ЕНПФ сохраняется '+fmt(r.enpfLeft)+' ₸.</li>':'')+'</ul>';
+  const steps='<h2>Как оформить</h2><ol><li>Выбрать страховую компанию (КСЖ) и подтвердить расчёт.</li><li>Подготовить документы: удостоверение личности и выписку из ЕНПФ.</li><li>Подписать договор пенсионного аннуитета.</li><li>ЕНПФ переводит сумму в КСЖ.</li><li>Получать аннуитетные выплаты — пожизненно.</li></ol>';
+  return head+consultant+
+    '<h1>Расчёт пенсионного аннуитета</h1>'+
+    '<div class="muted">'+genderTxt+', '+r.age+' лет'+disTxt+(r.oppv?', ОППВ 60 мес+':'')+' · накопления '+fmt(r.sav)+' ₸</div>'+
+    statusBlock+
+    '<div class="kp"><div><div class="l">Выплата в месяц'+(r.type==='delayed'?' (с '+r.startAge+' лет)':'')+'</div><div class="v">'+fmt(r.payFirst)+' ₸</div></div>'+
+    '<div><div class="l">Единовременный бонус</div><div class="v">'+fmt(r.bonus)+' ₸</div></div>'+
+    '<div><div class="l">Через 10 лет / мес</div><div class="v">'+fmt(Math.round(r.payFirst*Math.pow(1+r.idx,10)))+' ₸</div></div></div>'+
+    benefits+
+    '<h2>Когда вернутся ваши деньги</h2>'+imgCum+
+    '<h2>Выплаты по годам</h2>'+imgY+
+    '<h2>Таблица выплат по годам</h2><table><thead><tr><th>Возраст</th><th>Выплата/мес</th><th>За год</th><th>Получено всего</th><th>Остаток в КСЖ</th></tr></thead><tbody>'+rows+'</tbody></table>'+
+    steps+
+    '<p class="muted" style="margin-top:24px">Расчёт справочный, по официальной методике пенсионного аннуитета РК (2026). Итоговые суммы подтверждает КСЖ при оформлении.</p>'+
+    '</body></html>';
+}
+
+function dl(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),3000);}
+
+$('#dl-html').onclick=()=>{ if(!ST.lastR)return; dl(new Blob([buildReport(ST.lastR)],{type:'text/html;charset=utf-8'}),'raschet-annuitet.html'); showToast('HTML-файл скачан'); };
+$('#dl-word').onclick=()=>{ if(!ST.lastR)return; dl(new Blob(['﻿'+buildReport(ST.lastR)],{type:'application/msword'}),'raschet-annuitet.doc'); showToast('Word-файл скачан'); };
+$('#dl-print').onclick=()=>{ if(!ST.lastR)return; const w=window.open('','_blank'); w.document.write(buildReport(ST.lastR)); w.document.close(); setTimeout(()=>{w.focus();w.print();},400); };
+
+/* ================= ШЕРИНГ ================= */
+function getShareLink(){
+  const r=ST.lastR; const base=location.origin+location.pathname; if(!r)return base;
+  const c=card(); const p=new URLSearchParams();
+  p.set('v','1');p.set('g',r.g);p.set('dis',r.dis);p.set('oppv',r.oppv?1:0);
+  p.set('age',r.age);p.set('sav',r.sav);p.set('gp',r.gp);p.set('pm',r.premMode);
+  if(r.premMode==='custom')p.set('premium',r.premium);
+  p.set('idx',Math.round(r.idx*1000)/1000);p.set('bon',Math.round(r.bon*1000)/1000);
+  if(c.name)p.set('cn',c.name);if(c.phone)p.set('cp',c.phone);if(c.email)p.set('ce',c.email);if(c.city)p.set('cc',c.city);
+  return base+'?'+p.toString();
+}
+$('#share-copy').onclick=async()=>{ if(!ST.lastR){showToast('Сначала сделайте расчёт');return;} const url=getShareLink(); try{await navigator.clipboard.writeText(url);showToast('Ссылка скопирована');}catch(e){prompt('Скопируйте ссылку:',url);} };
+$('#share-wa').onclick=()=>{ if(!ST.lastR){showToast('Сначала сделайте расчёт');return;} const url=getShareLink(); const ph=digits($('#cl-phone').value); const txt='Ваш расчёт пенсионного аннуитета: '+url; const wa='https://wa.me/'+(ph?(ph.length===10?'7'+ph:(ph[0]==='8'?'7'+ph.slice(1):ph)):'')+'?text='+encodeURIComponent(txt); window.open(wa,'_blank'); };
+
+function applyFromUrl(){
+  const p=new URLSearchParams(location.search); if(p.get('v')!=='1')return false;
+  const setSeg=(id,val)=>{document.querySelectorAll('#'+id+' button').forEach(b=>{const on=b.dataset.v===val;b.classList.toggle('on',on);});};
+  if(p.get('g')){ST.g=p.get('g');setSeg('seg-g',ST.g);}
+  if(p.get('dis')){ST.dis=p.get('dis');setSeg('seg-dis',ST.dis);}
+  if(p.get('oppv')){ST.oppv=+p.get('oppv');setSeg('seg-oppv',String(ST.oppv));}
+  if(p.get('age')){$('#in-age').value=p.get('age');}
+  if(p.get('sav')){$('#in-sav').value=(+p.get('sav')).toLocaleString('ru-RU').replace(/,/g,' ');}
+  if(p.get('gp')!=null){ST.gp=+p.get('gp');$('#rng-gp').value=ST.gp;$('#lab-gp').textContent=ST.gp+' '+plural(ST.gp,'год','года','лет');setRange($('#rng-gp'));}
+  if(p.get('idx')){ST.idx=+p.get('idx');$('#rng-idx').value=ST.idx*100;$('#lab-idx').textContent=(ST.idx*100)+'%';setRange($('#rng-idx'));}
+  if(p.get('bon')){ST.bon=+p.get('bon');$('#rng-bon').value=ST.bon*100;$('#lab-bon').textContent=(ST.bon*100)+'%';setRange($('#rng-bon'));}
+  if(p.get('pm')){ST.premMode=p.get('pm'); if(p.get('premium'))ST.premium=+p.get('premium');}
+  ['cn','cp','ce','cc'].forEach((k,i)=>{const v=p.get(k);if(v)$('#'+['c-name','c-phone','c-email','c-city'][i]).value=v;});
+  ST._scroll=false; render(); return true;
+}
+
+/* часы Алматы (UTC+5) */
+function tickClock(){const d=new Date(Date.now()+ (new Date().getTimezoneOffset()*60000) + 5*3600000);const p=n=>String(n).padStart(2,'0');$('#clock').textContent='Алматы · '+p(d.getHours())+':'+p(d.getMinutes());}
+setInterval(tickClock,1000); tickClock();
+
+/* init */
+['rng-gp','rng-idx','rng-bon'].forEach(id=>setRange($('#'+id)));
+applyFromUrl();
+</script>
+</body>
+</html>
