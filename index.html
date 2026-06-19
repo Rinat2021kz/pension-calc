@@ -273,16 +273,16 @@ details.expl .body{padding:0 0 16px;font-size:14px;color:#5b5448}
         <div class="slrow">
           <div class="top"><span class="name">Сколько перевести в страховую</span></div>
           <div class="premchips" id="premchips">
-            <button data-m="min" class="on">Только достаточную</button>
-            <button data-m="all">Всю сумму</button>
+            <button data-m="min">Только достаточную</button>
+            <button data-m="all" class="on">Всю сумму</button>
           </div>
           <input type="range" id="rng-prem" min="0" max="100" step="1000" value="0">
           <div class="small muted" id="lab-prem" style="margin-top:8px">Переводите: <b>—</b></div>
           <label class="checkline"><input type="checkbox" id="chk-reserve"> Заложить запас на смену страховой через 2 года</label>
         </div>
         <div class="slrow">
-          <div class="top"><span class="name">Гарантийный период <span class="qmark" onclick="tip('tip-gp')">?</span></span><span class="v" id="lab-gp">15 лет</span></div>
-          <input type="range" id="rng-gp" min="0" max="30" step="1" value="15">
+          <div class="top"><span class="name">Гарантийный период <span class="qmark" onclick="tip('tip-gp')">?</span></span><span class="v" id="lab-gp">1 год</span></div>
+          <input type="range" id="rng-gp" min="1" max="30" step="1" value="1">
           <div class="tipbox" id="tip-gp">Период, на который выплаты закреплены за договором. Если застрахованный уходит из жизни в эти годы, невыплаченный остаток переходит наследникам. Чем дольше период — тем немного меньше ежемесячная сумма.</div>
         </div>
         <div class="slrow">
@@ -483,8 +483,8 @@ function engineCalc(IN){
 }
 
 /* ================= СОСТОЯНИЕ И УТИЛИТЫ ================= */
-const ST={g:'m',dis:'none',oppv:0,age:null,sav:null,gp:15,idx:0.08,bon:0.11,
-  premMode:'min',premium:0,joint:false,sg:'f',spage:null,spsav:null,shown:false,lastR:null};
+const ST={g:'m',dis:'none',oppv:0,age:null,sav:null,gp:1,idx:0.08,bon:0.11,
+  premMode:'all',premium:0,joint:false,sg:'f',spage:null,spsav:null,shown:false,lastR:null};
 const $=s=>document.querySelector(s);
 const fmt=n=>Math.round(n).toLocaleString('ru-RU').replace(/ /g,' ').replace(/,/g,' ');
 const fmtM=n=>{const m=n/1e6; return (m>=10?m.toFixed(1):m.toFixed(2))+' млн';};
@@ -704,7 +704,12 @@ $('#in-sav').addEventListener('input',e=>fmtField(e.target));
 $('#sp-sav').addEventListener('input',e=>{fmtField(e.target); if(ST.joint&&ST.shown)renderJoint(ST.lastR);});
 $('#sp-age').addEventListener('input',()=>{if(ST.joint&&ST.shown)renderJoint(ST.lastR);});
 
-$('#btn-calc').onclick=()=>{ ST._scroll=true; render(); };
+$('#btn-calc').onclick=()=>{
+  ST.gp=1; ST.premMode='all'; ST.premium=0;
+  $('#rng-gp').value=1; $('#lab-gp').textContent='1 год'; setRange($('#rng-gp'));
+  const cr=$('#chk-reserve'); if(cr)cr.checked=false;
+  ST._scroll=true; render();
+};
 [ 'in-age','in-sav' ].forEach(id=>$('#'+id).addEventListener('keydown',e=>{if(e.key==='Enter'){ST._scroll=true;render();}}));
 
 let _t;
