@@ -196,6 +196,10 @@ details.expl .body{padding:0 0 16px;font-size:14px;color:#5b5448}
 .enpf-col .big{font-size:20px;font-weight:800;margin:5px 0;letter-spacing:-.02em}
 .enpf-col.ok .big{color:var(--green-d)}
 .enpf-col .d{font-size:12.5px;color:#5b5448;line-height:1.5}
+.note-pill{border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.5}
+.note-pill.money{background:var(--green-soft);color:#245f43;border:1px solid #cfe6d8}
+.note-pill.guard{background:#eef3f8;color:#2f4a63;border:1px solid #d9e3ee}
+.note-pill b{font-weight:700}
 </style>
 </head>
 <body>
@@ -279,6 +283,7 @@ details.expl .body{padding:0 0 16px;font-size:14px;color:#5b5448}
         <div><h2 id="status-h">—</h2><p id="status-p">—</p></div>
       </div>
       <div class="kpis" id="kpis"></div>
+      <div id="extraNotes" style="margin-top:14px;display:grid;gap:10px"></div>
     </div>
 
     <!-- conditions -->
@@ -515,11 +520,17 @@ function engineCalc(IN){
     if(be===null && acc>=premium) be=a;
   }
   const enough = sav>=thrCur;
+  const bonusAtThr=Math.round(thrCur*bon);
+  const shortAmt=Math.max(0,thrCur-sav);
+  const almostEnough = !enough && shortAmt>0 && shortAmt<=bonusAtThr;
+  const pensionAge = g==='m'?63:61;
+  let gotBeforePension=0;
+  if(startAge<pensionAge){ const rb=series.filter(y=>y.age<pensionAge); gotBeforePension=rb.length?rb[rb.length-1].acc:0; }
   return {ok:true, g,dis,oppv,age,defer,startAge,gp,idx,bon,sav,
     type:defer>0?'delayed':'immediate', E2,E3,E5,
     thrJ,thrCur,thrNext,reserveAmt,maxPrem,premium,premMode:mode,
     payFirst, bonus:Math.round(premium*bon), enpfLeft:Math.max(0,sav-premium),
-    shortToThr:Math.max(0,thrCur-sav), be, series, enough};
+    shortToThr:shortAmt, be, series, enough, bonusAtThr, almostEnough, pensionAge, gotBeforePension};
 }
 
 /* ================= СОСТОЯНИЕ И УТИЛИТЫ ================= */
@@ -562,10 +573,14 @@ function render(){
     sb.className='statusbig ok'; $('#status-ic').textContent='✓';
     $('#status-h').textContent='Накоплений хватает';
     $('#status-p').innerHTML='Вы можете оформить пенсионный аннуитет'+(r.type==='delayed'?' — выплаты начнутся в '+r.startAge+' лет':'')+'. Минимально для оформления: <b>'+fmt(r.thrCur)+' ₸</b>.';
+  } else if(r.almostEnough){
+    sb.className='statusbig ok'; $('#status-ic').textContent='≈';
+    $('#status-h').textContent='Почти хватает — это решаемо';
+    $('#status-p').innerHTML='До порога не хватает <b>'+fmt(r.shortToThr)+' ₸</b> — но это меньше единовременного бонуса <b>'+fmt(r.bonusAtThr)+' ₸</b>, который начисляет страховая. Нехватку можно доложить (добровольным пенсионным взносом или доплатой в страховую), и бонус всё равно остаётся в плюсе.';
   } else {
     sb.className='statusbig no'; $('#status-ic').textContent='○';
     $('#status-h').textContent='Пока не хватает';
-    $('#status-p').innerHTML='До оформления не хватает <b>'+fmt(r.shortToThr)+' ₸</b>. Нужный минимум: <b>'+fmt(r.thrCur)+' ₸</b>, у вас: '+fmt(r.sav)+' ₸.';
+    $('#status-p').innerHTML='До оформления не хватает <b>'+fmt(r.shortToThr)+' ₸</b>. Нужный минимум: <b>'+fmt(r.thrCur)+' ₸</b>, у вас: '+fmt(r.sav)+' ₸. Нехватку можно доложить добровольным взносом или доплатить прямо в страховую.';
   }
 
   /* KPI */
@@ -579,6 +594,11 @@ function render(){
     (r.enough
       ? `<div class="kpi"><div class="lab">Остаётся в ЕНПФ</div><div class="val">${fmt(r.enpfLeft)} <small>₸</small></div></div>`
       : `<div class="kpi"><div class="lab">Не хватает</div><div class="val" style="color:var(--red)">${fmt(r.shortToThr)} <small>₸</small></div></div>`);
+
+  let _notes='';
+  if(r.gotBeforePension>0) _notes+='<div class="note-pill money"><b>Деньги работают раньше.</b> С '+r.startAge+' до '+r.pensionAge+' лет — ещё до пенсии — вы получите на руки <b>'+fmt(r.gotBeforePension)+' ₸</b>.</div>';
+  _notes+='<div class="note-pill guard"><b>Выплаты под защитой государства.</b> Их гарантирует Фонд гарантирования страховых выплат (ФГСВ) — как банковские вклады, даже при ликвидации страховой компании.</div>';
+  const en=$('#extraNotes'); if(en)en.innerHTML=_notes;
 
   /* premium slider bounds */
   const rp=$('#rng-prem');
@@ -859,7 +879,9 @@ function buildReport(r, mode){
     ? '<div style="background:#f6f2ea;border:1px solid #e9e0d2;border-radius:12px;padding:16px;margin-bottom:20px"><div style="font-weight:800;font-size:15px">'+esc(c.name||'Ваш консультант')+'</div><div style="color:#6b6356;font-size:13px;margin-top:4px">'+[esc(c.phone),esc(c.email),esc(c.city)].filter(Boolean).join(' · ')+'</div></div>' : '';
   const statusBlock=r.enough
     ? '<div style="background:#e7f1ea;border-radius:12px;padding:18px;margin:16px 0"><div style="font-size:18px;font-weight:800;color:#245f43">✓ Накоплений хватает на пенсионный аннуитет</div><div style="color:#5b5448;margin-top:6px">Минимально для оформления: <b>'+fmt(r.thrCur)+' ₸</b>'+(r.type==='delayed'?'. Выплаты начнутся в '+r.startAge+' лет':'')+'.</div></div>'
-    : '<div style="background:#f6e3dd;border-radius:12px;padding:18px;margin:16px 0"><div style="font-size:18px;font-weight:800;color:#8a3422">До оформления не хватает '+fmt(r.shortToThr)+' ₸</div><div style="color:#5b5448;margin-top:6px">Нужный минимум: <b>'+fmt(r.thrCur)+' ₸</b>, накоплено: '+fmt(r.sav)+' ₸.</div></div>';
+    : (r.almostEnough
+      ? '<div style="background:#fbf3df;border-radius:12px;padding:18px;margin:16px 0"><div style="font-size:18px;font-weight:800;color:#8a6d1a">Почти хватает — это решаемо</div><div style="color:#5b5448;margin-top:6px">До порога не хватает <b>'+fmt(r.shortToThr)+' ₸</b>, но это меньше единовременного бонуса <b>'+fmt(r.bonusAtThr)+' ₸</b>. Нехватку можно доложить (добровольным взносом или доплатой в страховую) — бонус всё равно остаётся в плюсе.</div></div>'
+      : '<div style="background:#f6e3dd;border-radius:12px;padding:18px;margin:16px 0"><div style="font-size:18px;font-weight:800;color:#8a3422">До оформления не хватает '+fmt(r.shortToThr)+' ₸</div><div style="color:#5b5448;margin-top:6px">Нужный минимум: <b>'+fmt(r.thrCur)+' ₸</b>, накоплено: '+fmt(r.sav)+' ₸. Нехватку можно доложить добровольным взносом или доплатить прямо в страховую.</div></div>');
   const genderTxt=r.g==='m'?'Мужчина':'Женщина';
   const disTxt=r.dis==='none'?'':(', инвалидность '+r.dis+' группы');
   function card2(items){ return '<div style="background:#f6f2ea;border:1px solid #e9e0d2;border-radius:10px;padding:12px 14px;margin:10px 0;font-size:13.5px;color:#3b3a36;line-height:1.6">'+items+'</div>'; }
@@ -875,6 +897,8 @@ function buildReport(r, mode){
     '<li><b>Ежегодная индексация '+(r.idx*100)+'%.</b> Выплата растёт каждый год и успевает за ростом цен.</li>'+
     '<li><b>Бонус '+fmt(r.bonus)+' ₸ сверху.</b> Страховая начисляет его дополнительно — он не уменьшает выплату.</li>'+
     '<li><b>Защита наследников.</b> В гарантийный период ('+r.gp+' лет) выплаты получают близкие, если что-то случится.</li>'+
+    '<li><b>Гарантия государства.</b> Выплаты гарантирует Фонд гарантирования страховых выплат (ФГСВ) — как банковские вклады, даже при ликвидации страховой компании.</li>'+
+    (r.gotBeforePension>0?'<li><b>Деньги работают раньше.</b> С '+r.startAge+' до '+r.pensionAge+' лет — ещё до пенсии — вы получите на руки '+fmt(r.gotBeforePension)+' ₸.</li>':'')+
     (r.enpfLeft>0?'<li><b>Остаток остаётся вам.</b> В ЕНПФ сохраняется '+fmt(r.enpfLeft)+' ₸.</li>':'')+'</ul>';
   const explain='<h2>Пояснения к расчёту</h2><div class="expl">'+
     '<h3>Что такое пенсионный аннуитет?</h3><p>Это перевод накоплений из ЕНПФ в страховую компанию (КСЖ), которая взамен платит фиксированную сумму ежемесячно и пожизненно — даже после того, как переведённые деньги формально закончились бы.</p>'+
