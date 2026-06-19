@@ -660,6 +660,13 @@ function vGpLine(idx,label){return {id:'vgp',afterDraw(c){
   ctx.fillText(label,xx,top+10);ctx.restore();
 }};}
 
+function ptLabels(idxs,col,ds){ds=ds||0;return {id:'ptl'+Math.random(),afterDatasetsDraw(c){
+  const meta=c.getDatasetMeta(ds); if(!meta||!meta.data)return; const ctx=c.ctx;
+  idxs.forEach(i=>{const pt=meta.data[i]; if(!pt)return; const v=c.data.datasets[ds].data[i]; if(v==null||v===0)return;
+    ctx.save();ctx.fillStyle=col||'#245f43';ctx.font='700 10.5px Manrope,sans-serif';ctx.textAlign='center';ctx.textBaseline='bottom';
+    const t=v>=1e6?(v/1e6).toFixed(1)+' млн':(Math.round(v/1000)+'k');
+    ctx.fillText(t, pt.x, pt.y-7);ctx.restore();});
+}};}
 function drawCharts(r){
   const TEAL='#2f7a55', TEALF='rgba(47,122,85,.16)', CORAL='#b4452f', GRID='#ece2d2', AX='#a99e8d';
   if(typeof Chart==="undefined"){["#chartCompare","#chartCum","#chartYears"].forEach(function(id){var c=$(id);if(c&&c.parentElement)c.parentElement.innerHTML='<div style="padding:60px 20px;text-align:center;color:#8a8073">График временно недоступен</div>';});return;}
@@ -688,21 +695,21 @@ function drawCharts(r){
       {data:S.map(y=>y.acc),borderColor:TEAL,backgroundColor:TEALF,fill:true,tension:.35,borderWidth:2,pointRadius:labels.map((_,i)=>i===beIdx?5:0),pointBackgroundColor:TEAL,pointBorderColor:'#fff',pointBorderWidth:2},
       {data:labels.map(()=>cap),borderColor:CORAL,borderDash:[6,4],borderWidth:2,pointRadius:0,fill:false}
     ]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},
+    options:{responsive:true,maintainAspectRatio:false,interaction:{mode:"index",intersect:false},plugins:{legend:{display:false},
       tooltip:{callbacks:{label:c=>c.datasetIndex===0?fmt(c.raw)+' ₸ получено к '+c.label+' годам':'вложено '+fmt(c.raw)+' ₸'}}},
       scales:{x:{grid:{display:false},ticks:{color:AX,maxTicksLimit:10,maxRotation:0}},
         y:{grid:{color:GRID},ticks:{color:AX,callback:v=>(v/1e6).toFixed(0)+' млн'}}}},
-    plugins:[refLine(cap,'вы перевели '+fmt(cap)+' ₸'), bePoint(beIdx, beIdx>=0?('деньги вернулись · '+S[beIdx].age+' лет'):'')]});
+    plugins:[refLine(cap,'вы перевели '+fmt(cap)+' ₸'), bePoint(beIdx, beIdx>=0?('деньги вернулись · '+S[beIdx].age+' лет'):''), ptLabels([Math.floor(S.length/2),S.length-1],'#245f43',0)]});
 
   const gpEndIdx = r.gp>0 ? Math.min(r.gp, S.length-1) : -1;
   if(chY)chY.destroy();
   chY=new Chart($('#chartYears'),{type:'line',
     data:{labels,datasets:[{data:S.map(y=>y.monthly),borderColor:TEAL,backgroundColor:TEALF,fill:true,tension:.35,borderWidth:2.5,pointRadius:0}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},
+    options:{responsive:true,maintainAspectRatio:false,interaction:{mode:"index",intersect:false},plugins:{legend:{display:false},
       tooltip:{callbacks:{label:c=>fmt(c.raw)+' ₸/мес в '+c.label+' лет'}}},
       scales:{x:{grid:{display:false},ticks:{color:AX,maxTicksLimit:10,maxRotation:0}},
         y:{grid:{color:GRID},ticks:{color:AX,callback:v=>v>=1e6?(v/1e6).toFixed(1)+' млн':Math.round(v/1000)+'k'}}}},
-    plugins:[gpEndIdx>0?vGpLine(gpEndIdx,'конец гарантии'):{id:'noop'}]});
+    plugins:[gpEndIdx>0?vGpLine(gpEndIdx,'конец гарантии'):{id:'noop'}, ptLabels([0,Math.floor(S.length/2),S.length-1],'#245f43',0)]});
   }catch(e){console.error('chart error',e);}
 }
 
@@ -743,11 +750,11 @@ function drawEnpf(r){
           {label:'аннуитет',data:annMonthly.map(x=>x.m),borderColor:'#2f7a55',backgroundColor:'rgba(47,122,85,.10)',fill:true,tension:.3,borderWidth:2.5,pointRadius:0},
           {label:'ЕНПФ по графику',data:enpfData,borderColor:'#c1933b',backgroundColor:'rgba(193,147,59,.08)',fill:true,tension:.3,borderWidth:2.5,pointRadius:0,borderDash:[5,3]}
         ]},
-        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},
+        options:{responsive:true,maintainAspectRatio:false,interaction:{mode:"index",intersect:false},plugins:{legend:{display:false},
           tooltip:{callbacks:{label:c=>c.dataset.label+': '+(c.raw>0?fmt(c.raw)+' ₸/мес':'выплаты закончились')}}},
           scales:{x:{grid:{display:false},ticks:{color:'#a99e8d',maxTicksLimit:10,maxRotation:0}},
             y:{grid:{color:'#ece2d2'},ticks:{color:'#a99e8d',callback:v=>v>=1e6?(v/1e6).toFixed(1)+' млн':Math.round(v/1000)+'k'}}}},
-        plugins:[ exIdx>0?vGpLine(exIdx,'ЕНПФ закончился'):{id:'noop2'} ]});
+        plugins:[ exIdx>0?vGpLine(exIdx,'ЕНПФ закончился'):{id:'noop2'}, ptLabels([0,labels.length-1],'#2f7a55',0), ptLabels([Math.max(0,exIdx)],'#9a6b16',1) ]});
     }catch(e){console.error('enpf chart',e);}
   }
   sum.innerHTML='<div class="enpf-cmp"><div class="enpf-col ok"><div class="t">Пенсионный аннуитет</div>'+
@@ -825,46 +832,65 @@ function card(){return {name:$('#c-name').value.trim(),phone:$('#c-phone').value
 /* ================= ОТЧЁТ ДЛЯ КЛИЕНТА ================= */
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
 
-function buildReport(r){
+function buildReport(r, mode){
+  mode=mode||'html';
   const c=card();
   const accAt=a=>{const row=r.series.find(x=>x.age===a)||r.series[r.series.length-1];return row?row.acc:0;};
-  function img(ch){ try{ return ch?'<img src="'+ch.toBase64Image('image/png',1)+'" style="width:100%;border:1px solid #e9e0d2;border-radius:10px">':''; }catch(e){ return ''; } }
-  const imgCompare=img(chCompare), imgCum=img(chCum), imgY=img(chY);
+  const g=graphEnpf(r);
   let mile=[r.startAge+10,r.startAge+20,r.startAge+30].filter(a=>a<=100);
   while(mile.length<3) mile.push(Math.min(100,(mile.length?mile[mile.length-1]:r.startAge)+5));
+  const D={
+    labels:r.series.map(y=>y.age), acc:r.series.map(y=>y.acc), monthly:r.series.map(y=>y.monthly),
+    premium:r.premium, be:r.be, bonus:r.bonus,
+    enpf:r.series.map(y=>{const e=g.series.find(x=>x.age===y.age);return e?e.monthly:0;}),
+    payFirst:r.payFirst, enpfFirst:g.payFirst, exhaust:g.exhaustAge,
+    mLabels:mile.map(a=>'к '+a+' годам'), mInvested:mile.map(()=>r.premium), mGot:mile.map(a=>accAt(a)+r.bonus)
+  };
+  function pngOf(ch){ try{ return ch?'<img src="'+ch.toBase64Image('image/png',1)+'" style="width:100%;border:1px solid #e9e0d2;border-radius:10px">':''; }catch(e){ return ''; } }
+  function gblock(cid, ch, title, desc, legend){
+    const head='<h2>'+title+'</h2><p class="muted">'+desc+'</p>';
+    if(mode==='html') return head+(legend||'')+'<div style="position:relative;height:300px;margin-top:6px"><canvas id="'+cid+'"></canvas></div>';
+    return head+pngOf(ch)+(legend||'');
+  }
   let rows='';
   r.series.forEach(y=>{ rows+='<tr style="background:'+(y.guar?'#f6ecd6':'#fff')+'"><td>'+y.age+'</td><td style="text-align:right">'+fmt(y.monthly)+'</td><td style="text-align:right">'+fmt(y.annual)+'</td><td style="text-align:right">'+fmt(y.acc)+'</td><td style="text-align:right">'+fmt(Math.max(0,y.rem))+'</td></tr>'; });
-  const adv=c;
-  const consultant = (adv.name||adv.phone||adv.email||adv.city)
-    ? '<div style="background:#f6f2ea;border:1px solid #e9e0d2;border-radius:12px;padding:16px;margin-bottom:20px"><div style="font-weight:800;font-size:15px">'+esc(adv.name||'Ваш консультант')+'</div><div style="color:#6b6356;font-size:13px;margin-top:4px">'+[esc(adv.phone),esc(adv.email),esc(adv.city)].filter(Boolean).join(' · ')+'</div></div>'
-    : '';
-  const statusBlock = r.enough
+  const consultant=(c.name||c.phone||c.email||c.city)
+    ? '<div style="background:#f6f2ea;border:1px solid #e9e0d2;border-radius:12px;padding:16px;margin-bottom:20px"><div style="font-weight:800;font-size:15px">'+esc(c.name||'Ваш консультант')+'</div><div style="color:#6b6356;font-size:13px;margin-top:4px">'+[esc(c.phone),esc(c.email),esc(c.city)].filter(Boolean).join(' · ')+'</div></div>' : '';
+  const statusBlock=r.enough
     ? '<div style="background:#e7f1ea;border-radius:12px;padding:18px;margin:16px 0"><div style="font-size:18px;font-weight:800;color:#245f43">✓ Накоплений хватает на пенсионный аннуитет</div><div style="color:#5b5448;margin-top:6px">Минимально для оформления: <b>'+fmt(r.thrCur)+' ₸</b>'+(r.type==='delayed'?'. Выплаты начнутся в '+r.startAge+' лет':'')+'.</div></div>'
     : '<div style="background:#f6e3dd;border-radius:12px;padding:18px;margin:16px 0"><div style="font-size:18px;font-weight:800;color:#8a3422">До оформления не хватает '+fmt(r.shortToThr)+' ₸</div><div style="color:#5b5448;margin-top:6px">Нужный минимум: <b>'+fmt(r.thrCur)+' ₸</b>, накоплено: '+fmt(r.sav)+' ₸.</div></div>';
-  const genderTxt = r.g==='m'?'Мужчина':'Женщина';
-  const disTxt = r.dis==='none'?'':(', инвалидность '+r.dis+' группы');
-  function sumCard(items){ return '<div style="background:#f6f2ea;border:1px solid #e9e0d2;border-radius:10px;padding:12px 14px;margin:10px 0;font-size:13.5px;color:#3b3a36;line-height:1.6">'+items+'</div>'; }
-  const sumCompare = sumCard(
-    'Вы переводите в страховую: <b>'+fmt(r.premium)+' ₸</b>.<br>'+
-    mile.map(a=>{const g=accAt(a)+r.bonus;return 'К '+a+' годам получите выплатами: <b>'+fmt(g)+' ₸</b> — в '+(g/r.premium).toFixed(1)+' раза больше вложенного.';}).join('<br>')+
-    '<br><span style="color:#8a8073;font-size:12px">Суммы с учётом единовременного бонуса '+fmt(r.bonus)+' ₸.</span>');
-  const sumCum = sumCard(
-    'Вложено: <b>'+fmt(r.premium)+' ₸</b>.'+
-    (r.be!=null?(' Полностью возвращается выплатами к <b>'+r.be+' годам</b> — дальше всё, что вы получаете, идёт сверх вложенного, пожизненно.'):'')+
-    ' К '+mile[1]+' годам получено всего: <b>'+fmt(accAt(mile[1]))+' ₸</b>.');
-  const sumY = sumCard(
-    'Первая выплата: <b>'+fmt(r.payFirst)+' ₸/мес</b>'+(r.type==='delayed'?' (с '+r.startAge+' лет)':'')+'.'+
-    ' Через 10 лет — <b>'+fmt(Math.round(r.payFirst*Math.pow(1+r.idx,10)))+' ₸/мес</b>, через 20 лет — <b>'+fmt(Math.round(r.payFirst*Math.pow(1+r.idx,20)))+' ₸/мес</b> за счёт индексации '+(r.idx*100)+'% в год.');
-  const head = '<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Расчёт пенсионного аннуитета</title>'+
-    '<style>body{font-family:Manrope,Segoe UI,system-ui,sans-serif;color:#22201c;line-height:1.55;max-width:760px;margin:0 auto;padding:28px 18px;background:#fff}h1{font-size:24px}h2{font-size:17px;margin:24px 0 8px}table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}th,td{padding:7px 8px;border-bottom:1px solid #e9e0d2}th{text-align:right;color:#8a8073;font-size:11px;text-transform:uppercase}th:first-child,td:first-child{text-align:left}.kp{display:flex;gap:12px;flex-wrap:wrap;margin:14px 0}.kp>div{flex:1;min-width:140px;background:#fffefb;border:1px solid #e9e0d2;border-radius:10px;padding:12px}.kp .l{font-size:12px;color:#8a8073}.kp .v{font-size:19px;font-weight:800;margin-top:3px}ul{margin:6px 0;padding-left:20px}li{margin:5px 0}.muted{color:#8a8073;font-size:12px}</style></head><body>';
+  const genderTxt=r.g==='m'?'Мужчина':'Женщина';
+  const disTxt=r.dis==='none'?'':(', инвалидность '+r.dis+' группы');
+  function card2(items){ return '<div style="background:#f6f2ea;border:1px solid #e9e0d2;border-radius:10px;padding:12px 14px;margin:10px 0;font-size:13.5px;color:#3b3a36;line-height:1.6">'+items+'</div>'; }
+  const sumCompare=card2('Вы переводите в страховую: <b>'+fmt(r.premium)+' ₸</b>.<br>'+mile.map(a=>{const gg=accAt(a)+r.bonus;return 'К '+a+' годам получите выплатами: <b>'+fmt(gg)+' ₸</b> — в '+(gg/r.premium).toFixed(1)+' раза больше вложенного.';}).join('<br>')+'<br><span style="color:#8a8073;font-size:12px">С учётом единовременного бонуса '+fmt(r.bonus)+' ₸.</span>');
+  const sumCum=card2('Вложено: <b>'+fmt(r.premium)+' ₸</b>.'+(r.be!=null?(' Полностью возвращается выплатами к <b>'+r.be+' годам</b> — дальше всё идёт сверх вложенного, пожизненно.'):'')+' К '+mile[1]+' годам получено всего: <b>'+fmt(accAt(mile[1]))+' ₸</b>.');
+  const sumY=card2('Первая выплата: <b>'+fmt(r.payFirst)+' ₸/мес</b>'+(r.type==='delayed'?' (с '+r.startAge+' лет)':'')+'. Через 10 лет — <b>'+fmt(Math.round(r.payFirst*Math.pow(1+r.idx,10)))+' ₸/мес</b>, через 20 — <b>'+fmt(Math.round(r.payFirst*Math.pow(1+r.idx,20)))+' ₸/мес</b> за счёт индексации '+(r.idx*100)+'% в год.');
+  const sumEnpf=card2('<b>Через аннуитет:</b> '+fmt(r.payFirst)+' ₸/мес пожизненно'+(r.bonus>0?' + бонус '+fmt(r.bonus)+' ₸ сверху':'')+'.<br><b>Если забирать из ЕНПФ по графику:</b> старт '+fmt(g.payFirst)+' ₸/мес, но выплаты из ЕНПФ закончатся к <b>'+g.exhaustAge+' годам</b> — дальше только государственная базовая и солидарная пенсия.');
+
+  const head='<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Расчёт пенсионного аннуитета</title>'+
+    '<style>body{font-family:Manrope,Segoe UI,system-ui,sans-serif;color:#22201c;line-height:1.55;max-width:760px;margin:0 auto;padding:28px 18px;background:#fff}h1{font-size:24px}h2{font-size:17px;margin:24px 0 8px}h3{font-size:14px;margin:16px 0 4px;color:#245f43}table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}th,td{padding:7px 8px;border-bottom:1px solid #e9e0d2}th{text-align:right;color:#8a8073;font-size:11px;text-transform:uppercase}th:first-child,td:first-child{text-align:left}.kp{display:flex;gap:12px;flex-wrap:wrap;margin:14px 0}.kp>div{flex:1;min-width:140px;background:#fffefb;border:1px solid #e9e0d2;border-radius:10px;padding:12px}.kp .l{font-size:12px;color:#8a8073}.kp .v{font-size:19px;font-weight:800;margin-top:3px}ul{margin:6px 0;padding-left:20px}li{margin:5px 0}.muted{color:#8a8073;font-size:12px}.expl p{font-size:13.5px;color:#3b3a36;margin:4px 0 12px}.legrow{font-size:12px;color:#8a8073;margin:6px 0}.legrow span{margin-right:14px}.dot{display:inline-block;width:10px;height:10px;border-radius:2px;vertical-align:middle;margin-right:4px}.law .row{padding:8px 0;border-bottom:1px solid #f0e9dc;font-size:13px;color:#5b5448;line-height:1.5}.law .art{font-weight:700;color:#245f43}.law q{font-style:italic;color:#6b6356}</style></head><body>';
   const benefits='<h2>Почему пенсионный аннуитет — это выгодно</h2><ul>'+
     '<li><b>Пожизненные выплаты.</b> Деньги приходят каждый месяц до конца жизни — даже когда переведённая сумма математически закончилась бы.</li>'+
     '<li><b>Ежегодная индексация '+(r.idx*100)+'%.</b> Выплата растёт каждый год и успевает за ростом цен.</li>'+
     '<li><b>Бонус '+fmt(r.bonus)+' ₸ сверху.</b> Страховая начисляет его дополнительно — он не уменьшает выплату.</li>'+
     '<li><b>Защита наследников.</b> В гарантийный период ('+r.gp+' лет) выплаты получают близкие, если что-то случится.</li>'+
     (r.enpfLeft>0?'<li><b>Остаток остаётся вам.</b> В ЕНПФ сохраняется '+fmt(r.enpfLeft)+' ₸.</li>':'')+'</ul>';
-  const steps='<h2>Как оформить</h2><ol><li>Выбрать страховую компанию (КСЖ) и подтвердить расчёт.</li><li>Подготовить документы: удостоверение личности и выписку из ЕНПФ.</li><li>Подписать договор пенсионного аннуитета.</li><li>ЕНПФ переводит сумму в КСЖ.</li><li>Получать аннуитетные выплаты — пожизненно.</li></ol>';
-  return head+consultant+
+  const explain='<h2>Пояснения к расчёту</h2><div class="expl">'+
+    '<h3>Что такое пенсионный аннуитет?</h3><p>Это перевод накоплений из ЕНПФ в страховую компанию (КСЖ), которая взамен платит фиксированную сумму ежемесячно и пожизненно — даже после того, как переведённые деньги формально закончились бы.</p>'+
+    '<h3>Гарантийный период</h3><p>Период, на который выплаты закреплены за договором. Если застрахованный уходит из жизни в эти годы, невыплаченный остаток переходит наследникам.</p>'+
+    '<h3>Индексация</h3><p>Ежегодный прирост выплаты, компенсирующий инфляцию. Чем выше индексация, тем меньше стартовая выплата, зато дальше сумма растёт быстрее.</p>'+
+    '<h3>Единовременный бонус</h3><p>Сумма, которую страховая начисляет дополнительно при переводе накоплений. Идёт сверху: не вычитается из накоплений и не снижает ежемесячную выплату.</p>'+
+    '<h3>Выплаты из ЕНПФ по графику — в чём разница</h3><p>Из ЕНПФ деньги можно забирать по графику, но они со временем заканчиваются. Аннуитет платит пожизненно. Это главное отличие.</p></div>';
+  const legal='<h2>Правовая основа расчёта</h2><div class="law"><p class="muted">По Социальному кодексу РК (№ 224-VII):</p>'+
+    '<div class="row"><span class="art">Ст. 225, п. 2.</span> Выплата <q>не может быть ниже 70 процентов от величины прожиточного минимума (1,4-кратного — для договора двумя лицами)</q>.</div>'+
+    '<div class="row"><span class="art">Ст. 220, п. 1, пп. 4.</span> Аннуитет — <q>по достижении сорокапятилетнего возраста при достаточности пенсионных накоплений</q>.</div>'+
+    '<div class="row"><span class="art">Ст. 221, п. 1, пп. 4.</span> При вредном стаже — <q>по достижении сорокалетнего возраста</q>, если ОППВ уплачены <q>не менее шестидесяти календарных месяцев</q>.</div>'+
+    '<div class="row"><span class="art">Ст. 207, п. 1.</span> Пенсионный возраст: <q>мужчинам по достижении 63 лет</q>; для женщин — поэтапно (с 2023 — 61, с 2031 — 63 года).</div>'+
+    '<div class="row"><span class="art">Ст. 226, п. 8.</span> Сменить страховую можно <q>не ранее двух лет</q>; выкупная сумма — <q>не менее суммы уплаченной страховой премии за вычетом... страховых выплат и расходов</q>.</div>'+
+    '<div class="row"><span class="art">Ст. 226, п. 11.</span> <q>Расчёт страховой премии и страховой выплаты осуществляется страховой организацией в соответствии с методикой, установленной уполномоченным органом по регулированию... финансового рынка</q> (АРРФР).</div>'+
+    '<p class="muted" style="margin-top:8px">Размер бонуса/дивиденда ('+(r.bon*100)+'%) — это договорная ставка конкретной страховой компании (КСЖ), а не норма закона; у разных КСЖ отличается.</p></div>';
+
+  let body=head+consultant+
     '<h1>Расчёт пенсионного аннуитета</h1>'+
     '<div class="muted">'+genderTxt+', '+r.age+' лет'+disTxt+(r.oppv?', ОППВ 60 мес+':'')+' · накопления '+fmt(r.sav)+' ₸</div>'+
     statusBlock+
@@ -872,20 +898,35 @@ function buildReport(r){
     '<div><div class="l">Единовременный бонус</div><div class="v">'+fmt(r.bonus)+' ₸</div></div>'+
     '<div><div class="l">Через 10 лет / мес</div><div class="v">'+fmt(Math.round(r.payFirst*Math.pow(1+r.idx,10)))+' ₸</div></div></div>'+
     benefits+
-    '<h2>Вложили → получите</h2>'+imgCompare+sumCompare+
-    '<h2>Когда вернутся ваши деньги</h2>'+imgCum+sumCum+
-    '<h2>Как растёт ваша выплата</h2>'+imgY+sumY+
+    gblock('rCompare', chCompare, 'Вложили → получите', 'Сколько переводите и сколько получите выплатами к разным возрастам.', '<div class="legrow"><span><span class="dot" style="background:#b4452f"></span>вы перевели</span><span><span class="dot" style="background:#2f7a55"></span>получите выплатами</span></div>')+sumCompare+
+    gblock('rCum', chCum, 'Когда вернутся ваши деньги', 'Зелёная область — получено выплатами нарастающим итогом. Пунктир — сколько вы перевели.', '<div class="legrow"><span><span class="dot" style="background:#2f7a55"></span>получено всего</span><span><span class="dot" style="background:#b4452f"></span>вы перевели</span></div>')+sumCum+
+    gblock('rYears', chY, 'Как растёт ваша выплата', 'Ежемесячная выплата по годам — растёт за счёт индексации.', '')+sumY+
+    gblock('rEnpf', chEnpf, 'Аннуитет или выплаты из ЕНПФ по графику', 'Аннуитет платит пожизненно, а выплаты из ЕНПФ по графику со временем заканчиваются.', '<div class="legrow"><span><span class="dot" style="background:#2f7a55"></span>аннуитет — пожизненно</span><span><span class="dot" style="background:#c1933b"></span>ЕНПФ по графику</span></div>')+sumEnpf+
     '<h2>Таблица выплат по годам</h2><table><thead><tr><th>Возраст</th><th>Выплата/мес</th><th>За год</th><th>Получено всего</th><th>Остаток в КСЖ</th></tr></thead><tbody>'+rows+'</tbody></table>'+
-    steps+
-    '<p class="muted" style="margin-top:24px">Расчёт справочный, по официальной методике пенсионного аннуитета РК (2026). Итоговые суммы подтверждает КСЖ при оформлении.</p>'+
-    '</body></html>';
+    '<h2>Как оформить</h2><ol><li>Выбрать страховую компанию (КСЖ) и подтвердить расчёт.</li><li>Подготовить документы: удостоверение личности и выписку из ЕНПФ.</li><li>Подписать договор пенсионного аннуитета.</li><li>ЕНПФ переводит сумму в КСЖ.</li><li>Получать аннуитетные выплаты — пожизненно.</li></ol>'+
+    explain+legal+
+    '<p class="muted" style="margin-top:24px">Расчёт справочный, по официальной методике пенсионного аннуитета РК (2026). Итоговые суммы подтверждает КСЖ при оформлении.</p>';
+
+  if(mode==='html'){
+    let lib=''; try{ lib=document.scripts[0].textContent.replace(/<\/script>/g,'<\\/script>'); }catch(e){}
+    body+='<script>'+lib+'<\/script><script>var D='+JSON.stringify(D)+';'+REPORT_DRAW+'<\/script>';
+  }
+  return body+'</body></html>';
 }
+
+var REPORT_DRAW='(function(){if(typeof Chart==="undefined")return;var f=function(n){return Math.round(n).toLocaleString("ru-RU").replace(/,/g," ");};'+
+'var ti={mode:"index",intersect:false};'+
+'new Chart(document.getElementById("rCompare"),{type:"bar",data:{labels:D.mLabels,datasets:[{label:"вы перевели",data:D.mInvested,backgroundColor:"#b4452f",borderRadius:4,barPercentage:.62},{label:"получите",data:D.mGot,backgroundColor:"#2f7a55",borderRadius:4,barPercentage:.62}]},options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.dataset.label+": "+f(c.raw)+" ₸"+(c.datasetIndex===1?" (×"+(c.raw/D.premium).toFixed(1)+")":"");}}}},scales:{x:{ticks:{callback:function(v){return (v/1e6).toFixed(0)+" млн";}}}}}});'+
+'new Chart(document.getElementById("rCum"),{type:"line",data:{labels:D.labels,datasets:[{data:D.acc,borderColor:"#2f7a55",backgroundColor:"rgba(47,122,85,.16)",fill:true,tension:.35,pointRadius:0,borderWidth:2},{data:D.labels.map(function(){return D.premium;}),borderColor:"#b4452f",borderDash:[6,4],pointRadius:0,borderWidth:2,fill:false}]},options:{responsive:true,maintainAspectRatio:false,interaction:ti,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.datasetIndex===0?f(c.raw)+" ₸ получено к "+c.label+" годам":"вложено "+f(c.raw)+" ₸";}}}},scales:{y:{ticks:{callback:function(v){return (v/1e6).toFixed(0)+" млн";}}}}}});'+
+'new Chart(document.getElementById("rYears"),{type:"line",data:{labels:D.labels,datasets:[{data:D.monthly,borderColor:"#2f7a55",backgroundColor:"rgba(47,122,85,.16)",fill:true,tension:.35,pointRadius:0,borderWidth:2.5}]},options:{responsive:true,maintainAspectRatio:false,interaction:ti,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return f(c.raw)+" ₸/мес в "+c.label+" лет";}}}},scales:{y:{ticks:{callback:function(v){return v>=1e6?(v/1e6).toFixed(1)+" млн":Math.round(v/1000)+"k";}}}}}});'+
+'new Chart(document.getElementById("rEnpf"),{type:"line",data:{labels:D.labels,datasets:[{label:"аннуитет",data:D.monthly,borderColor:"#2f7a55",backgroundColor:"rgba(47,122,85,.10)",fill:true,tension:.3,pointRadius:0,borderWidth:2.5},{label:"ЕНПФ по графику",data:D.enpf,borderColor:"#c1933b",backgroundColor:"rgba(193,147,59,.08)",fill:true,tension:.3,pointRadius:0,borderWidth:2.5,borderDash:[5,3]}]},options:{responsive:true,maintainAspectRatio:false,interaction:ti,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.dataset.label+": "+(c.raw>0?f(c.raw)+" ₸/мес":"выплаты закончились");}}}},scales:{y:{ticks:{callback:function(v){return v>=1e6?(v/1e6).toFixed(1)+" млн":Math.round(v/1000)+"k";}}}}}});'+
+'})();';
 
 function dl(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),3000);}
 
-$('#dl-html').onclick=()=>{ if(!ST.lastR)return; dl(new Blob([buildReport(ST.lastR)],{type:'text/html;charset=utf-8'}),'raschet-annuitet.html'); showToast('HTML-файл скачан'); };
-$('#dl-word').onclick=()=>{ if(!ST.lastR)return; dl(new Blob(['﻿'+buildReport(ST.lastR)],{type:'application/msword'}),'raschet-annuitet.doc'); showToast('Word-файл скачан'); };
-$('#dl-print').onclick=()=>{ if(!ST.lastR)return; const w=window.open('','_blank'); w.document.write(buildReport(ST.lastR)); w.document.close(); setTimeout(()=>{w.focus();w.print();},400); };
+$('#dl-html').onclick=()=>{ if(!ST.lastR)return; dl(new Blob([buildReport(ST.lastR,'html')],{type:'text/html;charset=utf-8'}),'raschet-annuitet.html'); showToast('HTML-файл скачан'); };
+$('#dl-word').onclick=()=>{ if(!ST.lastR)return; dl(new Blob(['﻿'+buildReport(ST.lastR,'static')],{type:'application/msword'}),'raschet-annuitet.doc'); showToast('Word-файл скачан'); };
+$('#dl-print').onclick=()=>{ if(!ST.lastR)return; const w=window.open('','_blank'); w.document.write(buildReport(ST.lastR,'static')); w.document.close(); setTimeout(()=>{w.focus();w.print();},400); };
 
 /* ================= ШЕРИНГ ================= */
 function getShareLink(){
