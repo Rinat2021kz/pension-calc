@@ -717,8 +717,9 @@ function graphEnpf(r){
   const arr=mortArr(r.dis,r.oppv,r.g);
   const startAge=r.startAge;
   const ax=factorE2(arr,startAge,0,r.idx);
-  const payFirst=Math.max(Math.round(r.sav/(12*ax)), PARAM.min_pen);
-  let rem=r.sav, payM=payFirst, exhaustAge=null;
+  const savStart=r.sav*Math.pow(1+PARAM.i, r.defer||0);
+  const payFirst=Math.max(Math.round(savStart/(12*ax)), PARAM.min_pen);
+  let rem=savStart, payM=payFirst, exhaustAge=null;
   const series=[];
   for(let age=startAge; age<=PARAM.seriesEnd; age++){
     if(rem<=0){ series.push({age,monthly:0,rem:0}); continue; }
@@ -758,7 +759,7 @@ function drawEnpf(r){
     }catch(e){console.error('enpf chart',e);}
   }
   sum.innerHTML='<div class="enpf-cmp"><div class="enpf-col ok"><div class="t">Пенсионный аннуитет</div>'+
-    '<div class="big">'+fmt(r.payFirst)+' ₸/мес</div><div class="d">пожизненно, не закончится'+(r.bonus>0?'<br>+ бонус '+fmt(r.bonus)+' ₸ сверху':'')+'</div></div>'+
+    '<div class="big">'+fmt(r.payFirst)+' ₸/мес</div><div class="d">пожизненно, не закончится — и растёт каждый год'+(r.bonus>0?'<br>+ бонус '+fmt(r.bonus)+' ₸ сверху':'')+'</div></div>'+
     '<div class="enpf-col"><div class="t">Выплаты из ЕНПФ по графику</div>'+
     '<div class="big">'+fmt(g.payFirst)+' ₸/мес</div><div class="d">закончатся к <b>'+g.exhaustAge+' годам</b><br>дальше — только госбазовая и солидарная пенсия</div></div></div>'+
     '<div class="tiny muted" style="margin-top:8px">Расчёт ЕНПФ по графику — по официальной методике РК (доходность 9%, индексация 8%). Это ориентир; точную выплату по графику показывает калькулятор ЕНПФ.</div>';
@@ -865,7 +866,7 @@ function buildReport(r, mode){
   const sumCompare=card2('Вы переводите в страховую: <b>'+fmt(r.premium)+' ₸</b>.<br>'+mile.map(a=>{const gg=accAt(a)+r.bonus;return 'К '+a+' годам получите выплатами: <b>'+fmt(gg)+' ₸</b> — в '+(gg/r.premium).toFixed(1)+' раза больше вложенного.';}).join('<br>')+'<br><span style="color:#8a8073;font-size:12px">С учётом единовременного бонуса '+fmt(r.bonus)+' ₸.</span>');
   const sumCum=card2('Вложено: <b>'+fmt(r.premium)+' ₸</b>.'+(r.be!=null?(' Полностью возвращается выплатами к <b>'+r.be+' годам</b> — дальше всё идёт сверх вложенного, пожизненно.'):'')+' К '+mile[1]+' годам получено всего: <b>'+fmt(accAt(mile[1]))+' ₸</b>.');
   const sumY=card2('Первая выплата: <b>'+fmt(r.payFirst)+' ₸/мес</b>'+(r.type==='delayed'?' (с '+r.startAge+' лет)':'')+'. Через 10 лет — <b>'+fmt(Math.round(r.payFirst*Math.pow(1+r.idx,10)))+' ₸/мес</b>, через 20 — <b>'+fmt(Math.round(r.payFirst*Math.pow(1+r.idx,20)))+' ₸/мес</b> за счёт индексации '+(r.idx*100)+'% в год.');
-  const sumEnpf=card2('<b>Через аннуитет:</b> '+fmt(r.payFirst)+' ₸/мес пожизненно'+(r.bonus>0?' + бонус '+fmt(r.bonus)+' ₸ сверху':'')+'.<br><b>Если забирать из ЕНПФ по графику:</b> старт '+fmt(g.payFirst)+' ₸/мес, но выплаты из ЕНПФ закончатся к <b>'+g.exhaustAge+' годам</b> — дальше только государственная базовая и солидарная пенсия.');
+  const sumEnpf=card2('<b>Через аннуитет:</b> '+fmt(r.payFirst)+' ₸/мес пожизненно (растёт каждый год)'+(r.bonus>0?' + бонус '+fmt(r.bonus)+' ₸ сверху':'')+'.<br><b>Если забирать из ЕНПФ по графику:</b> старт '+fmt(g.payFirst)+' ₸/мес, но выплаты из ЕНПФ закончатся к <b>'+g.exhaustAge+' годам</b> — дальше только государственная базовая и солидарная пенсия.');
 
   const head='<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Расчёт пенсионного аннуитета</title>'+
     '<style>body{font-family:Manrope,Segoe UI,system-ui,sans-serif;color:#22201c;line-height:1.55;max-width:760px;margin:0 auto;padding:28px 18px;background:#fff}h1{font-size:24px}h2{font-size:17px;margin:24px 0 8px}h3{font-size:14px;margin:16px 0 4px;color:#245f43}table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}th,td{padding:7px 8px;border-bottom:1px solid #e9e0d2}th{text-align:right;color:#8a8073;font-size:11px;text-transform:uppercase}th:first-child,td:first-child{text-align:left}.kp{display:flex;gap:12px;flex-wrap:wrap;margin:14px 0}.kp>div{flex:1;min-width:140px;background:#fffefb;border:1px solid #e9e0d2;border-radius:10px;padding:12px}.kp .l{font-size:12px;color:#8a8073}.kp .v{font-size:19px;font-weight:800;margin-top:3px}ul{margin:6px 0;padding-left:20px}li{margin:5px 0}.muted{color:#8a8073;font-size:12px}.expl p{font-size:13.5px;color:#3b3a36;margin:4px 0 12px}.legrow{font-size:12px;color:#8a8073;margin:6px 0}.legrow span{margin-right:14px}.dot{display:inline-block;width:10px;height:10px;border-radius:2px;vertical-align:middle;margin-right:4px}.law .row{padding:8px 0;border-bottom:1px solid #f0e9dc;font-size:13px;color:#5b5448;line-height:1.5}.law .art{font-weight:700;color:#245f43}.law q{font-style:italic;color:#6b6356}</style></head><body>';
