@@ -26,10 +26,10 @@
 </script>
 <style>
 :root{
-  --bg:#f6f2ea; --card:#ffffff; --ink:#22201c; --muted:#8a8073; --line:#e9e0d2;
-  --green:#2f7a55; --green-d:#245f43; --green-soft:#e7f1ea;
-  --gold:#c1933b; --gold-soft:#f6ecd6; --red:#b4452f; --red-soft:#f6e3dd;
-  --shadow:0 1px 2px rgba(40,30,15,.04),0 8px 30px rgba(40,30,15,.06);
+  --bg:#eef3f1; --card:#ffffff; --ink:#0f1f18; --muted:#65756d; --line:#e3ebe7;
+  --green:#15b877; --green-d:#0e9a61; --green-soft:#e2f6ed;
+  --gold:#e0a52f; --gold-soft:#fbf1da; --red:#e2574d; --red-soft:#fdecea;
+  --shadow:0 1px 2px rgba(15,40,28,.04),0 10px 34px rgba(15,40,28,.07);
   --radius:18px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -90,17 +90,17 @@ input[type=text]:focus,input[type=number]:focus{outline:none;border-color:var(--
 .tipbox.show{display:block}
 
 /* button */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;border-radius:13px;padding:15px 26px;font:inherit;font-weight:700;font-size:16px;cursor:pointer;transition:.15s;background:var(--green);color:#fff;box-shadow:0 6px 18px rgba(47,122,85,.28)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;border-radius:13px;padding:15px 26px;font:inherit;font-weight:700;font-size:16px;cursor:pointer;transition:.15s;background:var(--green);color:#fff;box-shadow:0 6px 18px rgba(21,184,119,.28)}
 .btn:hover{background:var(--green-d);transform:translateY(-1px)}
 .btn:active{transform:translateY(0)}
 .btn.block{width:100%;margin-top:22px;font-size:17px;padding:17px}
 .btn.ghost{background:#fff;color:var(--ink);border:1.5px solid var(--line);box-shadow:none}
 .btn.ghost:hover{background:#faf6ef;border-color:var(--green)}
-.btn.gold{background:var(--gold);box-shadow:0 6px 18px rgba(193,147,59,.3)}
+.btn.gold{background:var(--gold);box-shadow:0 6px 18px rgba(224,165,47,.3)}
 .btn.gold:hover{background:#a87f2f}
 .btn.sm{padding:10px 16px;font-size:14px;border-radius:10px}
 
-.err{display:none;margin-top:14px;padding:13px 15px;background:var(--red-soft);border:1px solid #e6c3b8;color:#8a3422;border-radius:12px;font-size:14px;font-weight:600}
+.err{display:none;margin-top:14px;padding:13px 15px;background:var(--red-soft);border:1px solid #e6c3b8;color:#c0413a;border-radius:12px;font-size:14px;font-weight:600}
 .err.show{display:block}
 
 /* results */
@@ -112,7 +112,7 @@ input[type=text]:focus,input[type=number]:focus{outline:none;border-color:var(--
 .statusbig .ic{font-size:30px;line-height:1}
 .statusbig h2{font-size:21px;margin-bottom:4px}
 .statusbig.ok h2{color:var(--green-d)}
-.statusbig.no h2{color:#8a3422}
+.statusbig.no h2{color:#c0413a}
 .statusbig p{font-size:14.5px;color:#5b5448}
 
 .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:18px}
@@ -186,7 +186,7 @@ details.expl .body{padding:0 0 16px;font-size:14px;color:#5b5448}
 .lawlist{margin-top:6px}
 .lawlist .row{padding:9px 0;border-bottom:1px solid #f0e9dc;font-size:13px;color:#5b5448;line-height:1.5}
 .lawlist .row:last-child{border-bottom:none}
-.lawlist .art{font-weight:700;color:#245f43}
+.lawlist .art{font-weight:700;color:#0e9a61}
 .lawlist q{font-style:italic;color:#6b6356}
 .enpf-cmp{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}
 @media(max-width:560px){.enpf-cmp{grid-template-columns:1fr}}
@@ -197,7 +197,7 @@ details.expl .body{padding:0 0 16px;font-size:14px;color:#5b5448}
 .enpf-col.ok .big{color:var(--green-d)}
 .enpf-col .d{font-size:12.5px;color:#5b5448;line-height:1.5}
 .note-pill{border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.5}
-.note-pill.money{background:var(--green-soft);color:#245f43;border:1px solid #cfe6d8}
+.note-pill.money{background:var(--green-soft);color:#0e9a61;border:1px solid #cfe6d8}
 .note-pill.guard{background:#eef3f8;color:#2f4a63;border:1px solid #d9e3ee}
 .note-pill b{font-weight:700}
 </style>
@@ -356,7 +356,7 @@ details.expl .body{padding:0 0 16px;font-size:14px;color:#5b5448}
       <h2>Вложили → получите</h2>
       <p class="muted small" style="margin-top:2px">Сколько вы переводите в страховую и сколько получите выплатами к разным возрастам. Множитель показывает, во сколько раз выплаты превышают вложенное.</p>
       <div class="chartbox" style="height:260px"><canvas id="chartCompare"></canvas></div>
-      <div class="legendrow"><span><span class="dot" style="background:#b4452f"></span>вы перевели</span><span><span class="dot" style="background:#2f7a55"></span>получите выплатами</span></div>
+      <div class="legendrow"><span><span class="dot" style="background:#e2574d"></span>вы перевели</span><span><span class="dot" style="background:#15b877"></span>получите выплатами</span></div>
     </div>
 
     <!-- chart cumulative (area, payback) -->
@@ -364,7 +364,7 @@ details.expl .body{padding:0 0 16px;font-size:14px;color:#5b5448}
       <h2>Когда вернутся ваши деньги</h2>
       <p class="muted small" style="margin-top:2px">Зелёная область — сколько всего получено выплатами нарастающим итогом. Пунктир — сумма, которую вы перевели. Где область поднимается выше пунктира, вложенное полностью вернулось — дальше выплаты идут пожизненно.</p>
       <div class="chartbox"><canvas id="chartCum"></canvas></div>
-      <div class="legendrow"><span><span class="dot" style="background:#2f7a55"></span>получено всего</span><span><span class="dot" style="background:#b4452f"></span>вы перевели</span><span><span class="dot" style="background:#2f7a55;border-radius:50%"></span>деньги вернулись</span></div>
+      <div class="legendrow"><span><span class="dot" style="background:#15b877"></span>получено всего</span><span><span class="dot" style="background:#e2574d"></span>вы перевели</span><span><span class="dot" style="background:#15b877;border-radius:50%"></span>деньги вернулись</span></div>
     </div>
 
     <!-- chart: monthly payment growth (line) -->
@@ -379,7 +379,7 @@ details.expl .body{padding:0 0 16px;font-size:14px;color:#5b5448}
       <h2>Аннуитет или забрать из ЕНПФ по графику?</h2>
       <p class="muted small" style="margin-top:2px">Сравнение на ваши накопления: аннуитет платит пожизненно, а выплаты из ЕНПФ по графику со временем заканчиваются.</p>
       <div class="chartbox"><canvas id="chartEnpf"></canvas></div>
-      <div class="legendrow"><span><span class="dot" style="background:#2f7a55"></span>аннуитет — пожизненно</span><span><span class="dot" style="background:#c1933b"></span>выплаты ЕНПФ по графику</span></div>
+      <div class="legendrow"><span><span class="dot" style="background:#15b877"></span>аннуитет — пожизненно</span><span><span class="dot" style="background:#e0a52f"></span>выплаты ЕНПФ по графику</span></div>
       <div id="enpfSummary" class="small" style="margin-top:12px"></div>
     </div>
 
@@ -442,7 +442,7 @@ details.expl .body{padding:0 0 16px;font-size:14px;color:#5b5448}
       <div class="row"><span class="art">Ст. 226, п. 11.</span> <q>Расчёт страховой премии и страховой выплаты осуществляется страховой организацией в соответствии с методикой, установленной уполномоченным органом по регулированию... финансового рынка</q> (АРРФР).</div>
     </div>
     <p style="margin:10px 0 0;color:#5b5448;font-size:12px">Размер единовременного бонуса/дивиденда (по умолчанию 11%) — это договорная ставка конкретной страховой компании (КСЖ), а не норма закона; у разных КСЖ она отличается.</p>
-    <p style="margin:10px 0 0;color:#a99e8d;font-size:11.5px">Цитаты приведены по Социальному кодексу РК в редакции на 2026 год. Точные условия договора подтверждает страховая компания (КСЖ).</p>
+    <p style="margin:10px 0 0;color:#9aa8a1;font-size:11.5px">Цитаты приведены по Социальному кодексу РК в редакции на 2026 год. Точные условия договора подтверждает страховая компания (КСЖ).</p>
   </div>
 </details>
 
@@ -640,16 +640,16 @@ function setRange(el){const mn=+el.min,mx=+el.max;el.style.setProperty('--pct',(
 /* плагины для линий на графике */
 function refLine(yVal,label){return {id:'ref'+Math.random(),afterDraw(c){
   const {ctx,chartArea:{left,right},scales:{y}}=c; if(!y)return; const yy=y.getPixelForValue(yVal);
-  ctx.save();ctx.strokeStyle='#b4452f';ctx.lineWidth=2;ctx.setLineDash([6,4]);
+  ctx.save();ctx.strokeStyle='#e2574d';ctx.lineWidth=2;ctx.setLineDash([6,4]);
   ctx.beginPath();ctx.moveTo(left,yy);ctx.lineTo(right,yy);ctx.stroke();
-  ctx.setLineDash([]);ctx.fillStyle='#b4452f';ctx.font='600 11px Manrope,sans-serif';ctx.textAlign='right';
+  ctx.setLineDash([]);ctx.fillStyle='#e2574d';ctx.font='600 11px Manrope,sans-serif';ctx.textAlign='right';
   ctx.fillText(label,right-4,yy-6);ctx.restore();
 }};}
 function vBar(idx,label){return {id:'vb'+Math.random(),afterDraw(c){
   if(idx<0)return; const {ctx,chartArea:{top,bottom},scales:{x}}=c; if(!x)return; const xx=x.getPixelForValue(idx);
-  ctx.save();ctx.strokeStyle='#2f7a55';ctx.lineWidth=2;ctx.setLineDash([4,3]);
+  ctx.save();ctx.strokeStyle='#15b877';ctx.lineWidth=2;ctx.setLineDash([4,3]);
   ctx.beginPath();ctx.moveTo(xx,top);ctx.lineTo(xx,bottom);ctx.stroke();
-  ctx.setLineDash([]);ctx.fillStyle='#2f7a55';ctx.font='700 11px Manrope,sans-serif';ctx.textAlign='center';
+  ctx.setLineDash([]);ctx.fillStyle='#15b877';ctx.font='700 11px Manrope,sans-serif';ctx.textAlign='center';
   ctx.fillText(label,xx,top+12);ctx.restore();
 }};}
 
@@ -660,7 +660,7 @@ function barLabels(cap){return {id:'barlab',afterDatasetsDraw(c){
     meta.data.forEach((bar,i)=>{
       const v=ds.data[i];
       ctx.save();ctx.font='700 11px Manrope,sans-serif';ctx.textBaseline='middle';ctx.textAlign='left';
-      ctx.fillStyle=di===1?'#245f43':'#8a3422';
+      ctx.fillStyle=di===1?'#0e9a61':'#c0413a';
       let t=(v/1e6).toFixed(1)+' млн';
       if(di===1)t+=' ×'+(v/cap).toFixed(1);
       ctx.fillText(t, bar.x+6, bar.y);
@@ -670,13 +670,13 @@ function barLabels(cap){return {id:'barlab',afterDatasetsDraw(c){
 }};}
 function bePoint(idx,label){return {id:'bept',afterDatasetsDraw(c){
   if(idx<0||!label)return;const meta=c.getDatasetMeta(0);const pt=meta.data[idx];if(!pt)return;
-  const ctx=c.ctx;ctx.save();ctx.fillStyle='#245f43';ctx.font='700 11px Manrope,sans-serif';ctx.textAlign='center';
+  const ctx=c.ctx;ctx.save();ctx.fillStyle='#0e9a61';ctx.font='700 11px Manrope,sans-serif';ctx.textAlign='center';
   let x=pt.x; if(x>c.chartArea.right-60)x=c.chartArea.right-60; if(x<c.chartArea.left+50)x=c.chartArea.left+50;
   ctx.fillText(label, x, pt.y-12);ctx.restore();
 }};}
 function vGpLine(idx,label){return {id:'vgp',afterDraw(c){
   const sc=c.scales.x;if(!sc)return;const xx=sc.getPixelForValue(idx);const {top,bottom}=c.chartArea;
-  const ctx=c.ctx;ctx.save();ctx.strokeStyle='#caa35c';ctx.lineWidth=1.5;ctx.setLineDash([4,3]);
+  const ctx=c.ctx;ctx.save();ctx.strokeStyle='#e0a52f';ctx.lineWidth=1.5;ctx.setLineDash([4,3]);
   ctx.beginPath();ctx.moveTo(xx,top);ctx.lineTo(xx,bottom);ctx.stroke();
   ctx.setLineDash([]);ctx.fillStyle='#9a6b16';ctx.font='600 10px Manrope,sans-serif';ctx.textAlign='center';
   ctx.fillText(label,xx,top+10);ctx.restore();
@@ -685,12 +685,12 @@ function vGpLine(idx,label){return {id:'vgp',afterDraw(c){
 function ptLabels(idxs,col,ds){ds=ds||0;return {id:'ptl'+Math.random(),afterDatasetsDraw(c){
   const meta=c.getDatasetMeta(ds); if(!meta||!meta.data)return; const ctx=c.ctx;
   idxs.forEach(i=>{const pt=meta.data[i]; if(!pt)return; const v=c.data.datasets[ds].data[i]; if(v==null||v===0)return;
-    ctx.save();ctx.fillStyle=col||'#245f43';ctx.font='700 10.5px Manrope,sans-serif';ctx.textAlign='center';ctx.textBaseline='bottom';
+    ctx.save();ctx.fillStyle=col||'#0e9a61';ctx.font='700 10.5px Manrope,sans-serif';ctx.textAlign='center';ctx.textBaseline='bottom';
     const t=v>=1e6?(v/1e6).toFixed(1)+' млн':(Math.round(v/1000)+'k');
     ctx.fillText(t, pt.x, pt.y-7);ctx.restore();});
 }};}
 function drawCharts(r){
-  const TEAL='#2f7a55', TEALF='rgba(47,122,85,.16)', CORAL='#b4452f', GRID='#ece2d2', AX='#a99e8d';
+  const TEAL='#15b877', TEALF='rgba(21,184,119,.16)', CORAL='#e2574d', GRID='#e8eeeb', AX='#9aa8a1';
   if(typeof Chart==="undefined"){["#chartCompare","#chartCum","#chartYears"].forEach(function(id){var c=$(id);if(c&&c.parentElement)c.parentElement.innerHTML='<div style="padding:60px 20px;text-align:center;color:#8a8073">График временно недоступен</div>';});return;}
   try{
   const S=r.series, labels=S.map(y=>y.age), cap=r.premium;
@@ -721,7 +721,7 @@ function drawCharts(r){
       tooltip:{callbacks:{label:c=>c.datasetIndex===0?fmt(c.raw)+' ₸ получено к '+c.label+' годам':'вложено '+fmt(c.raw)+' ₸'}}},
       scales:{x:{grid:{display:false},ticks:{color:AX,maxTicksLimit:10,maxRotation:0}},
         y:{grid:{color:GRID},ticks:{color:AX,callback:v=>(v/1e6).toFixed(0)+' млн'}}}},
-    plugins:[refLine(cap,'вы перевели '+fmt(cap)+' ₸'), bePoint(beIdx, beIdx>=0?('деньги вернулись · '+S[beIdx].age+' лет'):''), ptLabels([Math.floor(S.length/2),S.length-1],'#245f43',0)]});
+    plugins:[refLine(cap,'вы перевели '+fmt(cap)+' ₸'), bePoint(beIdx, beIdx>=0?('деньги вернулись · '+S[beIdx].age+' лет'):''), ptLabels([Math.floor(S.length/2),S.length-1],'#0e9a61',0)]});
 
   const gpEndIdx = r.gp>0 ? Math.min(r.gp, S.length-1) : -1;
   if(chY)chY.destroy();
@@ -731,7 +731,7 @@ function drawCharts(r){
       tooltip:{callbacks:{label:c=>fmt(c.raw)+' ₸/мес в '+c.label+' лет'}}},
       scales:{x:{grid:{display:false},ticks:{color:AX,maxTicksLimit:10,maxRotation:0}},
         y:{grid:{color:GRID},ticks:{color:AX,callback:v=>v>=1e6?(v/1e6).toFixed(1)+' млн':Math.round(v/1000)+'k'}}}},
-    plugins:[gpEndIdx>0?vGpLine(gpEndIdx,'конец гарантии'):{id:'noop'}, ptLabels([0,Math.floor(S.length/2),S.length-1],'#245f43',0)]});
+    plugins:[gpEndIdx>0?vGpLine(gpEndIdx,'конец гарантии'):{id:'noop'}, ptLabels([0,Math.floor(S.length/2),S.length-1],'#0e9a61',0)]});
   }catch(e){console.error('chart error',e);}
 }
 
@@ -770,14 +770,14 @@ function drawEnpf(r){
       if(chEnpf)chEnpf.destroy();
       chEnpf=new Chart($('#chartEnpf'),{type:'line',
         data:{labels,datasets:[
-          {label:'аннуитет',data:annMonthly.map(x=>x.m),borderColor:'#2f7a55',backgroundColor:'rgba(47,122,85,.10)',fill:true,tension:.3,borderWidth:2.5,pointRadius:0},
-          {label:'ЕНПФ по графику',data:enpfData,borderColor:'#c1933b',backgroundColor:'rgba(193,147,59,.08)',fill:true,tension:.3,borderWidth:2.5,pointRadius:0,borderDash:[5,3]}
+          {label:'аннуитет',data:annMonthly.map(x=>x.m),borderColor:'#15b877',backgroundColor:'rgba(21,184,119,.10)',fill:true,tension:.3,borderWidth:2.5,pointRadius:0},
+          {label:'ЕНПФ по графику',data:enpfData,borderColor:'#e0a52f',backgroundColor:'rgba(224,165,47,.08)',fill:true,tension:.3,borderWidth:2.5,pointRadius:0,borderDash:[5,3]}
         ]},
         options:{responsive:true,maintainAspectRatio:false,interaction:{mode:"index",intersect:false},plugins:{legend:{display:false},
           tooltip:{callbacks:{label:c=>c.dataset.label+': '+(c.raw>0?fmt(c.raw)+' ₸/мес':'выплаты закончились')}}},
-          scales:{x:{grid:{display:false},ticks:{color:'#a99e8d',maxTicksLimit:10,maxRotation:0}},
-            y:{grid:{color:'#ece2d2'},ticks:{color:'#a99e8d',callback:v=>v>=1e6?(v/1e6).toFixed(1)+' млн':Math.round(v/1000)+'k'}}}},
-        plugins:[ exIdx>0?vGpLine(exIdx,'ЕНПФ закончился'):{id:'noop2'}, ptLabels([0,labels.length-1],'#2f7a55',0), ptLabels([Math.max(0,exIdx)],'#9a6b16',1) ]});
+          scales:{x:{grid:{display:false},ticks:{color:'#9aa8a1',maxTicksLimit:10,maxRotation:0}},
+            y:{grid:{color:'#e8eeeb'},ticks:{color:'#9aa8a1',callback:v=>v>=1e6?(v/1e6).toFixed(1)+' млн':Math.round(v/1000)+'k'}}}},
+        plugins:[ exIdx>0?vGpLine(exIdx,'ЕНПФ закончился'):{id:'noop2'}, ptLabels([0,labels.length-1],'#15b877',0), ptLabels([Math.max(0,exIdx)],'#9a6b16',1) ]});
     }catch(e){console.error('enpf chart',e);}
   }
   sum.innerHTML='<div class="enpf-cmp"><div class="enpf-col ok"><div class="t">Если оформить аннуитет</div>'+
@@ -876,14 +876,14 @@ function buildReport(r, mode){
     return head+pngOf(ch)+(legend||'');
   }
   let rows='';
-  r.series.forEach(y=>{ rows+='<tr style="background:'+(y.guar?'#f6ecd6':'#fff')+'"><td>'+y.age+'</td><td style="text-align:right">'+fmt(y.monthly)+'</td><td style="text-align:right">'+fmt(y.annual)+'</td><td style="text-align:right">'+fmt(y.acc)+'</td><td style="text-align:right">'+fmt(Math.max(0,y.rem))+'</td></tr>'; });
+  r.series.forEach(y=>{ rows+='<tr style="background:'+(y.guar?'#fbf1da':'#fff')+'"><td>'+y.age+'</td><td style="text-align:right">'+fmt(y.monthly)+'</td><td style="text-align:right">'+fmt(y.annual)+'</td><td style="text-align:right">'+fmt(y.acc)+'</td><td style="text-align:right">'+fmt(Math.max(0,y.rem))+'</td></tr>'; });
   const consultant=(c.name||c.phone||c.email||c.city)
     ? '<div style="background:#f6f2ea;border:1px solid #e9e0d2;border-radius:12px;padding:16px;margin-bottom:20px"><div style="font-weight:800;font-size:15px">'+esc(c.name||'Ваш консультант')+'</div><div style="color:#6b6356;font-size:13px;margin-top:4px">'+[esc(c.phone),esc(c.email),esc(c.city)].filter(Boolean).join(' · ')+'</div></div>' : '';
   const statusBlock=r.enough
-    ? '<div style="background:#e7f1ea;border-radius:12px;padding:18px;margin:16px 0"><div style="font-size:18px;font-weight:800;color:#245f43">✓ Накоплений хватает на пенсионный аннуитет</div><div style="color:#5b5448;margin-top:6px">Минимально для оформления: <b>'+fmt(r.thrCur)+' ₸</b>'+(r.type==='delayed'?'. Выплаты начнутся в '+r.startAge+' лет':'')+'.</div></div>'
+    ? '<div style="background:#e2f6ed;border-radius:12px;padding:18px;margin:16px 0"><div style="font-size:18px;font-weight:800;color:#0e9a61">✓ Накоплений хватает на пенсионный аннуитет</div><div style="color:#5b5448;margin-top:6px">Минимально для оформления: <b>'+fmt(r.thrCur)+' ₸</b>'+(r.type==='delayed'?'. Выплаты начнутся в '+r.startAge+' лет':'')+'.</div></div>'
     : (r.almostEnough
       ? '<div style="background:#fbf3df;border-radius:12px;padding:18px;margin:16px 0"><div style="font-size:18px;font-weight:800;color:#8a6d1a">Почти хватает — это решаемо</div><div style="color:#5b5448;margin-top:6px">До порога не хватает <b>'+fmt(r.shortToThr)+' ₸</b>, но это меньше единовременного бонуса <b>'+fmt(r.bonusAtThr)+' ₸</b>. Нехватку можно доложить (добровольным взносом или доплатой в страховую) — бонус всё равно остаётся в плюсе.</div></div>'
-      : '<div style="background:#f6e3dd;border-radius:12px;padding:18px;margin:16px 0"><div style="font-size:18px;font-weight:800;color:#8a3422">До оформления не хватает '+fmt(r.shortToThr)+' ₸</div><div style="color:#5b5448;margin-top:6px">Нужный минимум: <b>'+fmt(r.thrCur)+' ₸</b>, накоплено: '+fmt(r.sav)+' ₸. Нехватку можно доложить добровольным взносом или доплатить прямо в страховую.</div></div>');
+      : '<div style="background:#fdecea;border-radius:12px;padding:18px;margin:16px 0"><div style="font-size:18px;font-weight:800;color:#c0413a">До оформления не хватает '+fmt(r.shortToThr)+' ₸</div><div style="color:#5b5448;margin-top:6px">Нужный минимум: <b>'+fmt(r.thrCur)+' ₸</b>, накоплено: '+fmt(r.sav)+' ₸. Нехватку можно доложить добровольным взносом или доплатить прямо в страховую.</div></div>');
   const genderTxt=r.g==='m'?'Мужчина':'Женщина';
   const disTxt=r.dis==='none'?'':(', инвалидность '+r.dis+' группы');
   function card2(items){ return '<div style="background:#f6f2ea;border:1px solid #e9e0d2;border-radius:10px;padding:12px 14px;margin:10px 0;font-size:13.5px;color:#3b3a36;line-height:1.6">'+items+'</div>'; }
@@ -893,7 +893,7 @@ function buildReport(r, mode){
   const sumEnpf=card2('<b>Если оформить аннуитет:</b> '+fmt(r.payFirst)+' ₸/мес — страховая платит пожизненно, сумма растёт каждый год'+(r.bonus>0?', плюс единовременный бонус '+fmt(r.bonus)+' ₸':'')+'.<br><b>Если забирать из ЕНПФ по графику:</b> '+fmt(g.payFirst)+' ₸/мес — это снятие <b>своих</b> накоплений частями. Но деньги конечны: к <b>'+g.exhaustAge+' годам</b> накопления в ЕНПФ исчерпаются, и останется только государственная пенсия.<br><span style="color:#8a8073;font-size:12px">Государственная пенсия (базовая + солидарная) есть в обоих случаях — аннуитет идёт сверх неё.</span>');
 
   const head='<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Расчёт пенсионного аннуитета</title>'+
-    '<style>body{font-family:Manrope,Segoe UI,system-ui,sans-serif;color:#22201c;line-height:1.55;max-width:760px;margin:0 auto;padding:28px 18px;background:#fff}h1{font-size:24px}h2{font-size:17px;margin:24px 0 8px}h3{font-size:14px;margin:16px 0 4px;color:#245f43}table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}th,td{padding:7px 8px;border-bottom:1px solid #e9e0d2}th{text-align:right;color:#8a8073;font-size:11px;text-transform:uppercase}th:first-child,td:first-child{text-align:left}.kp{display:flex;gap:12px;flex-wrap:wrap;margin:14px 0}.kp>div{flex:1;min-width:140px;background:#fffefb;border:1px solid #e9e0d2;border-radius:10px;padding:12px}.kp .l{font-size:12px;color:#8a8073}.kp .v{font-size:19px;font-weight:800;margin-top:3px}ul{margin:6px 0;padding-left:20px}li{margin:5px 0}.muted{color:#8a8073;font-size:12px}.expl p{font-size:13.5px;color:#3b3a36;margin:4px 0 12px}.legrow{font-size:12px;color:#8a8073;margin:6px 0}.legrow span{margin-right:14px}.dot{display:inline-block;width:10px;height:10px;border-radius:2px;vertical-align:middle;margin-right:4px}.law .row{padding:8px 0;border-bottom:1px solid #f0e9dc;font-size:13px;color:#5b5448;line-height:1.5}.law .art{font-weight:700;color:#245f43}.law q{font-style:italic;color:#6b6356}</style></head><body>';
+    '<style>body{font-family:Manrope,Segoe UI,system-ui,sans-serif;color:#22201c;line-height:1.55;max-width:760px;margin:0 auto;padding:28px 18px;background:#fff}h1{font-size:24px}h2{font-size:17px;margin:24px 0 8px}h3{font-size:14px;margin:16px 0 4px;color:#0e9a61}table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}th,td{padding:7px 8px;border-bottom:1px solid #e9e0d2}th{text-align:right;color:#8a8073;font-size:11px;text-transform:uppercase}th:first-child,td:first-child{text-align:left}.kp{display:flex;gap:12px;flex-wrap:wrap;margin:14px 0}.kp>div{flex:1;min-width:140px;background:#fffefb;border:1px solid #e9e0d2;border-radius:10px;padding:12px}.kp .l{font-size:12px;color:#8a8073}.kp .v{font-size:19px;font-weight:800;margin-top:3px}ul{margin:6px 0;padding-left:20px}li{margin:5px 0}.muted{color:#8a8073;font-size:12px}.expl p{font-size:13.5px;color:#3b3a36;margin:4px 0 12px}.legrow{font-size:12px;color:#8a8073;margin:6px 0}.legrow span{margin-right:14px}.dot{display:inline-block;width:10px;height:10px;border-radius:2px;vertical-align:middle;margin-right:4px}.law .row{padding:8px 0;border-bottom:1px solid #f0e9dc;font-size:13px;color:#5b5448;line-height:1.5}.law .art{font-weight:700;color:#0e9a61}.law q{font-style:italic;color:#6b6356}</style></head><body>';
   const benefits='<h2>Почему пенсионный аннуитет — это выгодно</h2><ul>'+
     '<li><b>Пожизненные выплаты.</b> Деньги приходят каждый месяц до конца жизни — даже когда переведённая сумма математически закончилась бы.</li>'+
     '<li><b>Ежегодная индексация '+(r.idx*100)+'%.</b> Выплата растёт каждый год и успевает за ростом цен.</li>'+
@@ -925,10 +925,10 @@ function buildReport(r, mode){
     '<div><div class="l">Единовременный бонус</div><div class="v">'+fmt(r.bonus)+' ₸</div></div>'+
     '<div><div class="l">Через 10 лет / мес</div><div class="v">'+fmt(Math.round(r.payFirst*Math.pow(1+r.idx,10)))+' ₸</div></div></div>'+
     benefits+
-    gblock('rCompare', chCompare, 'Вложили → получите', 'Сколько переводите и сколько получите выплатами к разным возрастам.', '<div class="legrow"><span><span class="dot" style="background:#b4452f"></span>вы перевели</span><span><span class="dot" style="background:#2f7a55"></span>получите выплатами</span></div>')+sumCompare+
-    gblock('rCum', chCum, 'Когда вернутся ваши деньги', 'Зелёная область — получено выплатами нарастающим итогом. Пунктир — сколько вы перевели.', '<div class="legrow"><span><span class="dot" style="background:#2f7a55"></span>получено всего</span><span><span class="dot" style="background:#b4452f"></span>вы перевели</span></div>')+sumCum+
+    gblock('rCompare', chCompare, 'Вложили → получите', 'Сколько переводите и сколько получите выплатами к разным возрастам.', '<div class="legrow"><span><span class="dot" style="background:#e2574d"></span>вы перевели</span><span><span class="dot" style="background:#15b877"></span>получите выплатами</span></div>')+sumCompare+
+    gblock('rCum', chCum, 'Когда вернутся ваши деньги', 'Зелёная область — получено выплатами нарастающим итогом. Пунктир — сколько вы перевели.', '<div class="legrow"><span><span class="dot" style="background:#15b877"></span>получено всего</span><span><span class="dot" style="background:#e2574d"></span>вы перевели</span></div>')+sumCum+
     gblock('rYears', chY, 'Как растёт ваша выплата', 'Ежемесячная выплата по годам — растёт за счёт индексации.', '')+sumY+
-    gblock('rEnpf', chEnpf, 'Аннуитет или выплаты из ЕНПФ по графику', 'Аннуитет платит пожизненно, а выплаты из ЕНПФ по графику со временем заканчиваются.', '<div class="legrow"><span><span class="dot" style="background:#2f7a55"></span>аннуитет — пожизненно</span><span><span class="dot" style="background:#c1933b"></span>ЕНПФ по графику</span></div>')+sumEnpf+
+    gblock('rEnpf', chEnpf, 'Аннуитет или выплаты из ЕНПФ по графику', 'Аннуитет платит пожизненно, а выплаты из ЕНПФ по графику со временем заканчиваются.', '<div class="legrow"><span><span class="dot" style="background:#15b877"></span>аннуитет — пожизненно</span><span><span class="dot" style="background:#e0a52f"></span>ЕНПФ по графику</span></div>')+sumEnpf+
     '<h2>Таблица выплат по годам</h2><table><thead><tr><th>Возраст</th><th>Выплата/мес</th><th>За год</th><th>Получено всего</th><th>Остаток в КСЖ</th></tr></thead><tbody>'+rows+'</tbody></table>'+
     '<h2>Как оформить</h2><ol><li>Выбрать страховую компанию (КСЖ) и подтвердить расчёт.</li><li>Подготовить документы: удостоверение личности и выписку из ЕНПФ.</li><li>Подписать договор пенсионного аннуитета.</li><li>ЕНПФ переводит сумму в КСЖ.</li><li>Получать аннуитетные выплаты — пожизненно.</li></ol>'+
     explain+legal+
@@ -943,10 +943,10 @@ function buildReport(r, mode){
 
 var REPORT_DRAW='(function(){if(typeof Chart==="undefined")return;var f=function(n){return Math.round(n).toLocaleString("ru-RU").replace(/,/g," ");};'+
 'var ti={mode:"index",intersect:false};'+
-'new Chart(document.getElementById("rCompare"),{type:"bar",data:{labels:D.mLabels,datasets:[{label:"вы перевели",data:D.mInvested,backgroundColor:"#b4452f",borderRadius:4,barPercentage:.62},{label:"получите",data:D.mGot,backgroundColor:"#2f7a55",borderRadius:4,barPercentage:.62}]},options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.dataset.label+": "+f(c.raw)+" ₸"+(c.datasetIndex===1?" (×"+(c.raw/D.premium).toFixed(1)+")":"");}}}},scales:{x:{ticks:{callback:function(v){return (v/1e6).toFixed(0)+" млн";}}}}}});'+
-'new Chart(document.getElementById("rCum"),{type:"line",data:{labels:D.labels,datasets:[{data:D.acc,borderColor:"#2f7a55",backgroundColor:"rgba(47,122,85,.16)",fill:true,tension:.35,pointRadius:0,borderWidth:2},{data:D.labels.map(function(){return D.premium;}),borderColor:"#b4452f",borderDash:[6,4],pointRadius:0,borderWidth:2,fill:false}]},options:{responsive:true,maintainAspectRatio:false,interaction:ti,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.datasetIndex===0?f(c.raw)+" ₸ получено к "+c.label+" годам":"вложено "+f(c.raw)+" ₸";}}}},scales:{y:{ticks:{callback:function(v){return (v/1e6).toFixed(0)+" млн";}}}}}});'+
-'new Chart(document.getElementById("rYears"),{type:"line",data:{labels:D.labels,datasets:[{data:D.monthly,borderColor:"#2f7a55",backgroundColor:"rgba(47,122,85,.16)",fill:true,tension:.35,pointRadius:0,borderWidth:2.5}]},options:{responsive:true,maintainAspectRatio:false,interaction:ti,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return f(c.raw)+" ₸/мес в "+c.label+" лет";}}}},scales:{y:{ticks:{callback:function(v){return v>=1e6?(v/1e6).toFixed(1)+" млн":Math.round(v/1000)+"k";}}}}}});'+
-'new Chart(document.getElementById("rEnpf"),{type:"line",data:{labels:D.labels,datasets:[{label:"аннуитет",data:D.monthly,borderColor:"#2f7a55",backgroundColor:"rgba(47,122,85,.10)",fill:true,tension:.3,pointRadius:0,borderWidth:2.5},{label:"ЕНПФ по графику",data:D.enpf,borderColor:"#c1933b",backgroundColor:"rgba(193,147,59,.08)",fill:true,tension:.3,pointRadius:0,borderWidth:2.5,borderDash:[5,3]}]},options:{responsive:true,maintainAspectRatio:false,interaction:ti,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.dataset.label+": "+(c.raw>0?f(c.raw)+" ₸/мес":"выплаты закончились");}}}},scales:{y:{ticks:{callback:function(v){return v>=1e6?(v/1e6).toFixed(1)+" млн":Math.round(v/1000)+"k";}}}}}});'+
+'new Chart(document.getElementById("rCompare"),{type:"bar",data:{labels:D.mLabels,datasets:[{label:"вы перевели",data:D.mInvested,backgroundColor:"#e2574d",borderRadius:4,barPercentage:.62},{label:"получите",data:D.mGot,backgroundColor:"#15b877",borderRadius:4,barPercentage:.62}]},options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.dataset.label+": "+f(c.raw)+" ₸"+(c.datasetIndex===1?" (×"+(c.raw/D.premium).toFixed(1)+")":"");}}}},scales:{x:{ticks:{callback:function(v){return (v/1e6).toFixed(0)+" млн";}}}}}});'+
+'new Chart(document.getElementById("rCum"),{type:"line",data:{labels:D.labels,datasets:[{data:D.acc,borderColor:"#15b877",backgroundColor:"rgba(21,184,119,.16)",fill:true,tension:.35,pointRadius:0,borderWidth:2},{data:D.labels.map(function(){return D.premium;}),borderColor:"#e2574d",borderDash:[6,4],pointRadius:0,borderWidth:2,fill:false}]},options:{responsive:true,maintainAspectRatio:false,interaction:ti,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.datasetIndex===0?f(c.raw)+" ₸ получено к "+c.label+" годам":"вложено "+f(c.raw)+" ₸";}}}},scales:{y:{ticks:{callback:function(v){return (v/1e6).toFixed(0)+" млн";}}}}}});'+
+'new Chart(document.getElementById("rYears"),{type:"line",data:{labels:D.labels,datasets:[{data:D.monthly,borderColor:"#15b877",backgroundColor:"rgba(21,184,119,.16)",fill:true,tension:.35,pointRadius:0,borderWidth:2.5}]},options:{responsive:true,maintainAspectRatio:false,interaction:ti,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return f(c.raw)+" ₸/мес в "+c.label+" лет";}}}},scales:{y:{ticks:{callback:function(v){return v>=1e6?(v/1e6).toFixed(1)+" млн":Math.round(v/1000)+"k";}}}}}});'+
+'new Chart(document.getElementById("rEnpf"),{type:"line",data:{labels:D.labels,datasets:[{label:"аннуитет",data:D.monthly,borderColor:"#15b877",backgroundColor:"rgba(21,184,119,.10)",fill:true,tension:.3,pointRadius:0,borderWidth:2.5},{label:"ЕНПФ по графику",data:D.enpf,borderColor:"#e0a52f",backgroundColor:"rgba(224,165,47,.08)",fill:true,tension:.3,pointRadius:0,borderWidth:2.5,borderDash:[5,3]}]},options:{responsive:true,maintainAspectRatio:false,interaction:ti,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.dataset.label+": "+(c.raw>0?f(c.raw)+" ₸/мес":"выплаты закончились");}}}},scales:{y:{ticks:{callback:function(v){return v>=1e6?(v/1e6).toFixed(1)+" млн":Math.round(v/1000)+"k";}}}}}});'+
 '})();';
 
 function dl(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),3000);}
