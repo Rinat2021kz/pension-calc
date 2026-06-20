@@ -252,6 +252,51 @@ details.expl .body{padding:0 0 16px;font-size:14px;color:#5b5448}
   .enpf-cmp{grid-template-columns:1fr}
   .vcard .grid2{grid-template-columns:1fr}
 }
+
+/* ===================== ПОШАГОВЫЙ МАСТЕР ===================== */
+.wiz{position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:center;gap:6px;
+  padding:12px 8px;margin:0 -16px 6px;background:rgba(238,243,241,.93);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.wdot{display:flex;align-items:center;gap:8px;border:none;background:transparent;cursor:default;font:inherit;padding:4px 6px;opacity:.45;transition:.2s}
+.wdot .n{width:30px;height:30px;border-radius:50%;background:#fff;border:2px solid var(--line);color:var(--muted);
+  display:grid;place-items:center;font-weight:800;font-size:14px;flex:none;transition:.2s}
+.wdot .t{font-weight:700;font-size:13.5px;color:var(--muted);white-space:nowrap}
+.wdot.cur{opacity:1}
+.wdot.cur .n{background:var(--green);border-color:var(--green);color:#fff}
+.wdot.cur .t{color:var(--ink)}
+.wdot.done{opacity:1;cursor:pointer}
+.wdot.done .n{background:var(--green-soft);border-color:var(--green);color:var(--green-d)}
+.wbar{flex:1;max-width:42px;height:2px;background:var(--line);border-radius:2px}
+
+.wstep{display:none}
+.wstep.active{display:block;animation:wfade .28s ease}
+@keyframes wfade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+.wnav{display:flex;gap:10px;margin-top:18px}
+.wnav .btn{flex:1;margin-top:0}
+.wnav .btn.ghost{flex:.85}
+
+.livebar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+  padding:16px 18px;border-radius:16px;margin-bottom:16px;border:1px solid var(--line);box-shadow:var(--shadow)}
+.livebar.ok{background:var(--green-soft);border-color:#cfe6d8}
+.livebar.no{background:var(--red-soft);border-color:#e6c3b8}
+.livebar .lb-chip{font-weight:700;font-size:13px}
+.livebar.ok .lb-chip{color:var(--green-d)}
+.livebar.no .lb-chip{color:#c0413a}
+.livebar .lb-pay{font-size:27px;font-weight:800;letter-spacing:-.02em;color:var(--ink);font-variant-numeric:tabular-nums;text-align:right}
+.livebar .lb-pay small{display:block;font-size:11.5px;font-weight:600;color:var(--muted);letter-spacing:0;margin-top:2px}
+
+@media(max-width:600px){
+  .wiz{margin:0 -12px 6px;gap:3px;padding:10px 4px}
+  .wdot{padding:3px 4px;gap:6px}
+  .wdot .n{width:27px;height:27px;font-size:13px}
+  .wbar{max-width:30px}
+  .livebar{padding:14px 15px}
+  .livebar .lb-pay{font-size:23px}
+}
+@media(max-width:440px){
+  .wdot .t{display:none}
+  .wbar{max-width:70px}
+}
 </style>
 </head>
 <body>
@@ -261,6 +306,15 @@ details.expl .body{padding:0 0 16px;font-size:14px;color:#5b5448}
 </header>
 
 <div class="wrap">
+  <div class="wiz" id="wizProg">
+    <button type="button" class="wdot cur" data-go="1"><span class="n">1</span><span class="t">Данные</span></button>
+    <span class="wbar"></span>
+    <button type="button" class="wdot" data-go="2"><span class="n">2</span><span class="t">Условия</span></button>
+    <span class="wbar"></span>
+    <button type="button" class="wdot" data-go="3"><span class="n">3</span><span class="t">Результат</span></button>
+  </div>
+
+  <section class="wstep active" id="step1" data-step="1">
   <div class="hero">
     <h1>Калькулятор пенсионного аннуитета</h1>
     <p class="lead">Узнайте, достаточно ли пенсионных накоплений для оформления аннуитета и какой будет ежемесячная выплата. Считаем по нормативам Казахстана 2026 года.</p>
@@ -269,11 +323,10 @@ details.expl .body{padding:0 0 16px;font-size:14px;color:#5b5448}
   <div class="card howto">
     <h2 class="sec">Как пользоваться</h2>
     <ol>
-      <li>Укажите пол и полный возраст.</li>
-      <li>Впишите сумму на счёте в ЕНПФ.</li>
+      <li>Шаг 1 — укажите пол, возраст и сумму в ЕНПФ.</li>
       <li>Отметьте вредный стаж (ОППВ) или инвалидность, если есть — порог снизится.</li>
-      <li>Нажмите «Проверить» и смотрите итог.</li>
-      <li>Меняйте условия ползунками и выгружайте готовый расчёт.</li>
+      <li>Шаг 2 — настройте условия договора кнопками − и +.</li>
+      <li>Шаг 3 — смотрите результат, графики и выгрузите расчёт клиенту.</li>
     </ol>
   </div>
 
@@ -314,7 +367,7 @@ details.expl .body{padding:0 0 16px;font-size:14px;color:#5b5448}
       <div class="tipbox" id="tip-dis">Засчитывается только <b>бессрочная</b> инвалидность — без даты переосвидетельствования. Она уменьшает сумму, необходимую для заключения договора.<div class="law"><b>Закон:</b> учитывается инвалидность <q>первой и второй групп, если инвалидность установлена бессрочно</q> — ст. 220–221 Социального кодекса РК.</div></div>
     </div>
 
-    <button class="btn block" id="btn-calc">Проверить →</button>
+    <button class="btn block" id="btn-calc">Рассчитать →</button>
     <div class="err" id="errbox"></div>
   </div>
 
@@ -327,21 +380,16 @@ details.expl .body{padding:0 0 16px;font-size:14px;color:#5b5448}
     <div class="body">Расчёт выполнен по официальной методике с учётом актуальных параметров, применяемых страховыми компаниями Республики Казахстан в 2026 году: таблиц смертности, ставки дисконтирования, минимального размера выплаты и порогов достаточности. Это точный ориентир — окончательную сумму страховая компания подтверждает при оформлении договора.</div>
   </details>
 
+  </section>
+
   <!-- RESULTS -->
   <div id="results">
-    <div class="card">
-      <div class="statusbig ok" id="statusbig">
-        <div class="ic" id="status-ic">✓</div>
-        <div><h2 id="status-h">—</h2><p id="status-p">—</p></div>
-      </div>
-      <div class="kpis" id="kpis"></div>
-      <div id="extraNotes" style="margin-top:14px;display:grid;gap:10px"></div>
-    </div>
-
+    <section class="wstep" id="step2" data-step="2">
+      <div class="livebar" id="liveBar"></div>
     <!-- conditions -->
     <div class="card">
       <h2>Условия договора</h2>
-      <p class="muted small" style="margin-top:2px">Двигайте ползунки — результат пересчитывается на лету.</p>
+      <p class="muted small" style="margin-top:2px">Настраивайте кнопками − и + — результат пересчитывается на лету.</p>
       <div class="sliders">
         <div class="slrow">
           <div class="top"><span class="name">Сколько перевести в страховую</span></div>
@@ -395,6 +443,21 @@ details.expl .body{padding:0 0 16px;font-size:14px;color:#5b5448}
         </div>
         <div id="jointResult" class="small" style="margin-top:14px"></div>
       </div>
+    </div>
+
+      <div class="wnav">
+        <button type="button" class="btn ghost" id="nav-back2">← Назад</button>
+        <button type="button" class="btn" id="nav-next2">Смотреть результат →</button>
+      </div>
+    </section>
+    <section class="wstep" id="step3" data-step="3">
+    <div class="card">
+      <div class="statusbig ok" id="statusbig">
+        <div class="ic" id="status-ic">✓</div>
+        <div><h2 id="status-h">—</h2><p id="status-p">—</p></div>
+      </div>
+      <div class="kpis" id="kpis"></div>
+      <div id="extraNotes" style="margin-top:14px;display:grid;gap:10px"></div>
     </div>
 
     <!-- lifetime -->
@@ -480,8 +543,6 @@ details.expl .body{padding:0 0 16px;font-size:14px;color:#5b5448}
         <button class="btn ghost" id="share-copy">🔗 Скопировать ссылку</button>
       </div>
     </div>
-  </div><!-- /results -->
-
   <details class="expl" style="margin-top:18px">
   <summary>Правовая основа расчёта</summary>
   <div class="body">
@@ -498,6 +559,13 @@ details.expl .body{padding:0 0 16px;font-size:14px;color:#5b5448}
     <p style="margin:10px 0 0;color:#9aa8a1;font-size:11.5px">Цитаты приведены по Социальному кодексу РК в редакции на 2026 год. Точные условия договора подтверждает страховая компания (КСЖ).</p>
   </div>
 </details>
+
+      <div class="wnav">
+        <button type="button" class="btn ghost" id="nav-back3">← Изменить условия</button>
+        <button type="button" class="btn" id="nav-reset">↺ Новый расчёт</button>
+      </div>
+    </section>
+  </div><!-- /results -->
 
   <div class="foot" id="foot">
     Калькулятор носит справочный характер. Итоговые суммы подтверждает страховая компания (КСЖ) при оформлении договора.<br>
@@ -904,7 +972,8 @@ $('#btn-calc').onclick=()=>{
   ST.gp=1; ST.premMode='all'; ST.premium=0;
   ST.gp=1; stepUpd('gp');
   const cr=$('#chk-reserve'); if(cr)cr.checked=false;
-  ST._scroll=true; render();
+  ST.shown=false; ST._scroll=false; render();
+  if(ST.shown) goStep(2);
 };
 [ 'in-age','in-sav' ].forEach(id=>$('#'+id).addEventListener('keydown',e=>{if(e.key==='Enter'){ST._scroll=true;render();}}));
 
@@ -1034,12 +1103,23 @@ function dl(blob,name){const a=document.createElement('a');a.href=URL.createObje
 $('#dl-html').onclick=()=>{ if(!ST.lastR)return; dl(new Blob([buildReport(ST.lastR,'html')],{type:'text/html;charset=utf-8'}),'raschet-annuitet.html'); showToast('HTML-файл скачан'); };
 $('#dl-word').onclick=()=>{ if(!ST.lastR)return; dl(new Blob(['﻿'+buildReport(ST.lastR,'static')],{type:'application/msword'}),'raschet-annuitet.doc'); showToast('Word-файл скачан'); };
 $('#dl-print').onclick=()=>{ if(!ST.lastR)return;
-  if(typeof html2pdf==='undefined'){ const w=window.open('','_blank'); w.document.write(buildReport(ST.lastR,'static')); w.document.close(); setTimeout(()=>{w.focus();w.print();},400); return; }
+  const docStr=buildReport(ST.lastR,'static');
+  const printFallback=()=>{ const w=window.open('','_blank'); if(w){ w.document.write(docStr); w.document.close(); setTimeout(()=>{w.focus();w.print();},400); } };
+  if(typeof html2pdf==='undefined'){ printFallback(); return; }
   showToast('Готовлю PDF…');
-  const el=document.createElement('div'); el.style.position='absolute'; el.style.left='-9999px'; el.style.top='0'; el.style.width='760px'; el.style.background='#fff';
-  el.innerHTML=buildReport(ST.lastR,'static');
+  let styleHTML='', bodyHTML=docStr;
+  try{ const pdoc=new DOMParser().parseFromString(docStr,'text/html'); styleHTML=Array.prototype.map.call(pdoc.querySelectorAll('style'),x=>x.outerHTML).join(''); bodyHTML=pdoc.body.innerHTML; }catch(e){}
+  const el=document.createElement('div');
+  el.style.cssText='position:absolute;left:0;top:0;width:760px;background:#fff;z-index:-9999';
+  el.innerHTML=styleHTML+bodyHTML;
   document.body.appendChild(el);
-  html2pdf().set({margin:[8,8,8,8],filename:'raschet-annuitet.pdf',image:{type:'jpeg',quality:0.95},html2canvas:{scale:2,backgroundColor:'#ffffff'},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},pagebreak:{mode:['css','legacy']}}).from(el).save().then(()=>{document.body.removeChild(el);showToast('PDF скачан');}).catch(()=>{try{document.body.removeChild(el);}catch(e){}showToast('Не удалось сформировать PDF');});
+  const ps=window.pageYOffset||document.documentElement.scrollTop||0;
+  try{window.scrollTo(0,0);}catch(e){}
+  const cleanup=()=>{ try{document.body.removeChild(el);}catch(e){} try{window.scrollTo(0,ps);}catch(e){} };
+  const opt={margin:[8,8,8,8],filename:'raschet-annuitet.pdf',image:{type:'jpeg',quality:0.95},html2canvas:{scale:2,backgroundColor:'#ffffff',useCORS:true,scrollX:0,scrollY:0,windowWidth:820},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},pagebreak:{mode:['css','legacy']}};
+  setTimeout(()=>{ html2pdf().set(opt).from(el).save()
+    .then(()=>{ cleanup(); showToast('PDF скачан'); })
+    .catch(()=>{ cleanup(); printFallback(); showToast('Открываю печать PDF'); }); }, 60);
 };
 
 /* ================= ШЕРИНГ ================= */
@@ -1077,6 +1157,34 @@ setInterval(tickClock,1000); tickClock();
 
 ['gp','idx','bon'].forEach(stepUpd);
 applyFromUrl();
+
+/* ===================== НАВИГАЦИЯ МАСТЕРА ===================== */
+function goStep(n){
+  ST.step=n;
+  ['1','2','3'].forEach(function(k){var el=document.getElementById('step'+k); if(el) el.classList.toggle('active', k===String(n));});
+  document.querySelectorAll('#wizProg .wdot').forEach(function(d){var t=+d.dataset.go; d.classList.toggle('cur',t===n); d.classList.toggle('done',t<n);});
+  try{window.scrollTo({top:0,behavior:'smooth'});}catch(e){window.scrollTo(0,0);}
+}
+function updateLiveBar(){
+  var r=ST.lastR, el=document.getElementById('liveBar'); if(!el||!r||!r.ok) return;
+  var cls,chip,pay,sub;
+  if(r.enough){cls='ok';chip='\u2713 Накоплений хватает';pay=fmt(r.payFirst);sub='\u20b8 в месяц пожизненно'+(r.type==='delayed'?' (с '+r.startAge+' лет)':'');}
+  else if(r.almostEnough){cls='ok';chip='\u2248 Почти хватает';pay=fmt(r.payFirst);sub='\u20b8 в месяц — нехватку можно доложить';}
+  else {cls='no';chip='\u25cb Пока не хватает';pay=fmt(r.thrCur);sub='\u20b8 — нужный минимум для входа';}
+  el.className='livebar '+cls;
+  el.innerHTML='<div class="lb-chip">'+chip+'</div><div class="lb-pay">'+pay+' <small>'+sub+'</small></div>';
+}
+var _renderOrig=render;
+render=function(){var _r=_renderOrig.apply(this,arguments); updateLiveBar(); return _r;};
+(function(){
+  var b2=document.getElementById('nav-back2'); if(b2)b2.onclick=function(){goStep(1);};
+  var n2=document.getElementById('nav-next2'); if(n2)n2.onclick=function(){goStep(3);};
+  var b3=document.getElementById('nav-back3'); if(b3)b3.onclick=function(){goStep(2);};
+  var rs=document.getElementById('nav-reset'); if(rs)rs.onclick=function(){location.href=location.origin+location.pathname;};
+  document.querySelectorAll('#wizProg .wdot').forEach(function(d){d.onclick=function(){var t=+d.dataset.go; if(t===1||ST.shown)goStep(t);};});
+  var shared=new URLSearchParams(location.search).get('v')==='1';
+  if(shared && ST.lastR){ updateLiveBar(); goStep(3); } else { goStep(1); }
+})();
 </script>
 </body>
 </html>
