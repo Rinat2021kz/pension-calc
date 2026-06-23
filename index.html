@@ -29,274 +29,184 @@
 //# sourceMappingURL=html2pdf.bundle.min.js.map</script>
 <style>
 :root{
-  --bg:#eef3f1; --card:#ffffff; --ink:#0f1f18; --muted:#65756d; --line:#e3ebe7;
-  --green:#15b877; --green-d:#0e9a61; --green-soft:#e2f6ed;
-  --gold:#e0a52f; --gold-soft:#fbf1da; --red:#e2574d; --red-soft:#fdecea;
-  --shadow:0 1px 2px rgba(15,40,28,.04),0 10px 34px rgba(15,40,28,.07);
-  --radius:18px;
+  --paper:#ECEFE9; --card:#FBFAF5; --ink:#18241D; --muted:#69756B;
+  --line:#D7DCD2; --line-2:#E7E3D6;
+  --ever:#1B5C42; --ever-d:#0F3A2A; --ever-soft:#E2ECE5;
+  --gold:#B0832C; --gold-ink:#6E5316; --gold-soft:#F1E7CF; --gold-line:#D8CAA0;
+  --brick:#9E3B2E; --brick-soft:#F1E1DC;
+  --serif:Georgia,'Times New Roman',serif;
+  --sans:system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+  --mono:ui-monospace,'SF Mono','Segoe UI Mono','Roboto Mono',monospace;
+  --radius:13px;
+  --shadow:0 1px 2px rgba(15,40,28,.04),0 10px 30px rgba(15,40,28,.07);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%}
-body{font-family:'Manrope',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;font-size:16px;-webkit-font-smoothing:antialiased}
-.wrap{max-width:920px;margin:0 auto;padding:0 16px 80px}
-a{color:var(--green);text-decoration:none}
-h1,h2,h3{line-height:1.2;font-weight:800;letter-spacing:-.01em}
-.muted{color:var(--muted)}
-.small{font-size:13px}
-.tiny{font-size:12px}
-
-/* header */
-header.top{padding:22px 16px 8px;max-width:920px;margin:0 auto;display:flex;align-items:center;gap:12px}
-.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:15px}
-.logo .mark{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--green),var(--green-d));display:grid;place-items:center;color:#fff;font-size:18px;box-shadow:var(--shadow)}
-.clock{margin-left:auto;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
-
-/* hero */
-.hero{padding:18px 0 6px}
-.hero h1{font-size:30px;margin-bottom:8px}
-.hero p.lead{color:var(--muted);font-size:16px;max-width:620px}
-
-/* card */
-.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px;margin-top:18px}
-.card h2{font-size:19px;margin-bottom:4px}
-.card h2.sec{font-size:15px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700}
-
-/* how-to */
-.howto{background:linear-gradient(180deg,#fff,#fffdf9);border:1px dashed var(--line)}
-.howto ol{margin:10px 0 0 0;padding-left:0;list-style:none;counter-reset:s}
-.howto li{counter-increment:s;position:relative;padding:7px 0 7px 38px;border-bottom:1px solid var(--line);font-size:14.5px}
-.howto li:last-child{border-bottom:none}
-.howto li::before{content:counter(s);position:absolute;left:0;top:6px;width:26px;height:26px;border-radius:50%;background:var(--green-soft);color:var(--green-d);font-weight:800;font-size:13px;display:grid;place-items:center}
-
-/* fields */
+body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.55;font-size:16px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:880px;margin:0 auto;padding:0 18px 80px}
+a{color:var(--ever);text-decoration:none}
+.muted{color:var(--muted)} .small{font-size:13px} .tiny{font-size:12px}
+::selection{background:var(--gold-soft)}
+header.top{max-width:880px;margin:0 auto;padding:20px 18px 14px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line)}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-weight:700;font-size:15px;color:var(--ink)}
+.logo .mark{width:33px;height:33px;border-radius:50%;border:1.5px solid var(--ever);display:grid;place-items:center;color:var(--ever);font-family:var(--serif);font-size:17px;font-weight:700;flex:none}
+.logo .tiny{font-family:var(--sans);font-weight:500;color:var(--muted)}
+.clock{margin-left:auto;font-family:var(--mono);font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.hero{padding:26px 0 6px}
+.hero::before{content:'Пенсионный аннуитет · Республика Казахстан · 2026';display:block;font-size:11px;letter-spacing:.17em;text-transform:uppercase;color:var(--gold-ink);font-weight:600;margin-bottom:14px}
+.hero h1{font-family:var(--serif);font-size:31px;font-weight:700;letter-spacing:-.012em;line-height:1.14;color:var(--ink)}
+.hero p.lead{color:var(--muted);font-size:15.5px;margin-top:11px;max-width:600px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px;margin-top:16px;box-shadow:var(--shadow)}
+.card h2{font-family:var(--serif);font-size:19px;font-weight:700;letter-spacing:-.005em;color:var(--ink);margin-bottom:4px}
+.card h2.sec{font-family:var(--sans);font-size:12px;text-transform:uppercase;letter-spacing:.15em;color:var(--gold-ink);font-weight:600}
+.howto{background:var(--card);border:1px solid var(--line)}
+.howto ol{margin:12px 0 0;padding:0;list-style:none;counter-reset:s}
+.howto li{counter-increment:s;position:relative;padding:9px 0 9px 40px;border-top:1px solid var(--line-2);font-size:14.5px;color:#33433a}
+.howto li:first-child{border-top:none}
+.howto li::before{content:counter(s,decimal-leading-zero);position:absolute;left:0;top:9px;font-family:var(--mono);font-size:12px;font-weight:600;color:var(--gold-ink)}
 .field{margin-top:18px}
-.field>label{display:block;font-weight:700;font-size:14.5px;margin-bottom:7px}
-.field .hint{font-size:12.5px;color:var(--muted);font-weight:500}
-.seg{display:inline-flex;background:#f1ebe0;border-radius:12px;padding:4px;gap:4px;flex-wrap:wrap}
-.seg button{border:none;background:transparent;padding:9px 18px;border-radius:9px;font:inherit;font-weight:600;font-size:14px;color:var(--muted);cursor:pointer;transition:.15s}
-.seg button.on{background:#fff;color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.08)}
-.seg.green button.on{background:var(--green);color:#fff}
-input[type=text],input[type=number]{width:100%;padding:13px 14px;border:1.5px solid var(--line);border-radius:12px;font:inherit;font-size:16px;background:#fffefb;transition:.15s}
-input[type=text]:focus,input[type=number]:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 4px var(--green-soft)}
+.field>label{display:block;font-weight:600;font-size:13.5px;margin-bottom:7px;color:var(--ink)}
+.field .hint{font-size:12.5px;color:var(--muted);font-weight:400}
+.seg{display:inline-flex;background:#E7E9E2;border-radius:10px;padding:3px;gap:3px;flex-wrap:wrap}
+.seg button{border:none;background:transparent;padding:9px 17px;border-radius:8px;font:inherit;font-weight:600;font-size:13.5px;color:var(--muted);cursor:pointer;transition:.15s}
+.seg button.on{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.seg.green button.on{background:var(--ever);color:#fff}
+input[type=text],input[type=number]{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;font:inherit;font-size:16px;background:#fff;color:var(--ink);transition:.15s}
+input[type=text]:focus,input[type=number]:focus{outline:none;border-color:var(--ever);box-shadow:0 0 0 3px var(--ever-soft)}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-@media(max-width:560px){.grid2{grid-template-columns:1fr}.hero h1{font-size:25px}}
-.suffix{position:relative}
-.suffix input{padding-right:42px}
-.suffix .u{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--muted);font-weight:600}
-
-/* special grounds */
-.grounds{margin-top:18px;padding:16px;background:#fbf7ef;border:1px solid var(--line);border-radius:14px}
+.suffix{position:relative}.suffix input{padding-right:42px}
+.suffix .u{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--muted);font-weight:600;font-family:var(--mono);font-size:14px}
+.grounds{margin-top:18px;padding:16px;background:#F4F1E6;border:1px solid var(--gold-line);border-radius:11px}
 .grounds .row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:12px}
 .grounds .row:first-child{margin-top:0}
 .qmark{display:inline-grid;place-items:center;width:18px;height:18px;border-radius:50%;background:var(--muted);color:#fff;font-size:11px;font-weight:700;cursor:help;vertical-align:middle;margin-left:5px}
-.tipbox{display:none;margin-top:8px;padding:11px 13px;background:#fff;border:1px solid var(--line);border-radius:10px;font-size:13px;color:#5b5448}
+.tipbox{display:none;margin-top:8px;padding:11px 13px;background:var(--card);border:1px solid var(--line);border-radius:9px;font-size:13px;color:#4f5a51}
 .tipbox.show{display:block}
-
-/* button */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;border-radius:13px;padding:15px 26px;font:inherit;font-weight:700;font-size:16px;cursor:pointer;transition:.15s;background:var(--green);color:#fff;box-shadow:0 6px 18px rgba(21,184,119,.28)}
-.btn:hover{background:var(--green-d);transform:translateY(-1px)}
-.btn:active{transform:translateY(0)}
-.btn.block{width:100%;margin-top:22px;font-size:17px;padding:17px}
-.btn.ghost{background:#fff;color:var(--ink);border:1.5px solid var(--line);box-shadow:none}
-.btn.ghost:hover{background:#faf6ef;border-color:var(--green)}
-.btn.gold{background:var(--gold);box-shadow:0 6px 18px rgba(224,165,47,.3)}
-.btn.gold:hover{background:#a87f2f}
-.btn.sm{padding:10px 16px;font-size:14px;border-radius:10px}
-
-.err{display:none;margin-top:14px;padding:13px 15px;background:var(--red-soft);border:1px solid #e6c3b8;color:#c0413a;border-radius:12px;font-size:14px;font-weight:600}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;border-radius:11px;padding:14px 24px;font-family:var(--sans);font-weight:600;font-size:15.5px;cursor:pointer;transition:.15s;background:var(--ever);color:#fff}
+.btn:hover{background:var(--ever-d)}
+.btn:active{transform:translateY(1px)}
+.btn.block{width:100%;margin-top:20px;font-size:16px;padding:16px}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.ghost:hover{background:#F1F0E8;border-color:var(--ever)}
+.btn.gold{background:var(--gold);color:#fff}
+.btn.gold:hover{background:#946C22}
+.btn.sm{padding:9px 15px;font-size:13.5px;border-radius:9px}
+.err{display:none;margin-top:14px;padding:13px 15px;background:var(--brick-soft);border:1px solid #e0bdb4;color:var(--brick);border-radius:10px;font-size:14px;font-weight:600}
 .err.show{display:block}
-
-/* results */
-#results{display:none}
-#results.show{display:block}
-.statusbig{display:flex;align-items:flex-start;gap:16px;padding:20px;border-radius:16px;margin-bottom:4px}
-.statusbig.ok{background:var(--green-soft)}
-.statusbig.no{background:var(--red-soft)}
-.statusbig .ic{font-size:30px;line-height:1}
-.statusbig h2{font-size:21px;margin-bottom:4px}
-.statusbig.ok h2{color:var(--green-d)}
-.statusbig.no h2{color:#c0413a}
-.statusbig p{font-size:14.5px;color:#5b5448}
-
-.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:18px}
-@media(max-width:680px){.kpis{grid-template-columns:1fr 1fr}}
-.kpi{background:#fffefb;border:1px solid var(--line);border-radius:14px;padding:15px}
-.kpi .lab{font-size:12.5px;color:var(--muted);font-weight:600;margin-bottom:6px;min-height:32px}
-.kpi .val{font-size:21px;font-weight:800;letter-spacing:-.02em}
-.kpi .val small{font-size:13px;font-weight:600;color:var(--muted)}
-.kpi.accent{background:linear-gradient(160deg,var(--green),var(--green-d));border:none;color:#fff}
-.kpi.accent .lab{color:rgba(255,255,255,.85)}
-.kpi.gold{background:linear-gradient(160deg,#d3a857,#b8862f);color:#fff}
-.kpi.gold2{background:var(--gold-soft);border-color:#ecdcb8}
-
-/* sliders */
-.sliders{margin-top:8px}
+#results{display:none}#results.show{display:block}
+.statusbig{display:flex;align-items:flex-start;gap:15px;padding:18px;border-radius:11px;margin-bottom:4px;border:1px solid transparent}
+.statusbig.ok{background:var(--ever-soft);border-color:#cadbd0}
+.statusbig.no{background:var(--brick-soft);border-color:#e6c8c1}
+.statusbig .ic{font-size:24px;line-height:1.1;font-family:var(--serif)}
+.statusbig h2{font-family:var(--serif);font-size:20px;margin-bottom:4px}
+.statusbig.ok h2{color:var(--ever-d)}.statusbig.no h2{color:var(--brick)}
+.statusbig p{font-size:14px;color:#4f5a51}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
+.kpi{background:transparent;border:1px solid var(--line);border-radius:10px;padding:13px 14px}
+.kpi .lab{font-size:11.5px;color:var(--muted);font-weight:500;margin-bottom:6px}
+.kpi .val{font-family:var(--mono);font-size:17px;font-weight:600;letter-spacing:-.02em;color:var(--ink)}
+.kpi .val small{font-family:var(--sans);font-size:12px;font-weight:500;color:var(--muted)}
+.kpi.gold{background:var(--gold-soft);border-color:var(--gold-line)} .kpi.gold .val,.kpi.gold .lab{color:var(--gold-ink)}
+.kpi.gold2{background:var(--gold-soft);border-color:var(--gold-line)}
+.kpi.accent{grid-column:1/-1;background:var(--card);border:1px solid var(--gold-line);border-radius:var(--radius);padding:24px 18px;text-align:center;position:relative;overflow:hidden}
+.kpi.accent::after{content:'₸';position:absolute;right:-12px;bottom:-34px;font-family:var(--serif);font-size:150px;color:var(--gold);opacity:.08;line-height:1;pointer-events:none}
+.kpi.accent .lab{display:inline-block;margin:0 auto 12px;font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--gold-ink);font-weight:600;border-top:1px solid var(--gold-line);border-bottom:1px solid var(--gold-line);padding:6px 14px}
+.kpi.accent .val{display:block;font-family:var(--serif);font-size:46px;font-weight:700;letter-spacing:-.01em;color:var(--ever)}
+.kpi.accent .val small{font-family:var(--serif);font-size:25px;color:var(--gold);font-weight:700}
+.sliders{margin-top:6px}
 .slrow{margin-top:20px}
 .slrow .top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px;gap:10px}
-.slrow .top .name{font-weight:700;font-size:14.5px}
-.slrow .top .v{font-weight:800;color:var(--green-d);font-variant-numeric:tabular-nums}
-input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:7px;border-radius:6px;background:linear-gradient(var(--green),var(--green)) no-repeat,#e9e0d2;background-size:var(--pct,50%) 100%;cursor:pointer}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:#fff;border:2px solid var(--green);box-shadow:0 2px 6px rgba(0,0,0,.18);cursor:pointer}
-input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:#fff;border:2px solid var(--green);box-shadow:0 2px 6px rgba(0,0,0,.18);cursor:pointer}
+.slrow .top .name{font-weight:600;font-size:14px}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:5px;background:linear-gradient(var(--ever),var(--ever)) no-repeat,#DDE0D6;background-size:var(--pct,50%) 100%;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--card);border:2px solid var(--ever);cursor:pointer}
+input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--card);border:2px solid var(--ever);cursor:pointer}
 .premchips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
-.stepper{display:inline-flex;align-items:center;border:1.5px solid var(--line);border-radius:14px;overflow:hidden;background:#fff}
-.st-btn{width:52px;height:50px;border:none;background:#f7faf8;font-size:24px;font-weight:700;color:var(--green-d);cursor:pointer;line-height:1;transition:.12s}
-.st-btn:active{background:var(--green-soft)}
-.st-val{min-width:96px;text-align:center;font-weight:800;font-size:16px;padding:0 6px;color:var(--ink)}
-.premchips button{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:8px 14px;font:inherit;font-size:13.5px;font-weight:600;cursor:pointer;color:var(--muted);transition:.15s}
-.premchips button.on{border-color:var(--green);background:var(--green-soft);color:var(--green-d)}
-.checkline{display:flex;align-items:center;gap:10px;margin-top:12px;font-size:14px;font-weight:600}
-.checkline input{width:18px;height:18px;accent-color:var(--green)}
-
-/* charts */
+.premchips button{border:1px solid var(--line);background:var(--card);border-radius:9px;padding:8px 13px;font:inherit;font-size:13px;font-weight:600;cursor:pointer;color:var(--muted);transition:.15s}
+.premchips button.on{border-color:var(--ever);background:var(--ever-soft);color:var(--ever-d)}
+.stepper{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:11px;overflow:hidden;background:var(--card)}
+.st-btn{width:50px;height:48px;border:none;background:#EFF1EB;font-size:22px;font-weight:600;color:var(--ever);cursor:pointer;line-height:1;transition:.12s}
+.st-btn:hover{background:var(--ever-soft)}
+.st-val{min-width:92px;text-align:center;font-family:var(--mono);font-weight:600;font-size:15px;padding:0 6px;color:var(--ink)}
+.checkline{display:flex;align-items:center;gap:10px;margin-top:12px;font-size:13.5px;font-weight:500}
+.checkline input{width:18px;height:18px;accent-color:var(--ever)}
 .chartbox{margin-top:14px;position:relative;height:300px}
-.legendrow{display:flex;gap:18px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-top:10px}
-.legendrow .dot{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:middle}
-
-/* lifetime cards */
-.life{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:14px}
-@media(max-width:680px){.life{grid-template-columns:1fr 1fr}}
-.lifecell{text-align:center;padding:16px 10px;border:1px solid var(--line);border-radius:14px;background:#fffefb}
-.lifecell .age{font-size:12.5px;color:var(--muted);font-weight:600}
-.lifecell .amt{font-size:19px;font-weight:800;margin-top:5px;color:var(--green-d)}
-
-/* table */
-table{width:100%;border-collapse:collapse;margin-top:14px;font-size:13.5px;font-variant-numeric:tabular-nums}
-th,td{padding:9px 8px;text-align:right;border-bottom:1px solid var(--line)}
-th:first-child,td:first-child{text-align:left}
-th{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);font-weight:700}
+.legendrow{display:flex;gap:18px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:10px}
+.legendrow .dot{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:middle}
+.life{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}
+.lifecell{text-align:center;padding:15px 8px;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+.lifecell .age{font-size:12px;color:var(--muted);font-weight:500}
+.lifecell .amt{font-family:var(--mono);font-size:17px;font-weight:600;margin-top:5px;color:var(--ever-d)}
+table{width:100%;border-collapse:collapse;margin-top:14px;font-size:13px;font-variant-numeric:tabular-nums}
+th,td{padding:9px 8px;text-align:right;border-bottom:1px solid var(--line-2)}
+td{font-family:var(--mono)}
+th:first-child,td:first-child{text-align:left;font-family:var(--sans)}
+th{font-family:var(--sans);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600}
 tr.guar td{background:var(--gold-soft)}
-.tblwrap{max-height:360px;overflow:auto;border:1px solid var(--line);border-radius:12px;margin-top:12px}
+.tblwrap{max-height:360px;overflow:auto;border:1px solid var(--line);border-radius:10px;margin-top:12px}
 .tblwrap.collapsed{max-height:230px}
 .showall{margin-top:10px}
-
-/* visit card */
-.vcard{margin-top:8px}
 .vcard .grid2{margin-top:0}
-
-/* export */
 .exprow{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#22201c;color:#fff;padding:13px 22px;border-radius:12px;font-weight:600;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:50}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:13px 22px;border-radius:10px;font-weight:600;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:50}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.divider{height:1px;background:var(--line);margin:26px 0}
-.foot{margin-top:30px;text-align:center;color:var(--muted);font-size:12.5px;line-height:1.7}
-details.expl{margin-top:16px;border:1px solid var(--line);border-radius:12px;padding:0 16px;background:#fffefb}
-details.expl summary{padding:14px 0;font-weight:700;cursor:pointer;font-size:14.5px;list-style:none;display:flex;justify-content:space-between}
-details.expl summary::after{content:'+';color:var(--green);font-weight:800}
+.divider{height:1px;background:var(--line);margin:24px 0}
+.foot{margin-top:28px;text-align:center;color:var(--muted);font-size:12px;line-height:1.7}
+details.expl{margin-top:14px;border:1px solid var(--line);border-radius:11px;padding:0 16px;background:var(--card)}
+details.expl summary{padding:14px 0;font-family:var(--serif);font-weight:700;cursor:pointer;font-size:15px;list-style:none;display:flex;justify-content:space-between;color:var(--ink)}
+details.expl summary::-webkit-details-marker{display:none}
+details.expl summary::after{content:'+';color:var(--gold);font-weight:700;font-family:var(--sans)}
 details.expl[open] summary::after{content:'–'}
-details.expl .body{padding:0 0 16px;font-size:14px;color:#5b5448}
-.spouse{display:none;margin-top:14px;padding:16px;border:1px dashed var(--line);border-radius:14px;background:#fbf7ef}
+details.expl .body{padding:0 0 16px;font-size:14px;color:#4f5a51}
+.spouse{display:none;margin-top:14px;padding:16px;border:1px dashed var(--gold-line);border-radius:11px;background:#F4F1E6}
 .spouse.on{display:block}
-.law{font-size:11.5px;color:#8a8073;margin-top:9px;padding-top:8px;border-top:1px dashed #e9e0d2;line-height:1.5}
-.law b{color:#5b5448;font-weight:700}
-.law q{font-style:italic;color:#6b6356}
+.law{font-size:11.5px;color:#7a7257;margin-top:9px;padding-top:8px;border-top:1px dashed var(--gold-line);line-height:1.5}
+.law b{color:var(--gold-ink);font-weight:600}.law q{font-style:italic;color:#6b6356}
 .lawlist{margin-top:6px}
-.lawlist .row{padding:9px 0;border-bottom:1px solid #f0e9dc;font-size:13px;color:#5b5448;line-height:1.5}
-.lawlist .row:last-child{border-bottom:none}
-.lawlist .art{font-weight:700;color:#0e9a61}
+.lawlist .row{padding:9px 0;border-top:1px solid var(--line-2);font-size:13px;color:#4f5a51;line-height:1.5}
+.lawlist .row:first-child{border-top:none}
+.lawlist .art{font-family:var(--mono);font-weight:600;color:var(--ever-d);font-size:12px}
 .lawlist q{font-style:italic;color:#6b6356}
 .enpf-cmp{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}
-@media(max-width:560px){.enpf-cmp{grid-template-columns:1fr}}
-.enpf-col{border:1px solid var(--line);border-radius:12px;padding:14px;background:#fffefb}
-.enpf-col.ok{border-color:var(--green);background:var(--green-soft)}
-.enpf-col .t{font-size:12.5px;color:var(--muted);font-weight:600}
-.enpf-col .big{font-size:20px;font-weight:800;margin:5px 0;letter-spacing:-.02em}
-.enpf-col.ok .big{color:var(--green-d)}
-.enpf-col .d{font-size:12.5px;color:#5b5448;line-height:1.5}
-.note-pill{border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.5}
-.note-pill.money{background:var(--green-soft);color:#0e9a61;border:1px solid #cfe6d8}
-.note-pill.guard{background:#eef3f8;color:#2f4a63;border:1px solid #d9e3ee}
-.note-pill.gold2{background:var(--gold-soft);color:#7a5a12;border:1px solid #efe0bd}
-.note-pill.warn{background:#fdf3e7;color:#9a5a16;border:1px solid #f3dcc0}
+.enpf-col{border:1px solid var(--line);border-radius:11px;padding:14px;background:var(--card)}
+.enpf-col.ok{border-color:var(--ever);background:var(--ever-soft)}
+.enpf-col .t{font-size:12px;color:var(--muted);font-weight:500}
+.enpf-col .big{font-family:var(--mono);font-size:19px;font-weight:600;margin:5px 0;letter-spacing:-.02em}
+.enpf-col.ok .big{color:var(--ever-d)}
+.enpf-col .d{font-size:12.5px;color:#4f5a51;line-height:1.5}
+.note-pill{border-radius:11px;padding:12px 14px;font-size:13px;line-height:1.5}
+.note-pill.money{background:var(--ever-soft);color:var(--ever-d);border:1px solid #cadbd0}
+.note-pill.guard{background:#E9EDE6;color:#3a4a40;border:1px solid var(--line)}
+.note-pill.gold2{background:var(--gold-soft);color:var(--gold-ink);border:1px solid var(--gold-line)}
+.note-pill.warn{background:#F6ECDA;color:var(--gold-ink);border:1px solid var(--gold-line)}
+.note-pill b{font-weight:600}
 .adv{margin-top:4px}
-.adv-h{font-weight:800;font-size:16px;margin:6px 0 10px;color:var(--ink);letter-spacing:-.01em}
-.adv-item{padding:12px 14px;background:#f7faf8;border:1px solid var(--line);border-radius:12px;margin-bottom:8px;font-size:13.5px;line-height:1.55;color:#3b4a43}
-.adv-item b{color:var(--green-d);font-weight:700}
+.adv-h{font-family:var(--serif);font-weight:700;font-size:16px;margin:6px 0 10px;color:var(--ink)}
+.adv-item{padding:12px 14px;background:var(--card);border:1px solid var(--line);border-radius:10px;margin-bottom:8px;font-size:13.5px;line-height:1.55;color:#3b4a43}
+.adv-item b{color:var(--ever-d);font-weight:600}
 .adv-note{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.5}
-.note-pill b{font-weight:700}
-
+:focus-visible{outline:2px solid var(--ever);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media(max-width:680px){.kpis{grid-template-columns:1fr 1fr}.life{grid-template-columns:1fr 1fr}}
 @media(max-width:600px){
-  .wrap{padding:0 12px 60px}
-  header.top{padding:16px 12px 6px}
-  .hero{padding:12px 0 4px}
-  .hero h1{font-size:23px}
-  .hero p.lead{font-size:14.5px}
-  .card{padding:16px;border-radius:15px;margin-top:14px}
-  .card h2{font-size:17px}
-  .howto li{font-size:14px;padding-left:34px}
-  .statusbig{padding:15px;gap:12px}
-  .statusbig h2{font-size:18px}
-  .kpis{gap:8px}
-  .kpi{padding:12px}
-  .kpi .val{font-size:18px}
-  .kpi .lab{min-height:auto}
+  .wrap{padding:0 14px 60px}
+  header.top{padding:16px 14px 12px}
+  .hero{padding:18px 0 4px}.hero h1{font-size:25px}.hero p.lead{font-size:14.5px}
+  .card{padding:16px;margin-top:13px}.card h2{font-size:17.5px}
+  .statusbig{padding:14px;gap:12px}.statusbig h2{font-size:18px}
+  .kpi.accent .val{font-size:38px}.kpi.accent .val small{font-size:21px}
+  .kpis{gap:8px}.kpi{padding:12px}
   .chartbox{height:240px}
-  .exprow{gap:8px}
-  .exprow .btn{flex:1 1 100%;justify-content:center}
-  .btn{padding:14px 18px;font-size:15px}
-  .btn.block{padding:16px;font-size:16px;margin-top:18px}
-  .seg{width:100%}
-  .seg button{flex:1;padding:11px 8px;font-size:13.5px}
+  .exprow .btn{flex:1 1 100%}
+  .btn{padding:13px 18px}.btn.block{padding:15px}
+  .seg{width:100%}.seg button{flex:1;padding:10px 8px;font-size:13px}
   .grounds{padding:14px}
-  .grounds .row{align-items:flex-start}
-  table{font-size:12.5px}
-  th,td{padding:7px 5px}
-  .stepper{width:100%}
-  .st-val{flex:1}
-  .st-btn{width:56px}
-  input[type=text],input[type=number]{font-size:16px}
-  .life{grid-template-columns:1fr 1fr;gap:8px}
-  .lifecell{padding:13px 8px}
-  .lifecell .amt{font-size:17px}
-  .adv-item{padding:11px 12px;font-size:13px}
+  .stepper{width:100%}.st-val{flex:1}.st-btn{width:54px}
+  table{font-size:12px}th,td{padding:7px 5px}
+  .grid2{grid-template-columns:1fr}
   .enpf-cmp{grid-template-columns:1fr}
   .vcard .grid2{grid-template-columns:1fr}
 }
-
-/* ===================== ПОШАГОВЫЙ МАСТЕР ===================== */
-.wiz{position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:center;gap:6px;
-  padding:12px 8px;margin:0 -16px 6px;background:rgba(238,243,241,.93);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-.wdot{display:flex;align-items:center;gap:8px;border:none;background:transparent;cursor:default;font:inherit;padding:4px 6px;opacity:.45;transition:.2s}
-.wdot .n{width:30px;height:30px;border-radius:50%;background:#fff;border:2px solid var(--line);color:var(--muted);
-  display:grid;place-items:center;font-weight:800;font-size:14px;flex:none;transition:.2s}
-.wdot .t{font-weight:700;font-size:13.5px;color:var(--muted);white-space:nowrap}
-.wdot.cur{opacity:1}
-.wdot.cur .n{background:var(--green);border-color:var(--green);color:#fff}
-.wdot.cur .t{color:var(--ink)}
-.wdot.done{opacity:1;cursor:pointer}
-.wdot.done .n{background:var(--green-soft);border-color:var(--green);color:var(--green-d)}
-.wbar{flex:1;max-width:42px;height:2px;background:var(--line);border-radius:2px}
-
-.wstep{display:none}
-.wstep.active{display:block;animation:wfade .28s ease}
-@keyframes wfade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-
-.wnav{display:flex;gap:10px;margin-top:18px}
-.wnav .btn{flex:1;margin-top:0}
-.wnav .btn.ghost{flex:.85}
-
-.livebar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
-  padding:16px 18px;border-radius:16px;margin-bottom:16px;border:1px solid var(--line);box-shadow:var(--shadow)}
-.livebar.ok{background:var(--green-soft);border-color:#cfe6d8}
-.livebar.no{background:var(--red-soft);border-color:#e6c3b8}
-.livebar .lb-chip{font-weight:700;font-size:13px}
-.livebar.ok .lb-chip{color:var(--green-d)}
-.livebar.no .lb-chip{color:#c0413a}
-.livebar .lb-pay{font-size:27px;font-weight:800;letter-spacing:-.02em;color:var(--ink);font-variant-numeric:tabular-nums;text-align:right}
-.livebar .lb-pay small{display:block;font-size:11.5px;font-weight:600;color:var(--muted);letter-spacing:0;margin-top:2px}
-
-@media(max-width:600px){
-  .wiz{margin:0 -12px 6px;gap:3px;padding:10px 4px}
-  .wdot{padding:3px 4px;gap:6px}
-  .wdot .n{width:27px;height:27px;font-size:13px}
-  .wbar{max-width:30px}
-  .livebar{padding:14px 15px}
-  .livebar .lb-pay{font-size:23px}
-}
-@media(max-width:440px){
-  .wdot .t{display:none}
-  .wbar{max-width:70px}
-}
+@media(max-width:380px){.hero h1{font-size:22px}.kpi.accent .val{font-size:33px}}
 </style>
 </head>
 <body>
@@ -306,27 +216,19 @@ details.expl .body{padding:0 0 16px;font-size:14px;color:#5b5448}
 </header>
 
 <div class="wrap">
-  <div class="wiz" id="wizProg">
-    <button type="button" class="wdot cur" data-go="1"><span class="n">1</span><span class="t">Данные</span></button>
-    <span class="wbar"></span>
-    <button type="button" class="wdot" data-go="2"><span class="n">2</span><span class="t">Условия</span></button>
-    <span class="wbar"></span>
-    <button type="button" class="wdot" data-go="3"><span class="n">3</span><span class="t">Результат</span></button>
-  </div>
-
-  <section class="wstep active" id="step1" data-step="1">
   <div class="hero">
-    <h1>Калькулятор пенсионного аннуитета</h1>
+    <h1>Сколько накоплений превратятся в пожизненную пенсию</h1>
     <p class="lead">Узнайте, достаточно ли пенсионных накоплений для оформления аннуитета и какой будет ежемесячная выплата. Считаем по нормативам Казахстана 2026 года.</p>
   </div>
 
   <div class="card howto">
     <h2 class="sec">Как пользоваться</h2>
     <ol>
-      <li>Шаг 1 — укажите пол, возраст и сумму в ЕНПФ.</li>
+      <li>Укажите пол и полный возраст.</li>
+      <li>Впишите сумму на счёте в ЕНПФ.</li>
       <li>Отметьте вредный стаж (ОППВ) или инвалидность, если есть — порог снизится.</li>
-      <li>Шаг 2 — настройте условия договора кнопками − и +.</li>
-      <li>Шаг 3 — смотрите результат, графики и выгрузите расчёт клиенту.</li>
+      <li>Нажмите «Проверить» и смотрите итог.</li>
+      <li>Меняйте условия ползунками и выгружайте готовый расчёт.</li>
     </ol>
   </div>
 
@@ -367,7 +269,7 @@ details.expl .body{padding:0 0 16px;font-size:14px;color:#5b5448}
       <div class="tipbox" id="tip-dis">Засчитывается только <b>бессрочная</b> инвалидность — без даты переосвидетельствования. Она уменьшает сумму, необходимую для заключения договора.<div class="law"><b>Закон:</b> учитывается инвалидность <q>первой и второй групп, если инвалидность установлена бессрочно</q> — ст. 220–221 Социального кодекса РК.</div></div>
     </div>
 
-    <button class="btn block" id="btn-calc">Рассчитать →</button>
+    <button class="btn block" id="btn-calc">Проверить →</button>
     <div class="err" id="errbox"></div>
   </div>
 
@@ -380,16 +282,21 @@ details.expl .body{padding:0 0 16px;font-size:14px;color:#5b5448}
     <div class="body">Расчёт выполнен по официальной методике с учётом актуальных параметров, применяемых страховыми компаниями Республики Казахстан в 2026 году: таблиц смертности, ставки дисконтирования, минимального размера выплаты и порогов достаточности. Это точный ориентир — окончательную сумму страховая компания подтверждает при оформлении договора.</div>
   </details>
 
-  </section>
-
   <!-- RESULTS -->
   <div id="results">
-    <section class="wstep" id="step2" data-step="2">
-      <div class="livebar" id="liveBar"></div>
+    <div class="card">
+      <div class="statusbig ok" id="statusbig">
+        <div class="ic" id="status-ic">✓</div>
+        <div><h2 id="status-h">—</h2><p id="status-p">—</p></div>
+      </div>
+      <div class="kpis" id="kpis"></div>
+      <div id="extraNotes" style="margin-top:14px;display:grid;gap:10px"></div>
+    </div>
+
     <!-- conditions -->
     <div class="card">
       <h2>Условия договора</h2>
-      <p class="muted small" style="margin-top:2px">Настраивайте кнопками − и + — результат пересчитывается на лету.</p>
+      <p class="muted small" style="margin-top:2px">Двигайте ползунки — результат пересчитывается на лету.</p>
       <div class="sliders">
         <div class="slrow">
           <div class="top"><span class="name">Сколько перевести в страховую</span></div>
@@ -445,21 +352,6 @@ details.expl .body{padding:0 0 16px;font-size:14px;color:#5b5448}
       </div>
     </div>
 
-      <div class="wnav">
-        <button type="button" class="btn ghost" id="nav-back2">← Назад</button>
-        <button type="button" class="btn" id="nav-next2">Смотреть результат →</button>
-      </div>
-    </section>
-    <section class="wstep" id="step3" data-step="3">
-    <div class="card">
-      <div class="statusbig ok" id="statusbig">
-        <div class="ic" id="status-ic">✓</div>
-        <div><h2 id="status-h">—</h2><p id="status-p">—</p></div>
-      </div>
-      <div class="kpis" id="kpis"></div>
-      <div id="extraNotes" style="margin-top:14px;display:grid;gap:10px"></div>
-    </div>
-
     <!-- lifetime -->
     <div class="card">
       <h2>Сколько денег вы получите за всю жизнь</h2>
@@ -472,7 +364,7 @@ details.expl .body{padding:0 0 16px;font-size:14px;color:#5b5448}
       <h2>Вложили → получите</h2>
       <p class="muted small" style="margin-top:2px">Сколько вы переводите в страховую и сколько получите выплатами к разным возрастам. Множитель показывает, во сколько раз выплаты превышают вложенное.</p>
       <div class="chartbox" style="height:260px"><canvas id="chartCompare"></canvas></div>
-      <div class="legendrow"><span><span class="dot" style="background:#e2574d"></span>вы перевели</span><span><span class="dot" style="background:#15b877"></span>получите выплатами</span></div>
+      <div class="legendrow"><span><span class="dot" style="background:#9E3B2E"></span>вы перевели</span><span><span class="dot" style="background:#1B5C42"></span>получите выплатами</span></div>
     </div>
 
     <!-- chart cumulative (area, payback) -->
@@ -480,7 +372,7 @@ details.expl .body{padding:0 0 16px;font-size:14px;color:#5b5448}
       <h2>Когда вернутся ваши деньги</h2>
       <p class="muted small" style="margin-top:2px">Зелёная область — сколько всего получено выплатами нарастающим итогом. Пунктир — сумма, которую вы перевели. Где область поднимается выше пунктира, вложенное полностью вернулось — дальше выплаты идут пожизненно.</p>
       <div class="chartbox"><canvas id="chartCum"></canvas></div>
-      <div class="legendrow"><span><span class="dot" style="background:#15b877"></span>получено всего</span><span><span class="dot" style="background:#e2574d"></span>вы перевели</span><span><span class="dot" style="background:#15b877;border-radius:50%"></span>деньги вернулись</span></div>
+      <div class="legendrow"><span><span class="dot" style="background:#1B5C42"></span>получено всего</span><span><span class="dot" style="background:#9E3B2E"></span>вы перевели</span><span><span class="dot" style="background:#1B5C42;border-radius:50%"></span>деньги вернулись</span></div>
     </div>
 
     <!-- chart: monthly payment growth (line) -->
@@ -495,7 +387,7 @@ details.expl .body{padding:0 0 16px;font-size:14px;color:#5b5448}
       <h2>Аннуитет или забрать из ЕНПФ по графику?</h2>
       <p class="muted small" style="margin-top:2px">Сравнение на ваши накопления: аннуитет платит пожизненно, а выплаты из ЕНПФ по графику со временем заканчиваются.</p>
       <div class="chartbox"><canvas id="chartEnpf"></canvas></div>
-      <div class="legendrow"><span><span class="dot" style="background:#15b877"></span>аннуитет — пожизненно</span><span><span class="dot" style="background:#e0a52f"></span>выплаты ЕНПФ по графику</span></div>
+      <div class="legendrow"><span><span class="dot" style="background:#1B5C42"></span>аннуитет — пожизненно</span><span><span class="dot" style="background:#B0832C"></span>выплаты ЕНПФ по графику</span></div>
       <div id="enpfSummary" class="small" style="margin-top:12px"></div>
     </div>
 
@@ -543,6 +435,8 @@ details.expl .body{padding:0 0 16px;font-size:14px;color:#5b5448}
         <button class="btn ghost" id="share-copy">🔗 Скопировать ссылку</button>
       </div>
     </div>
+  </div><!-- /results -->
+
   <details class="expl" style="margin-top:18px">
   <summary>Правовая основа расчёта</summary>
   <div class="body">
@@ -559,13 +453,6 @@ details.expl .body{padding:0 0 16px;font-size:14px;color:#5b5448}
     <p style="margin:10px 0 0;color:#9aa8a1;font-size:11.5px">Цитаты приведены по Социальному кодексу РК в редакции на 2026 год. Точные условия договора подтверждает страховая компания (КСЖ).</p>
   </div>
 </details>
-
-      <div class="wnav">
-        <button type="button" class="btn ghost" id="nav-back3">← Изменить условия</button>
-        <button type="button" class="btn" id="nav-reset">↺ Новый расчёт</button>
-      </div>
-    </section>
-  </div><!-- /results -->
 
   <div class="foot" id="foot">
     Калькулятор носит справочный характер. Итоговые суммы подтверждает страховая компания (КСЖ) при оформлении договора.<br>
@@ -778,16 +665,16 @@ function setRange(el){const mn=+el.min,mx=+el.max;el.style.setProperty('--pct',(
 /* плагины для линий на графике */
 function refLine(yVal,label){return {id:'ref'+Math.random(),afterDraw(c){
   const {ctx,chartArea:{left,right},scales:{y}}=c; if(!y)return; const yy=y.getPixelForValue(yVal);
-  ctx.save();ctx.strokeStyle='#e2574d';ctx.lineWidth=2;ctx.setLineDash([6,4]);
+  ctx.save();ctx.strokeStyle='#9E3B2E';ctx.lineWidth=2;ctx.setLineDash([6,4]);
   ctx.beginPath();ctx.moveTo(left,yy);ctx.lineTo(right,yy);ctx.stroke();
-  ctx.setLineDash([]);ctx.fillStyle='#e2574d';ctx.font='600 11px Manrope,sans-serif';ctx.textAlign='right';
+  ctx.setLineDash([]);ctx.fillStyle='#9E3B2E';ctx.font='600 11px Manrope,sans-serif';ctx.textAlign='right';
   ctx.fillText(label,right-4,yy-6);ctx.restore();
 }};}
 function vBar(idx,label){return {id:'vb'+Math.random(),afterDraw(c){
   if(idx<0)return; const {ctx,chartArea:{top,bottom},scales:{x}}=c; if(!x)return; const xx=x.getPixelForValue(idx);
-  ctx.save();ctx.strokeStyle='#15b877';ctx.lineWidth=2;ctx.setLineDash([4,3]);
+  ctx.save();ctx.strokeStyle='#1B5C42';ctx.lineWidth=2;ctx.setLineDash([4,3]);
   ctx.beginPath();ctx.moveTo(xx,top);ctx.lineTo(xx,bottom);ctx.stroke();
-  ctx.setLineDash([]);ctx.fillStyle='#15b877';ctx.font='700 11px Manrope,sans-serif';ctx.textAlign='center';
+  ctx.setLineDash([]);ctx.fillStyle='#1B5C42';ctx.font='700 11px Manrope,sans-serif';ctx.textAlign='center';
   ctx.fillText(label,xx,top+12);ctx.restore();
 }};}
 
@@ -798,7 +685,7 @@ function barLabels(cap){return {id:'barlab',afterDatasetsDraw(c){
     meta.data.forEach((bar,i)=>{
       const v=ds.data[i];
       ctx.save();ctx.font='700 11px Manrope,sans-serif';ctx.textBaseline='middle';ctx.textAlign='left';
-      ctx.fillStyle=di===1?'#0e9a61':'#c0413a';
+      ctx.fillStyle=di===1?'#15703F':'#c0413a';
       let t=(v/1e6).toFixed(1)+' млн';
       if(di===1)t+=' ×'+(v/cap).toFixed(1);
       ctx.fillText(t, bar.x+6, bar.y);
@@ -808,13 +695,13 @@ function barLabels(cap){return {id:'barlab',afterDatasetsDraw(c){
 }};}
 function bePoint(idx,label){return {id:'bept',afterDatasetsDraw(c){
   if(idx<0||!label)return;const meta=c.getDatasetMeta(0);const pt=meta.data[idx];if(!pt)return;
-  const ctx=c.ctx;ctx.save();ctx.fillStyle='#0e9a61';ctx.font='700 11px Manrope,sans-serif';ctx.textAlign='center';
+  const ctx=c.ctx;ctx.save();ctx.fillStyle='#15703F';ctx.font='700 11px Manrope,sans-serif';ctx.textAlign='center';
   let x=pt.x; if(x>c.chartArea.right-60)x=c.chartArea.right-60; if(x<c.chartArea.left+50)x=c.chartArea.left+50;
   ctx.fillText(label, x, pt.y-12);ctx.restore();
 }};}
 function vGpLine(idx,label){return {id:'vgp',afterDraw(c){
   const sc=c.scales.x;if(!sc)return;const xx=sc.getPixelForValue(idx);const {top,bottom}=c.chartArea;
-  const ctx=c.ctx;ctx.save();ctx.strokeStyle='#e0a52f';ctx.lineWidth=1.5;ctx.setLineDash([4,3]);
+  const ctx=c.ctx;ctx.save();ctx.strokeStyle='#B0832C';ctx.lineWidth=1.5;ctx.setLineDash([4,3]);
   ctx.beginPath();ctx.moveTo(xx,top);ctx.lineTo(xx,bottom);ctx.stroke();
   ctx.setLineDash([]);ctx.fillStyle='#9a6b16';ctx.font='600 10px Manrope,sans-serif';ctx.textAlign='center';
   ctx.fillText(label,xx,top+10);ctx.restore();
@@ -823,12 +710,12 @@ function vGpLine(idx,label){return {id:'vgp',afterDraw(c){
 function ptLabels(idxs,col,ds){ds=ds||0;return {id:'ptl'+Math.random(),afterDatasetsDraw(c){
   const meta=c.getDatasetMeta(ds); if(!meta||!meta.data)return; const ctx=c.ctx;
   idxs.forEach(i=>{const pt=meta.data[i]; if(!pt)return; const v=c.data.datasets[ds].data[i]; if(v==null||v===0)return;
-    ctx.save();ctx.fillStyle=col||'#0e9a61';ctx.font='700 10.5px Manrope,sans-serif';ctx.textAlign='center';ctx.textBaseline='bottom';
+    ctx.save();ctx.fillStyle=col||'#15703F';ctx.font='700 10.5px Manrope,sans-serif';ctx.textAlign='center';ctx.textBaseline='bottom';
     const t=v>=1e6?(v/1e6).toFixed(1)+' млн':(Math.round(v/1000)+'k');
     ctx.fillText(t, pt.x, pt.y-7);ctx.restore();});
 }};}
 function drawCharts(r){
-  const TEAL='#15b877', TEALF='rgba(21,184,119,.16)', CORAL='#e2574d', GRID='#e8eeeb', AX='#9aa8a1';
+  const TEAL='#1B5C42', TEALF='rgba(27,92,66,.16)', CORAL='#9E3B2E', GRID='#e8eeeb', AX='#9aa8a1';
   if(typeof Chart==="undefined"){["#chartCompare","#chartCum","#chartYears"].forEach(function(id){var c=$(id);if(c&&c.parentElement)c.parentElement.innerHTML='<div style="padding:60px 20px;text-align:center;color:#8a8073">График временно недоступен</div>';});return;}
   try{
   const S=r.series, labels=S.map(y=>y.age), cap=r.premium;
@@ -859,7 +746,7 @@ function drawCharts(r){
       tooltip:{callbacks:{label:c=>c.datasetIndex===0?fmt(c.raw)+' ₸ получено к '+c.label+' годам':'вложено '+fmt(c.raw)+' ₸'}}},
       scales:{x:{grid:{display:false},ticks:{color:AX,maxTicksLimit:10,maxRotation:0}},
         y:{grid:{color:GRID},ticks:{color:AX,callback:v=>(v/1e6).toFixed(0)+' млн'}}}},
-    plugins:[refLine(cap,'вы перевели '+fmt(cap)+' ₸'), bePoint(beIdx, beIdx>=0?('деньги вернулись · '+S[beIdx].age+' лет'):''), ptLabels([Math.floor(S.length/2),S.length-1],'#0e9a61',0)]});
+    plugins:[refLine(cap,'вы перевели '+fmt(cap)+' ₸'), bePoint(beIdx, beIdx>=0?('деньги вернулись · '+S[beIdx].age+' лет'):''), ptLabels([Math.floor(S.length/2),S.length-1],'#15703F',0)]});
 
   const gpEndIdx = r.gp>0 ? Math.min(r.gp, S.length-1) : -1;
   if(chY)chY.destroy();
@@ -869,7 +756,7 @@ function drawCharts(r){
       tooltip:{callbacks:{label:c=>fmt(c.raw)+' ₸/мес в '+c.label+' лет'}}},
       scales:{x:{grid:{display:false},ticks:{color:AX,maxTicksLimit:10,maxRotation:0}},
         y:{grid:{color:GRID},ticks:{color:AX,callback:v=>v>=1e6?(v/1e6).toFixed(1)+' млн':Math.round(v/1000)+'k'}}}},
-    plugins:[gpEndIdx>0?vGpLine(gpEndIdx,'конец гарантии'):{id:'noop'}, ptLabels([0,Math.floor(S.length/2),S.length-1],'#0e9a61',0)]});
+    plugins:[gpEndIdx>0?vGpLine(gpEndIdx,'конец гарантии'):{id:'noop'}, ptLabels([0,Math.floor(S.length/2),S.length-1],'#15703F',0)]});
   }catch(e){console.error('chart error',e);}
 }
 
@@ -909,14 +796,14 @@ function drawEnpf(r){
       if(chEnpf)chEnpf.destroy();
       chEnpf=new Chart($('#chartEnpf'),{type:'line',
         data:{labels,datasets:[
-          {label:'аннуитет',data:annMonthly.map(x=>x.m),borderColor:'#15b877',backgroundColor:'rgba(21,184,119,.10)',fill:true,tension:.3,borderWidth:2.5,pointRadius:0},
-          {label:'ЕНПФ по графику',data:enpfData,borderColor:'#e0a52f',backgroundColor:'rgba(224,165,47,.08)',fill:true,tension:.3,borderWidth:2.5,pointRadius:0,borderDash:[5,3]}
+          {label:'аннуитет',data:annMonthly.map(x=>x.m),borderColor:'#1B5C42',backgroundColor:'rgba(27,92,66,.10)',fill:true,tension:.3,borderWidth:2.5,pointRadius:0},
+          {label:'ЕНПФ по графику',data:enpfData,borderColor:'#B0832C',backgroundColor:'rgba(224,165,47,.08)',fill:true,tension:.3,borderWidth:2.5,pointRadius:0,borderDash:[5,3]}
         ]},
         options:{responsive:true,maintainAspectRatio:false,interaction:{mode:"index",intersect:false},plugins:{legend:{display:false},
           tooltip:{callbacks:{label:c=>c.dataset.label+': '+(c.raw>0?fmt(c.raw)+' ₸/мес':'выплаты закончились')}}},
           scales:{x:{grid:{display:false},ticks:{color:'#9aa8a1',maxTicksLimit:10,maxRotation:0}},
             y:{grid:{color:'#e8eeeb'},ticks:{color:'#9aa8a1',callback:v=>v>=1e6?(v/1e6).toFixed(1)+' млн':Math.round(v/1000)+'k'}}}},
-        plugins:[ exIdx>0?vGpLine(exIdx,'ЕНПФ закончился'):{id:'noop2'}, ptLabels([0,labels.length-1],'#15b877',0), ptLabels([Math.max(0,exIdx)],'#9a6b16',1) ]});
+        plugins:[ exIdx>0?vGpLine(exIdx,'ЕНПФ закончился'):{id:'noop2'}, ptLabels([0,labels.length-1],'#1B5C42',0), ptLabels([Math.max(0,exIdx)],'#9a6b16',1) ]});
     }catch(e){console.error('enpf chart',e);}
   }
   sum.innerHTML='<div class="enpf-cmp"><div class="enpf-col ok"><div class="t">Если оформить аннуитет</div>'+
@@ -972,8 +859,7 @@ $('#btn-calc').onclick=()=>{
   ST.gp=1; ST.premMode='all'; ST.premium=0;
   ST.gp=1; stepUpd('gp');
   const cr=$('#chk-reserve'); if(cr)cr.checked=false;
-  ST.shown=false; ST._scroll=false; render();
-  if(ST.shown) goStep(2);
+  ST._scroll=true; render();
 };
 [ 'in-age','in-sav' ].forEach(id=>$('#'+id).addEventListener('keydown',e=>{if(e.key==='Enter'){ST._scroll=true;render();}}));
 
@@ -1027,7 +913,7 @@ function buildReport(r, mode){
   const consultant=(c.name||c.phone||c.email||c.city)
     ? '<div style="background:#f6f2ea;border:1px solid #e9e0d2;border-radius:12px;padding:16px;margin-bottom:20px"><div style="font-weight:800;font-size:15px">'+esc(c.name||'Ваш консультант')+'</div><div style="color:#6b6356;font-size:13px;margin-top:4px">'+[esc(c.phone),esc(c.email),esc(c.city)].filter(Boolean).join(' · ')+'</div></div>' : '';
   const statusBlock=r.enough
-    ? '<div style="background:#e2f6ed;border-radius:12px;padding:18px;margin:16px 0"><div style="font-size:18px;font-weight:800;color:#0e9a61">✓ Накоплений хватает на пенсионный аннуитет</div><div style="color:#5b5448;margin-top:6px">Минимально для оформления: <b>'+fmt(r.thrCur)+' ₸</b>'+(r.type==='delayed'?'. Выплаты начнутся в '+r.startAge+' лет':'')+'.</div></div>'
+    ? '<div style="background:#E2ECE5;border-radius:12px;padding:18px;margin:16px 0"><div style="font-size:18px;font-weight:800;color:#15703F">✓ Накоплений хватает на пенсионный аннуитет</div><div style="color:#5b5448;margin-top:6px">Минимально для оформления: <b>'+fmt(r.thrCur)+' ₸</b>'+(r.type==='delayed'?'. Выплаты начнутся в '+r.startAge+' лет':'')+'.</div></div>'
     : (r.almostEnough
       ? '<div style="background:#fbf3df;border-radius:12px;padding:18px;margin:16px 0"><div style="font-size:18px;font-weight:800;color:#8a6d1a">Почти хватает — это решаемо</div><div style="color:#5b5448;margin-top:6px">До порога не хватает <b>'+fmt(r.shortToThr)+' ₸</b>, но это меньше единовременного бонуса <b>'+fmt(r.bonusAtThr)+' ₸</b>. Нехватку можно доложить (добровольным взносом или доплатой в страховую) — бонус всё равно остаётся в плюсе.</div></div>'
       : '<div style="background:#fdecea;border-radius:12px;padding:18px;margin:16px 0"><div style="font-size:18px;font-weight:800;color:#c0413a">До оформления не хватает '+fmt(r.shortToThr)+' ₸</div><div style="color:#5b5448;margin-top:6px">Нужный минимум: <b>'+fmt(r.thrCur)+' ₸</b>, накоплено: '+fmt(r.sav)+' ₸. Нехватку можно доложить добровольным взносом или доплатить прямо в страховую.</div></div>');
@@ -1041,7 +927,7 @@ function buildReport(r, mode){
   const sumEnpf=card2('<b>Если оформить аннуитет:</b> '+fmt(r.payFirst)+' ₸/мес'+(r.type==='delayed'?' уже с '+r.startAge+' лет':'')+' — страховая платит пожизненно, сумма растёт каждый год'+(r.bonus>0?', плюс единовременный бонус '+fmt(r.bonus)+' ₸':'')+'.<br><b>Если забирать из ЕНПФ по графику:</b> '+fmt(g.payFirst)+' ₸/мес, но '+(g.enpfStart>r.startAge?'только с <b>'+g.enpfStart+' лет</b> (пенсионный возраст) — это на '+(g.enpfStart-r.startAge)+' '+plural(g.enpfStart-r.startAge,'год','года','лет')+' позже аннуитета; ':'')+'это снятие <b>своих</b> накоплений частями, и деньги конечны: к <b>'+g.exhaustAge+' годам</b> исчерпаются.<br><span style="color:#8a8073;font-size:12px">Государственная пенсия (базовая + солидарная) есть в обоих случаях — аннуитет идёт сверх неё.</span>');
 
   const head='<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Расчёт пенсионного аннуитета</title>'+
-    '<style>body{font-family:Manrope,Segoe UI,system-ui,sans-serif;color:#22201c;line-height:1.55;max-width:760px;margin:0 auto;padding:28px 18px;background:#fff}h1{font-size:24px}h2{font-size:17px;margin:24px 0 8px}h3{font-size:14px;margin:16px 0 4px;color:#0e9a61}table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}th,td{padding:7px 8px;border-bottom:1px solid #e9e0d2}th{text-align:right;color:#8a8073;font-size:11px;text-transform:uppercase}th:first-child,td:first-child{text-align:left}.kp{display:flex;gap:12px;flex-wrap:wrap;margin:14px 0}.kp>div{flex:1;min-width:140px;background:#fffefb;border:1px solid #e9e0d2;border-radius:10px;padding:12px}.kp .l{font-size:12px;color:#8a8073}.kp .v{font-size:19px;font-weight:800;margin-top:3px}ul{margin:6px 0;padding-left:20px}li{margin:5px 0}.muted{color:#8a8073;font-size:12px}.expl p{font-size:13.5px;color:#3b3a36;margin:4px 0 12px}.legrow{font-size:12px;color:#8a8073;margin:6px 0}.legrow span{margin-right:14px}.dot{display:inline-block;width:10px;height:10px;border-radius:2px;vertical-align:middle;margin-right:4px}.law .row{padding:8px 0;border-bottom:1px solid #f0e9dc;font-size:13px;color:#5b5448;line-height:1.5}.law .art{font-weight:700;color:#0e9a61}.law q{font-style:italic;color:#6b6356}</style></head><body>';
+    '<style>body{font-family:Manrope,Segoe UI,system-ui,sans-serif;color:#22201c;line-height:1.55;max-width:760px;margin:0 auto;padding:28px 18px;background:#fff}h1{font-size:24px}h2{font-size:17px;margin:24px 0 8px}h3{font-size:14px;margin:16px 0 4px;color:#15703F}table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}th,td{padding:7px 8px;border-bottom:1px solid #e9e0d2}th{text-align:right;color:#8a8073;font-size:11px;text-transform:uppercase}th:first-child,td:first-child{text-align:left}.kp{display:flex;gap:12px;flex-wrap:wrap;margin:14px 0}.kp>div{flex:1;min-width:140px;background:#fffefb;border:1px solid #e9e0d2;border-radius:10px;padding:12px}.kp .l{font-size:12px;color:#8a8073}.kp .v{font-size:19px;font-weight:800;margin-top:3px}ul{margin:6px 0;padding-left:20px}li{margin:5px 0}.muted{color:#8a8073;font-size:12px}.expl p{font-size:13.5px;color:#3b3a36;margin:4px 0 12px}.legrow{font-size:12px;color:#8a8073;margin:6px 0}.legrow span{margin-right:14px}.dot{display:inline-block;width:10px;height:10px;border-radius:2px;vertical-align:middle;margin-right:4px}.law .row{padding:8px 0;border-bottom:1px solid #f0e9dc;font-size:13px;color:#5b5448;line-height:1.5}.law .art{font-weight:700;color:#15703F}.law q{font-style:italic;color:#6b6356}</style></head><body>';
   const benefits='<h2>Почему пенсионный аннуитет — это выгодно</h2><ul>'+
     '<li><b>Пожизненные выплаты.</b> Деньги приходят каждый месяц до конца жизни — даже когда переведённая сумма математически закончилась бы.</li>'+
     '<li><b>Ежегодная индексация '+(r.idx*100)+'%.</b> Выплата растёт каждый год и успевает за ростом цен.</li>'+
@@ -1074,10 +960,10 @@ function buildReport(r, mode){
     '<div><div class="l">Единовременный бонус</div><div class="v">'+fmt(r.bonus)+' ₸</div></div>'+
     '<div><div class="l">Через 10 лет / мес</div><div class="v">'+fmt(Math.round(r.payFirst*Math.pow(1+r.idx,10)))+' ₸</div></div></div>'+
     benefits+
-    gblock('rCompare', chCompare, 'Вложили → получите', 'Сколько переводите и сколько получите выплатами к разным возрастам.', '<div class="legrow"><span><span class="dot" style="background:#e2574d"></span>вы перевели</span><span><span class="dot" style="background:#15b877"></span>получите выплатами</span></div>')+sumCompare+
-    gblock('rCum', chCum, 'Когда вернутся ваши деньги', 'Зелёная область — получено выплатами нарастающим итогом. Пунктир — сколько вы перевели.', '<div class="legrow"><span><span class="dot" style="background:#15b877"></span>получено всего</span><span><span class="dot" style="background:#e2574d"></span>вы перевели</span></div>')+sumCum+
+    gblock('rCompare', chCompare, 'Вложили → получите', 'Сколько переводите и сколько получите выплатами к разным возрастам.', '<div class="legrow"><span><span class="dot" style="background:#9E3B2E"></span>вы перевели</span><span><span class="dot" style="background:#1B5C42"></span>получите выплатами</span></div>')+sumCompare+
+    gblock('rCum', chCum, 'Когда вернутся ваши деньги', 'Зелёная область — получено выплатами нарастающим итогом. Пунктир — сколько вы перевели.', '<div class="legrow"><span><span class="dot" style="background:#1B5C42"></span>получено всего</span><span><span class="dot" style="background:#9E3B2E"></span>вы перевели</span></div>')+sumCum+
     gblock('rYears', chY, 'Как растёт ваша выплата', 'Ежемесячная выплата по годам — растёт за счёт индексации.', '')+sumY+
-    gblock('rEnpf', chEnpf, 'Аннуитет или выплаты из ЕНПФ по графику', 'Аннуитет платит пожизненно, а выплаты из ЕНПФ по графику со временем заканчиваются.', '<div class="legrow"><span><span class="dot" style="background:#15b877"></span>аннуитет — пожизненно</span><span><span class="dot" style="background:#e0a52f"></span>ЕНПФ по графику</span></div>')+sumEnpf+
+    gblock('rEnpf', chEnpf, 'Аннуитет или выплаты из ЕНПФ по графику', 'Аннуитет платит пожизненно, а выплаты из ЕНПФ по графику со временем заканчиваются.', '<div class="legrow"><span><span class="dot" style="background:#1B5C42"></span>аннуитет — пожизненно</span><span><span class="dot" style="background:#B0832C"></span>ЕНПФ по графику</span></div>')+sumEnpf+
     '<h2>Таблица выплат по годам</h2><table><thead><tr><th>Возраст</th><th>Выплата/мес</th><th>За год</th><th>Получено всего</th><th>Остаток в КСЖ</th></tr></thead><tbody>'+rows+'</tbody></table>'+
     '<h2>Как оформить</h2><ol><li>Выбрать страховую компанию (КСЖ) и подтвердить расчёт.</li><li>Подготовить документы: удостоверение личности и выписку из ЕНПФ.</li><li>Подписать договор пенсионного аннуитета.</li><li>ЕНПФ переводит сумму в КСЖ.</li><li>Получать аннуитетные выплаты — пожизненно.</li></ol>'+
     explain+legal+
@@ -1092,34 +978,46 @@ function buildReport(r, mode){
 
 var REPORT_DRAW='(function(){if(typeof Chart==="undefined")return;var f=function(n){return Math.round(n).toLocaleString("ru-RU").replace(/,/g," ");};'+
 'var ti={mode:"index",intersect:false};'+
-'new Chart(document.getElementById("rCompare"),{type:"bar",data:{labels:D.mLabels,datasets:[{label:"вы перевели",data:D.mInvested,backgroundColor:"#e2574d",borderRadius:4,barPercentage:.62},{label:"получите",data:D.mGot,backgroundColor:"#15b877",borderRadius:4,barPercentage:.62}]},options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.dataset.label+": "+f(c.raw)+" ₸"+(c.datasetIndex===1?" (×"+(c.raw/D.premium).toFixed(1)+")":"");}}}},scales:{x:{ticks:{callback:function(v){return (v/1e6).toFixed(0)+" млн";}}}}}});'+
-'new Chart(document.getElementById("rCum"),{type:"line",data:{labels:D.labels,datasets:[{data:D.acc,borderColor:"#15b877",backgroundColor:"rgba(21,184,119,.16)",fill:true,tension:.35,pointRadius:0,borderWidth:2},{data:D.labels.map(function(){return D.premium;}),borderColor:"#e2574d",borderDash:[6,4],pointRadius:0,borderWidth:2,fill:false}]},options:{responsive:true,maintainAspectRatio:false,interaction:ti,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.datasetIndex===0?f(c.raw)+" ₸ получено к "+c.label+" годам":"вложено "+f(c.raw)+" ₸";}}}},scales:{y:{ticks:{callback:function(v){return (v/1e6).toFixed(0)+" млн";}}}}}});'+
-'new Chart(document.getElementById("rYears"),{type:"line",data:{labels:D.labels,datasets:[{data:D.monthly,borderColor:"#15b877",backgroundColor:"rgba(21,184,119,.16)",fill:true,tension:.35,pointRadius:0,borderWidth:2.5}]},options:{responsive:true,maintainAspectRatio:false,interaction:ti,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return f(c.raw)+" ₸/мес в "+c.label+" лет";}}}},scales:{y:{ticks:{callback:function(v){return v>=1e6?(v/1e6).toFixed(1)+" млн":Math.round(v/1000)+"k";}}}}}});'+
-'new Chart(document.getElementById("rEnpf"),{type:"line",data:{labels:D.labels,datasets:[{label:"аннуитет",data:D.monthly,borderColor:"#15b877",backgroundColor:"rgba(21,184,119,.10)",fill:true,tension:.3,pointRadius:0,borderWidth:2.5},{label:"ЕНПФ по графику",data:D.enpf,borderColor:"#e0a52f",backgroundColor:"rgba(224,165,47,.08)",fill:true,tension:.3,pointRadius:0,borderWidth:2.5,borderDash:[5,3]}]},options:{responsive:true,maintainAspectRatio:false,interaction:ti,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.dataset.label+": "+(c.raw>0?f(c.raw)+" ₸/мес":"выплаты закончились");}}}},scales:{y:{ticks:{callback:function(v){return v>=1e6?(v/1e6).toFixed(1)+" млн":Math.round(v/1000)+"k";}}}}}});'+
+'new Chart(document.getElementById("rCompare"),{type:"bar",data:{labels:D.mLabels,datasets:[{label:"вы перевели",data:D.mInvested,backgroundColor:"#9E3B2E",borderRadius:4,barPercentage:.62},{label:"получите",data:D.mGot,backgroundColor:"#1B5C42",borderRadius:4,barPercentage:.62}]},options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.dataset.label+": "+f(c.raw)+" ₸"+(c.datasetIndex===1?" (×"+(c.raw/D.premium).toFixed(1)+")":"");}}}},scales:{x:{ticks:{callback:function(v){return (v/1e6).toFixed(0)+" млн";}}}}}});'+
+'new Chart(document.getElementById("rCum"),{type:"line",data:{labels:D.labels,datasets:[{data:D.acc,borderColor:"#1B5C42",backgroundColor:"rgba(27,92,66,.16)",fill:true,tension:.35,pointRadius:0,borderWidth:2},{data:D.labels.map(function(){return D.premium;}),borderColor:"#9E3B2E",borderDash:[6,4],pointRadius:0,borderWidth:2,fill:false}]},options:{responsive:true,maintainAspectRatio:false,interaction:ti,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.datasetIndex===0?f(c.raw)+" ₸ получено к "+c.label+" годам":"вложено "+f(c.raw)+" ₸";}}}},scales:{y:{ticks:{callback:function(v){return (v/1e6).toFixed(0)+" млн";}}}}}});'+
+'new Chart(document.getElementById("rYears"),{type:"line",data:{labels:D.labels,datasets:[{data:D.monthly,borderColor:"#1B5C42",backgroundColor:"rgba(27,92,66,.16)",fill:true,tension:.35,pointRadius:0,borderWidth:2.5}]},options:{responsive:true,maintainAspectRatio:false,interaction:ti,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return f(c.raw)+" ₸/мес в "+c.label+" лет";}}}},scales:{y:{ticks:{callback:function(v){return v>=1e6?(v/1e6).toFixed(1)+" млн":Math.round(v/1000)+"k";}}}}}});'+
+'new Chart(document.getElementById("rEnpf"),{type:"line",data:{labels:D.labels,datasets:[{label:"аннуитет",data:D.monthly,borderColor:"#1B5C42",backgroundColor:"rgba(27,92,66,.10)",fill:true,tension:.3,pointRadius:0,borderWidth:2.5},{label:"ЕНПФ по графику",data:D.enpf,borderColor:"#B0832C",backgroundColor:"rgba(224,165,47,.08)",fill:true,tension:.3,pointRadius:0,borderWidth:2.5,borderDash:[5,3]}]},options:{responsive:true,maintainAspectRatio:false,interaction:ti,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.dataset.label+": "+(c.raw>0?f(c.raw)+" ₸/мес":"выплаты закончились");}}}},scales:{y:{ticks:{callback:function(v){return v>=1e6?(v/1e6).toFixed(1)+" млн":Math.round(v/1000)+"k";}}}}}});'+
 '})();';
 
 function dl(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),3000);}
 
 $('#dl-html').onclick=()=>{ if(!ST.lastR)return; dl(new Blob([buildReport(ST.lastR,'html')],{type:'text/html;charset=utf-8'}),'raschet-annuitet.html'); showToast('HTML-файл скачан'); };
-$('#dl-word').onclick=()=>{ if(!ST.lastR)return; dl(new Blob(['﻿'+buildReport(ST.lastR,'static')],{type:'application/msword'}),'raschet-annuitet.doc'); showToast('Word-файл скачан'); };
+$('#dl-word').onclick=()=>{ if(!ST.lastR)return;
+  const htmlDoc=buildReport(ST.lastR,'static');
+  const parts=[]; let n=0;
+  const htmlCid=htmlDoc.replace(/src="data:image\/(png|jpeg);base64,([^"]+)"/g,function(m,typ,b64){
+    n++; const name='image'+n+(typ==='jpeg'?'.jpg':'.png');
+    parts.push({name:name,typ:'image/'+typ,b64:b64});
+    return 'src="'+name+'"';
+  });
+  const wrap=str=>str.replace(/(.{76})/g,'$1\r\n');
+  let b64html;
+  try{ b64html=wrap(btoa(unescape(encodeURIComponent(htmlCid)))); }
+  catch(e){ dl(new Blob(['﻿'+htmlDoc],{type:'application/msword'}),'raschet-annuitet.doc'); showToast('Word-файл скачан'); return; }
+  const B='----=_NextPart_Annuitet_'+Date.now();
+  const base='file:///C:/annuitet/';
+  let mht='MIME-Version: 1.0\r\nContent-Type: multipart/related; boundary="'+B+'"; type="text/html"\r\n\r\n';
+  mht+='--'+B+'\r\nContent-Type: text/html; charset="utf-8"\r\nContent-Transfer-Encoding: base64\r\nContent-Location: '+base+'main.html\r\n\r\n'+b64html+'\r\n\r\n';
+  parts.forEach(function(p){ mht+='--'+B+'\r\nContent-Type: '+p.typ+'\r\nContent-Transfer-Encoding: base64\r\nContent-Location: '+base+p.name+'\r\n\r\n'+wrap(p.b64)+'\r\n\r\n'; });
+  mht+='--'+B+'--\r\n';
+  dl(new Blob([mht],{type:'application/msword'}),'raschet-annuitet.doc');
+  showToast('Word-файл скачан');
+};
 $('#dl-print').onclick=()=>{ if(!ST.lastR)return;
   const docStr=buildReport(ST.lastR,'static');
-  const printFallback=()=>{ const w=window.open('','_blank'); if(w){ w.document.write(docStr); w.document.close(); setTimeout(()=>{w.focus();w.print();},400); } };
-  if(typeof html2pdf==='undefined'){ printFallback(); return; }
-  showToast('Готовлю PDF…');
-  let styleHTML='', bodyHTML=docStr;
-  try{ const pdoc=new DOMParser().parseFromString(docStr,'text/html'); styleHTML=Array.prototype.map.call(pdoc.querySelectorAll('style'),x=>x.outerHTML).join(''); bodyHTML=pdoc.body.innerHTML; }catch(e){}
-  const el=document.createElement('div');
-  el.style.cssText='position:absolute;left:0;top:0;width:760px;background:#fff;z-index:-9999';
-  el.innerHTML=styleHTML+bodyHTML;
-  document.body.appendChild(el);
-  const ps=window.pageYOffset||document.documentElement.scrollTop||0;
-  try{window.scrollTo(0,0);}catch(e){}
-  const cleanup=()=>{ try{document.body.removeChild(el);}catch(e){} try{window.scrollTo(0,ps);}catch(e){} };
-  const opt={margin:[8,8,8,8],filename:'raschet-annuitet.pdf',image:{type:'jpeg',quality:0.95},html2canvas:{scale:2,backgroundColor:'#ffffff',useCORS:true,scrollX:0,scrollY:0,windowWidth:820},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},pagebreak:{mode:['css','legacy']}};
-  setTimeout(()=>{ html2pdf().set(opt).from(el).save()
-    .then(()=>{ cleanup(); showToast('PDF скачан'); })
-    .catch(()=>{ cleanup(); printFallback(); showToast('Открываю печать PDF'); }); }, 60);
+  const w=window.open('','_blank');
+  if(!w){ showToast('Разрешите всплывающие окна, чтобы сохранить PDF'); return; }
+  try{ w.document.open(); w.document.write(docStr); w.document.close(); }catch(e){}
+  showToast('Откроется печать — выберите «Сохранить как PDF»');
+  const go=()=>{ try{ w.focus(); w.print(); }catch(e){} };
+  let done=false; const fire=()=>{ if(done)return; done=true; setTimeout(go,500); };
+  try{ w.onload=fire; }catch(e){}
+  setTimeout(fire,1200);
 };
 
 /* ================= ШЕРИНГ ================= */
@@ -1157,34 +1055,6 @@ setInterval(tickClock,1000); tickClock();
 
 ['gp','idx','bon'].forEach(stepUpd);
 applyFromUrl();
-
-/* ===================== НАВИГАЦИЯ МАСТЕРА ===================== */
-function goStep(n){
-  ST.step=n;
-  ['1','2','3'].forEach(function(k){var el=document.getElementById('step'+k); if(el) el.classList.toggle('active', k===String(n));});
-  document.querySelectorAll('#wizProg .wdot').forEach(function(d){var t=+d.dataset.go; d.classList.toggle('cur',t===n); d.classList.toggle('done',t<n);});
-  try{window.scrollTo({top:0,behavior:'smooth'});}catch(e){window.scrollTo(0,0);}
-}
-function updateLiveBar(){
-  var r=ST.lastR, el=document.getElementById('liveBar'); if(!el||!r||!r.ok) return;
-  var cls,chip,pay,sub;
-  if(r.enough){cls='ok';chip='\u2713 Накоплений хватает';pay=fmt(r.payFirst);sub='\u20b8 в месяц пожизненно'+(r.type==='delayed'?' (с '+r.startAge+' лет)':'');}
-  else if(r.almostEnough){cls='ok';chip='\u2248 Почти хватает';pay=fmt(r.payFirst);sub='\u20b8 в месяц — нехватку можно доложить';}
-  else {cls='no';chip='\u25cb Пока не хватает';pay=fmt(r.thrCur);sub='\u20b8 — нужный минимум для входа';}
-  el.className='livebar '+cls;
-  el.innerHTML='<div class="lb-chip">'+chip+'</div><div class="lb-pay">'+pay+' <small>'+sub+'</small></div>';
-}
-var _renderOrig=render;
-render=function(){var _r=_renderOrig.apply(this,arguments); updateLiveBar(); return _r;};
-(function(){
-  var b2=document.getElementById('nav-back2'); if(b2)b2.onclick=function(){goStep(1);};
-  var n2=document.getElementById('nav-next2'); if(n2)n2.onclick=function(){goStep(3);};
-  var b3=document.getElementById('nav-back3'); if(b3)b3.onclick=function(){goStep(2);};
-  var rs=document.getElementById('nav-reset'); if(rs)rs.onclick=function(){location.href=location.origin+location.pathname;};
-  document.querySelectorAll('#wizProg .wdot').forEach(function(d){d.onclick=function(){var t=+d.dataset.go; if(t===1||ST.shown)goStep(t);};});
-  var shared=new URLSearchParams(location.search).get('v')==='1';
-  if(shared && ST.lastR){ updateLiveBar(); goStep(3); } else { goStep(1); }
-})();
 </script>
 </body>
 </html>
