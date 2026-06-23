@@ -34,9 +34,9 @@
   --ever:#1B5C42; --ever-d:#0F3A2A; --ever-soft:#E2ECE5;
   --gold:#B0832C; --gold-ink:#6E5316; --gold-soft:#F1E7CF; --gold-line:#D8CAA0;
   --brick:#9E3B2E; --brick-soft:#F1E1DC;
-  --serif:Georgia,'Times New Roman',serif;
-  --sans:system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
-  --mono:ui-monospace,'SF Mono','Segoe UI Mono','Roboto Mono',monospace;
+  --serif:Georgia,"Times New Roman",serif;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono",'Segoe UI Mono','Roboto Mono',monospace;
   --radius:13px;
   --shadow:0 1px 2px rgba(15,40,28,.04),0 10px 30px rgba(15,40,28,.07);
 }
@@ -227,6 +227,13 @@ details.expl .body{padding:0 0 16px;font-size:14px;color:#4f5a51}
 .slrow.inline .stepper .st-btn{width:44px;height:44px;font-size:20px}
 .slrow.inline .stepper .st-val{min-width:64px;font-size:14px}
 @media(max-width:600px){.gpchips button{flex:1;min-width:40px}}
+
+.hero{text-align:center}
+.hero p.lead{margin-left:auto;margin-right:auto}
+.gprow{text-align:center}
+.gprow .top{justify-content:center;gap:8px;flex-wrap:wrap}
+.gprow .afford,.gprow .tipbox{text-align:left}
+.gpfine{display:inline-flex;width:auto;margin:0}
 </style>
 </head>
 <body>
@@ -328,7 +335,7 @@ details.expl .body{padding:0 0 16px;font-size:14px;color:#4f5a51}
           <div class="small muted" id="lab-prem" style="margin-top:8px">Переводите: <b>—</b></div>
           <label class="checkline"><input type="checkbox" id="chk-reserve"> Заложить запас на смену страховой через 2 года</label>
         </div>
-        <div class="slrow">
+        <div class="slrow gprow">
           <div class="top"><span class="name">Гарантийный период <span class="qmark" onclick="tip('tip-gp')">?</span></span><span class="hint">0–30 лет</span></div>
           <div class="gpchips" id="gp-chips"><button type="button" data-gp="0">0</button><button type="button" data-gp="5">5</button><button type="button" data-gp="10">10</button><button type="button" data-gp="15">15</button><button type="button" data-gp="20">20</button><button type="button" data-gp="25">25</button><button type="button" data-gp="30">30</button></div>
           <div class="stepper gpfine" data-key="gp"><button type="button" class="st-btn st-minus" aria-label="меньше">−</button><span class="st-val" id="lab-gp">1 год</span><button type="button" class="st-btn st-plus" aria-label="больше">+</button></div>
@@ -835,8 +842,9 @@ function drawEnpf(r){
         plugins:[ exIdx>0?vGpLine(exIdx,'ЕНПФ закончился'):{id:'noop2'}, ptLabels([0,labels.length-1],'#1B5C42',0), ptLabels([Math.max(0,exIdx)],'#9a6b16',1) ]});
     }catch(e){console.error('enpf chart',e);}
   }
-  sum.innerHTML='<div class="enpf-cmp"><div class="enpf-col ok"><div class="t">Если оформить аннуитет</div>'+
-    '<div class="big">'+fmt(r.payFirst)+' ₸/мес</div><div class="d">Платит страховая — <b>пожизненно</b>: сумма не закончится и каждый год растёт'+(r.bonus>0?'.<br>Плюс единовременный бонус <b>'+fmt(r.bonus)+' ₸</b>':'')+'.</div></div>'+
+  const payAtP=(r.pensionAge>r.startAge)?(((r.series.find(function(x){return x.age===r.pensionAge;})||{}).monthly)||0):0;
+  sum.innerHTML='<div class="enpf-cmp"><div class="enpf-col ok"><div class="t">Если оформить аннуитет — с '+r.startAge+' лет</div>'+
+    '<div class="big">'+fmt(r.payFirst)+' ₸/мес</div><div class="d">Платит страховая — <b>пожизненно</b>, выплаты не закончатся и каждый год растут.'+(payAtP?' К <b>'+r.pensionAge+' годам</b> (когда стартуют выплаты из ЕНПФ) аннуитет вырастет до <b>'+fmt(payAtP)+' ₸/мес</b>.':'')+(r.bonus>0?'<br>Плюс единовременный бонус <b>'+fmt(r.bonus)+' ₸</b>.':'')+'</div></div>'+
     '<div class="enpf-col"><div class="t">Если забирать из ЕНПФ по графику</div>'+
     '<div class="big">'+fmt(g.payFirst)+' ₸/мес</div><div class="d">'+(g.enpfStart>r.startAge?'Доступно только с <b>'+g.enpfStart+' лет</b> (пенсионный возраст) — на '+(g.enpfStart-r.startAge)+' '+plural(g.enpfStart-r.startAge,'год','года','лет')+' позже, чем аннуитет. ':'')+'Это снятие <b>своих</b> накоплений частями. Деньги конечны: к <b>'+g.exhaustAge+' годам</b> они исчерпаются — останется только государственная пенсия.</div></div></div>'+
     '<div class="tiny muted" style="margin-top:8px">Государственная пенсия (базовая + солидарная) назначается отдельно, по стажу, и сохраняется в обоих случаях — аннуитет идёт <b>сверх</b> неё. Разница в том, что выплаты из ЕНПФ со временем заканчиваются, а аннуитет — нет. Расчёт по графику — по официальной методике РК (доходность 9%, индексация 8%), это ориентир.</div>';
@@ -947,19 +955,20 @@ function buildReport(r, mode){
   const statusBlock=r.enough
     ? '<div style="background:#E2ECE5;border-radius:12px;padding:18px;margin:16px 0"><div style="font-size:18px;font-weight:800;color:#15703F">✓ Накоплений хватает на пенсионный аннуитет</div><div style="color:#5b5448;margin-top:6px">Минимально для оформления: <b>'+fmt(r.thrCur)+' ₸</b>'+(r.type==='delayed'?'. Выплаты начнутся в '+r.startAge+' лет':'')+'.</div></div>'
     : (r.almostEnough
-      ? '<div style="background:#fbf3df;border-radius:12px;padding:18px;margin:16px 0"><div style="font-size:18px;font-weight:800;color:#8a6d1a">Почти хватает — это решаемо</div><div style="color:#5b5448;margin-top:6px">До порога не хватает <b>'+fmt(r.shortToThr)+' ₸</b>, но это меньше единовременного бонуса <b>'+fmt(r.bonusAtThr)+' ₸</b>. Нехватку можно доложить (добровольным взносом или доплатой в страховую) — бонус всё равно остаётся в плюсе.</div></div>'
-      : '<div style="background:#fdecea;border-radius:12px;padding:18px;margin:16px 0"><div style="font-size:18px;font-weight:800;color:#c0413a">До оформления не хватает '+fmt(r.shortToThr)+' ₸</div><div style="color:#5b5448;margin-top:6px">Нужный минимум: <b>'+fmt(r.thrCur)+' ₸</b>, накоплено: '+fmt(r.sav)+' ₸. Нехватку можно доложить добровольным взносом или доплатить прямо в страховую.</div></div>');
+      ? '<div style="background:#F1E7CF;border-radius:12px;padding:18px;margin:16px 0"><div style="font-size:18px;font-weight:700;color:#6E5316">Почти хватает — это решаемо</div><div style="color:#3b4a43;margin-top:6px">Из ЕНПФ не хватает <b>'+fmt(r.shortToThr)+' ₸</b>, но это покрывает единовременный бонус <b>'+fmt(r.bonusAtThr)+' ₸</b> — с учётом бонуса этого достаточно.</div></div>'
+      : '<div style="background:#F1E1DC;border-radius:12px;padding:18px;margin:16px 0"><div style="font-size:18px;font-weight:700;color:#9E3B2E">До оформления не хватает</div><div style="color:#3b4a43;margin-top:6px">Из ЕНПФ не хватает <b>'+fmt(r.shortToThr)+' ₸</b> до минимума <b>'+fmt(r.thrCur)+' ₸</b> (накоплено '+fmt(r.sav)+' ₸). Единовременный бонус <b>'+fmt(r.bonusAtThr)+' ₸</b> закрывает часть — даже с ним нужно доложить ещё <b>'+fmt(Math.max(0,r.shortToThr-r.bonusAtThr))+' ₸</b>.</div></div>');
   const genderTxt=r.g==='m'?'Мужчина':'Женщина';
   const disTxt=r.dis==='none'?'':(', инвалидность '+r.dis+' группы');
-  function card2(items){ return '<div style="background:#f6f2ea;border:1px solid #e9e0d2;border-radius:10px;padding:12px 14px;margin:10px 0;font-size:13.5px;color:#3b3a36;line-height:1.6">'+items+'</div>'; }
+  function card2(items){ return '<div style="background:#FBFAF5;border:1px solid #E0DCCE;border-radius:10px;padding:12px 14px;margin:10px 0;font-size:13.5px;color:#3b4a43;line-height:1.6">'+items+'</div>'; }
   const extraReport = r.enough ? card2('<b>Страховой дивиденд '+fmt(r.bonus)+' ₸</b> — до '+(r.bon*100)+'% от суммы перевода. Выплачивается сразу при оформлении договора, не дожидаясь начала аннуитетных выплат; в сумму выплат не входит и при расчёте ежемесячной выплаты не учитывается.<br>Договор можно перезаключать (менять страховую) раз в 2 года — при достаточном размере накоплений дивиденд можно получить повторно.<br><b>Не откладывайте оформление:</b> сейчас для входа требуется '+fmt(r.thrCur)+' ₸, а через год может понадобиться уже около '+fmt(r.thrNext)+' ₸ — порог растёт вместе с прожиточным минимумом примерно на 10% в год.') : '';
   const sumCompare=card2('Вы переводите в страховую: <b>'+fmt(r.premium)+' ₸</b>.<br>'+mile.map(a=>{const gg=accAt(a)+r.bonus;return 'К '+a+' годам получите выплатами: <b>'+fmt(gg)+' ₸</b> — в '+(gg/r.premium).toFixed(1)+' раза больше вложенного.';}).join('<br>')+'<br><span style="color:#8a8073;font-size:12px">С учётом единовременного бонуса '+fmt(r.bonus)+' ₸.</span>');
   const sumCum=card2('Вложено: <b>'+fmt(r.premium)+' ₸</b>.'+(r.be!=null?(' Полностью возвращается выплатами к <b>'+r.be+' годам</b> — дальше всё идёт сверх вложенного, пожизненно.'):'')+' К '+mile[1]+' годам получено всего: <b>'+fmt(accAt(mile[1]))+' ₸</b>.');
   const sumY=card2('Первая выплата: <b>'+fmt(r.payFirst)+' ₸/мес</b>'+(r.type==='delayed'?' (с '+r.startAge+' лет)':'')+'. Через 10 лет — <b>'+fmt(Math.round(r.payFirst*Math.pow(1+r.idx,10)))+' ₸/мес</b>, через 20 — <b>'+fmt(Math.round(r.payFirst*Math.pow(1+r.idx,20)))+' ₸/мес</b> за счёт индексации '+(r.idx*100)+'% в год.');
-  const sumEnpf=card2('<b>Если оформить аннуитет:</b> '+fmt(r.payFirst)+' ₸/мес'+(r.type==='delayed'?' уже с '+r.startAge+' лет':'')+' — страховая платит пожизненно, сумма растёт каждый год'+(r.bonus>0?', плюс единовременный бонус '+fmt(r.bonus)+' ₸':'')+'.<br><b>Если забирать из ЕНПФ по графику:</b> '+fmt(g.payFirst)+' ₸/мес, но '+(g.enpfStart>r.startAge?'только с <b>'+g.enpfStart+' лет</b> (пенсионный возраст) — это на '+(g.enpfStart-r.startAge)+' '+plural(g.enpfStart-r.startAge,'год','года','лет')+' позже аннуитета; ':'')+'это снятие <b>своих</b> накоплений частями, и деньги конечны: к <b>'+g.exhaustAge+' годам</b> исчерпаются.<br><span style="color:#8a8073;font-size:12px">Государственная пенсия (базовая + солидарная) есть в обоих случаях — аннуитет идёт сверх неё.</span>');
+  const payAtP=(r.pensionAge>r.startAge)?(((r.series.find(function(x){return x.age===r.pensionAge;})||{}).monthly)||0):0;
+  const sumEnpf=card2('<b>Если оформить аннуитет:</b> '+fmt(r.payFirst)+' ₸/мес с '+r.startAge+' лет — страховая платит пожизненно, сумма растёт каждый год'+(payAtP?'; к '+r.pensionAge+' годам вырастет до '+fmt(payAtP)+' ₸/мес':'')+(r.bonus>0?', плюс единовременный бонус '+fmt(r.bonus)+' ₸':'')+'.<br><b>Если забирать из ЕНПФ по графику:</b> '+fmt(g.payFirst)+' ₸/мес, но '+(g.enpfStart>r.startAge?'только с <b>'+g.enpfStart+' лет</b> (пенсионный возраст) — это на '+(g.enpfStart-r.startAge)+' '+plural(g.enpfStart-r.startAge,'год','года','лет')+' позже аннуитета; ':'')+'это снятие <b>своих</b> накоплений частями, и деньги конечны: к <b>'+g.exhaustAge+' годам</b> исчерпаются.<br><span style="color:#8a8073;font-size:12px">Государственная пенсия (базовая + солидарная) есть в обоих случаях — аннуитет идёт сверх неё.</span>');
 
   const head='<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Расчёт пенсионного аннуитета</title>'+
-    '<style>body{font-family:Manrope,Segoe UI,system-ui,sans-serif;color:#22201c;line-height:1.55;max-width:760px;margin:0 auto;padding:28px 18px;background:#fff}h1{font-size:24px}h2{font-size:17px;margin:24px 0 8px}h3{font-size:14px;margin:16px 0 4px;color:#15703F}table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}th,td{padding:7px 8px;border-bottom:1px solid #e9e0d2}th{text-align:right;color:#8a8073;font-size:11px;text-transform:uppercase}th:first-child,td:first-child{text-align:left}.kp{display:flex;gap:12px;flex-wrap:wrap;margin:14px 0}.kp>div{flex:1;min-width:140px;background:#fffefb;border:1px solid #e9e0d2;border-radius:10px;padding:12px}.kp .l{font-size:12px;color:#8a8073}.kp .v{font-size:19px;font-weight:800;margin-top:3px}ul{margin:6px 0;padding-left:20px}li{margin:5px 0}.muted{color:#8a8073;font-size:12px}.expl p{font-size:13.5px;color:#3b3a36;margin:4px 0 12px}.legrow{font-size:12px;color:#8a8073;margin:6px 0}.legrow span{margin-right:14px}.dot{display:inline-block;width:10px;height:10px;border-radius:2px;vertical-align:middle;margin-right:4px}.law .row{padding:8px 0;border-bottom:1px solid #f0e9dc;font-size:13px;color:#5b5448;line-height:1.5}.law .art{font-weight:700;color:#15703F}.law q{font-style:italic;color:#6b6356}</style></head><body>';
+    '<style>body{font-family:-apple-system,system-ui,"Segoe UI",Roboto,Arial,sans-serif;color:#18241D;line-height:1.55;max-width:760px;margin:0 auto;padding:30px 20px;background:#fff}h1{font-family:Georgia,"Times New Roman",serif;font-size:25px;letter-spacing:-.01em;color:#0F3A2A;margin:0 0 4px}h2{font-family:Georgia,"Times New Roman",serif;font-size:18px;margin:26px 0 8px;color:#18241D;letter-spacing:-.005em}h3{font-size:12px;margin:16px 0 4px;color:#6E5316;text-transform:uppercase;letter-spacing:.08em}table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px;font-variant-numeric:tabular-nums}th,td{padding:7px 8px;border-bottom:1px solid #E0DCCE}td{font-family:ui-monospace,"SF Mono",monospace}th{text-align:right;color:#69756B;font-size:11px;text-transform:uppercase;letter-spacing:.05em}th:first-child,td:first-child{text-align:left;font-family:inherit}.kp{display:flex;gap:12px;flex-wrap:wrap;margin:14px 0}.kp>div{flex:1;min-width:140px;background:#FBFAF5;border:1px solid #E0DCCE;border-radius:10px;padding:13px}.kp .l{font-size:12px;color:#69756B}.kp .v{font-family:ui-monospace,"SF Mono",monospace;font-size:19px;font-weight:700;margin-top:3px;color:#0F3A2A;letter-spacing:-.02em}ul{margin:6px 0;padding-left:20px}li{margin:5px 0}.muted{color:#69756B;font-size:12px}.expl p{font-size:13.5px;color:#3b4a43;margin:4px 0 12px}.legrow{font-size:12px;color:#69756B;margin:6px 0}.legrow span{margin-right:14px}.dot{display:inline-block;width:10px;height:10px;border-radius:2px;vertical-align:middle;margin-right:4px}.law .row{padding:8px 0;border-bottom:1px solid #ECE8DA;font-size:13px;color:#4f5a51;line-height:1.5}.law .art{font-family:ui-monospace,monospace;font-weight:700;color:#0F3A2A}.law q{font-style:italic;color:#6b6356}</style></head><body>';
   const benefits='<h2>Почему пенсионный аннуитет — это выгодно</h2><ul>'+
     '<li><b>Пожизненные выплаты.</b> Деньги приходят каждый месяц до конца жизни — даже когда переведённая сумма математически закончилась бы.</li>'+
     '<li><b>Ежегодная индексация '+(r.idx*100)+'%.</b> Выплата растёт каждый год и успевает за ростом цен.</li>'+
