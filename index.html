@@ -207,6 +207,26 @@ details.expl .body{padding:0 0 16px;font-size:14px;color:#4f5a51}
   .vcard .grid2{grid-template-columns:1fr}
 }
 @media(max-width:380px){.hero h1{font-size:22px}.kpi.accent .val{font-size:33px}}
+
+.slrow .top .hint{font-size:12px;color:var(--muted);font-weight:500}
+.gpchips{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin:6px 0 10px}
+.gpchips button{border:1px solid var(--line);background:var(--card);border-radius:9px;padding:9px 0;width:44px;text-align:center;font-family:var(--mono);font-size:13.5px;font-weight:600;color:var(--muted);cursor:pointer;transition:.15s}
+.gpchips button:hover{border-color:var(--ever)}
+.gpchips button.on{border-color:var(--ever);background:var(--ever-soft);color:var(--ever-d)}
+.gpfine{display:flex;margin:0 auto;width:auto}
+.afford{margin-top:12px;padding:11px 13px;border-radius:10px;font-size:12.5px;line-height:1.5;border:1px solid var(--line)}
+.afford.ok{background:var(--ever-soft);border-color:#cadbd0;color:var(--ever-d)}
+.afford.warn{background:var(--gold-soft);border-color:var(--gold-line);color:var(--gold-ink)}
+.afford.no{background:var(--brick-soft);border-color:#e6c8c1;color:#7a3127}
+.afford b{font-weight:600}
+.afford:empty{display:none}
+.slrow.inline{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 14px}
+.slrow.inline .top{margin-bottom:0}
+.slrow.inline .tipbox{flex-basis:100%;width:100%}
+.slrow.inline .stepper{width:auto}
+.slrow.inline .stepper .st-btn{width:44px;height:44px;font-size:20px}
+.slrow.inline .stepper .st-val{min-width:64px;font-size:14px}
+@media(max-width:600px){.gpchips button{flex:1;min-width:40px}}
 </style>
 </head>
 <body>
@@ -296,7 +316,7 @@ details.expl .body{padding:0 0 16px;font-size:14px;color:#4f5a51}
     <!-- conditions -->
     <div class="card">
       <h2>Условия договора</h2>
-      <p class="muted small" style="margin-top:2px">Двигайте ползунки — результат пересчитывается на лету.</p>
+      <p class="muted small" style="margin-top:2px">Настраивайте условия — результат пересчитывается на лету.</p>
       <div class="sliders">
         <div class="slrow">
           <div class="top"><span class="name">Сколько перевести в страховую</span></div>
@@ -309,16 +329,18 @@ details.expl .body{padding:0 0 16px;font-size:14px;color:#4f5a51}
           <label class="checkline"><input type="checkbox" id="chk-reserve"> Заложить запас на смену страховой через 2 года</label>
         </div>
         <div class="slrow">
-          <div class="top"><span class="name">Гарантийный период <span class="qmark" onclick="tip('tip-gp')">?</span></span></div>
-          <div class="stepper" data-key="gp"><button type="button" class="st-btn st-minus" aria-label="меньше">−</button><span class="st-val" id="lab-gp">1 год</span><button type="button" class="st-btn st-plus" aria-label="больше">+</button></div>
+          <div class="top"><span class="name">Гарантийный период <span class="qmark" onclick="tip('tip-gp')">?</span></span><span class="hint">0–30 лет</span></div>
+          <div class="gpchips" id="gp-chips"><button type="button" data-gp="0">0</button><button type="button" data-gp="5">5</button><button type="button" data-gp="10">10</button><button type="button" data-gp="15">15</button><button type="button" data-gp="20">20</button><button type="button" data-gp="25">25</button><button type="button" data-gp="30">30</button></div>
+          <div class="stepper gpfine" data-key="gp"><button type="button" class="st-btn st-minus" aria-label="меньше">−</button><span class="st-val" id="lab-gp">1 год</span><button type="button" class="st-btn st-plus" aria-label="больше">+</button></div>
+          <div class="afford" id="gp-afford"></div>
           <div class="tipbox" id="tip-gp">Период, на который выплаты закреплены за договором. Если застрахованный уходит из жизни в эти годы, невыплаченный остаток переходит наследникам. Чем дольше период — тем немного меньше ежемесячная сумма.<div class="law"><b>Закон:</b> при уходе из жизни пенсионные накопления и остаток <q>наследуются в порядке, установленном законодательством</q> — ст. 221, п. 3 Социального кодекса РК.</div></div>
         </div>
-        <div class="slrow">
+        <div class="slrow inline">
           <div class="top"><span class="name">Индексация в год <span class="qmark" onclick="tip('tip-idx')">?</span></span></div>
           <div class="stepper" data-key="idx"><button type="button" class="st-btn st-minus" aria-label="меньше">−</button><span class="st-val" id="lab-idx">8%</span><button type="button" class="st-btn st-plus" aria-label="больше">+</button></div>
           <div class="tipbox" id="tip-idx">Ежегодный прирост выплаты, компенсирующий инфляцию. Чем выше индексация, тем меньше стартовая выплата, зато дальше сумма растёт быстрее.</div>
         </div>
-        <div class="slrow">
+        <div class="slrow inline">
           <div class="top"><span class="name">Единовременный бонус <span class="qmark" onclick="tip('tip-bon')">?</span></span></div>
           <div class="stepper" data-key="bon"><button type="button" class="st-btn st-minus" aria-label="меньше">−</button><span class="st-val" id="lab-bon">11%</span><button type="button" class="st-btn st-plus" aria-label="больше">+</button></div>
           <div class="tipbox" id="tip-bon">Сумма, которую страховая начисляет <b>дополнительно</b> при переводе накоплений. Идёт сверху: не вычитается из накоплений и не снижает ежемесячную выплату.</div>
@@ -596,10 +618,17 @@ function render(){
   } else {
     sb.className='statusbig no'; $('#status-ic').textContent='○';
     $('#status-h').textContent='Пока не хватает';
-    $('#status-p').innerHTML='До оформления не хватает <b>'+fmt(r.shortToThr)+' ₸</b>. Нужный минимум: <b>'+fmt(r.thrCur)+' ₸</b>, у вас: '+fmt(r.sav)+' ₸. Нехватку можно доложить добровольным взносом или доплатить прямо в страховую.';
+    $('#status-p').innerHTML='Из ЕНПФ не хватает <b>'+fmt(r.shortToThr)+' ₸</b> до минимума <b>'+fmt(r.thrCur)+' ₸</b> (у вас '+fmt(r.sav)+' ₸). Единовременный бонус <b>'+fmt(r.bonusAtThr)+' ₸</b> закрывает часть — даже с ним нужно доложить ещё <b>'+fmt(Math.max(0,r.shortToThr-r.bonusAtThr))+' ₸</b>.';
   }
 
   /* KPI */
+  var af=$('#gp-afford');
+  if(af){
+    var gpw=r.gp+' '+plural(r.gp,'год','года','лет');
+    if(r.enough){ af.className='afford ok'; af.innerHTML='<b>\u2713 С гарантийным периодом '+gpw+' накоплений ЕНПФ хватает.</b> Нужный минимум — '+fmt(r.thrCur)+'\u00a0\u20b8, у вас '+fmt(r.sav)+'\u00a0\u20b8.'; }
+    else if(r.almostEnough){ af.className='afford warn'; af.innerHTML='<b>Из ЕНПФ не хватает '+fmt(r.shortToThr)+'\u00a0\u20b8</b> для срока '+gpw+', но это покрывает единовременный бонус '+fmt(r.bonusAtThr)+'\u00a0\u20b8 — с учётом бонуса этого достаточно.'; }
+    else { var addB=Math.max(0,r.shortToThr-r.bonusAtThr); af.className='afford no'; af.innerHTML='<b>Для срока '+gpw+' не хватает даже с бонусом.</b> Из ЕНПФ не хватает '+fmt(r.shortToThr)+'\u00a0\u20b8; единовременный бонус '+fmt(r.bonusAtThr)+'\u00a0\u20b8 закрывает часть, и сверху нужно доложить <b>'+fmt(addB)+'\u00a0\u20b8</b>, чтобы оформить договор на этот срок.'; }
+  }
   const kp=$('#kpis');
   const payCell = r.enough
     ? `<div class="kpi accent"><div class="lab">Ваша выплата в месяц${r.type==='delayed'?' (с '+r.startAge+' лет)':''}</div><div class="val">${fmt(r.payFirst)} <small>₸</small></div></div>`
@@ -609,7 +638,7 @@ function render(){
     `<div class="kpi gold"><div class="lab">Единовременный бонус сверху</div><div class="val">${fmt(r.bonus)} <small>₸</small></div></div>`+
     (r.enough
       ? `<div class="kpi"><div class="lab">Остаётся в ЕНПФ</div><div class="val">${fmt(r.enpfLeft)} <small>₸</small></div></div>`
-      : `<div class="kpi"><div class="lab">Не хватает</div><div class="val" style="color:var(--red)">${fmt(r.shortToThr)} <small>₸</small></div></div>`);
+      : `<div class="kpi"><div class="lab">Не хватает из ЕНПФ</div><div class="val" style="color:var(--brick)">${fmt(r.shortToThr)} <small>₸</small></div></div>`);
 
   let _h='';
   if(r.enough||r.almostEnough){
@@ -864,13 +893,16 @@ $('#btn-calc').onclick=()=>{
 [ 'in-age','in-sav' ].forEach(id=>$('#'+id).addEventListener('keydown',e=>{if(e.key==='Enter'){ST._scroll=true;render();}}));
 
 let _t;
-const STEP={gp:{min:1,max:30,step:1,fmt:v=>v+' '+plural(v,'год','года','лет'),set:v=>ST.gp=v,get:()=>ST.gp},
+const STEP={gp:{min:0,max:30,step:1,fmt:v=>v+' '+plural(v,'год','года','лет'),set:v=>ST.gp=v,get:()=>ST.gp},
   idx:{min:7,max:9,step:0.5,fmt:v=>v+'%',set:v=>ST.idx=v/100,get:()=>Math.round(ST.idx*1000)/10},
   bon:{min:0,max:15,step:0.5,fmt:v=>v+'%',set:v=>ST.bon=v/100,get:()=>Math.round(ST.bon*1000)/10}};
-function stepUpd(key){const c=STEP[key],el=$('#lab-'+key);if(el)el.textContent=c.fmt(c.get());}
+function stepUpd(key){const c=STEP[key],el=$('#lab-'+key);if(el)el.textContent=c.fmt(c.get());if(key==='gp')gpChipSync();}
 document.querySelectorAll('.stepper').forEach(st=>{const key=st.dataset.key,c=STEP[key];
   st.querySelector('.st-minus').onclick=()=>{c.set(Math.max(c.min,+(c.get()-c.step).toFixed(1)));stepUpd(key);if(ST.shown)render();};
   st.querySelector('.st-plus').onclick=()=>{c.set(Math.min(c.max,+(c.get()+c.step).toFixed(1)));stepUpd(key);if(ST.shown)render();};});
+function gpChipSync(){var v=ST.gp;document.querySelectorAll('#gp-chips button').forEach(function(b){b.classList.toggle('on',+b.dataset.gp===v);});}
+document.querySelectorAll('#gp-chips button').forEach(function(b){b.onclick=function(){ST.gp=+b.dataset.gp;stepUpd('gp');if(ST.shown)render();};});
+
 $('#rng-prem').addEventListener('input',e=>{ST.premMode='custom';ST.premium=+e.target.value;setRange(e.target);$('#lab-prem').innerHTML='Переводите: <b>'+fmt(ST.premium)+' ₸</b>';clearTimeout(_t);_t=setTimeout(()=>{if(ST.shown)render();},180);});
 
 document.querySelectorAll('#premchips button').forEach(b=>{b.onclick=()=>{ST.premMode=b.dataset.m;ST.premium=0;$('#chk-reserve').checked=false;if(ST.shown)render();};});
