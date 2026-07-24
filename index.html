@@ -3,10 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-<title>Калькулятор пенсионного аннуитета</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>Калькулятор пенсионного аннуитета — Казахстан 2026</title>
+<meta name="description" content="Проверьте, хватает ли пенсионных накоплений из ЕНПФ для оформления пенсионного аннуитета, и узнайте размер пожизненной ежемесячной выплаты. Расчёт по нормативам Республики Казахстан 2026 года.">
+<meta name="theme-color" content="#0F3A2A">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_KZ">
+<meta property="og:title" content="Калькулятор пенсионного аннуитета — Казахстан 2026">
+<meta property="og:description" content="Расчёт пожизненной ежемесячной выплаты из накоплений ЕНПФ по нормативам Казахстана: проверка достаточности, графики и готовый материал для клиента.">
+<meta name="twitter:card" content="summary">
 <script>
 /*!
  * Chart.js v4.4.1
@@ -234,6 +238,12 @@ details.expl .body{padding:0 0 16px;font-size:14px;color:#4f5a51}
 .gprow .top{justify-content:center;gap:8px;flex-wrap:wrap}
 .gprow .afford,.gprow .tipbox{text-align:left}
 .gpfine{display:inline-flex;width:auto;margin:0}
+
+.srcbtns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.srcbtn{display:inline-flex;align-items:center;gap:4px;padding:8px 12px;border:1px solid var(--gold-line);border-radius:9px;background:var(--card);color:var(--gold-ink);font-size:12.5px;font-weight:600;text-decoration:none;transition:.15s}
+.srcbtn:hover{border-color:var(--ever);color:var(--ever-d);background:var(--ever-soft)}
+input[type=date]{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;font:inherit;font-size:16px;background:#fff;color:var(--ink)}
+input[type=date]:focus{outline:none;border-color:var(--ever);box-shadow:0 0 0 3px var(--ever-soft)}
 </style>
 </head>
 <body>
@@ -274,6 +284,11 @@ details.expl .body{padding:0 0 16px;font-size:14px;color:#4f5a51}
         <div class="suffix"><input type="number" id="in-age" min="40" max="73" placeholder="например, 58"><span class="u">лет</span></div>
         <div class="hint" style="margin-top:6px">полных лет (40–73)</div>
       </div>
+    </div>
+    <div class="field">
+      <label>Дата рождения <span class="muted" style="font-weight:400;font-size:12.5px">— по желанию</span></label>
+      <input type="date" id="in-dob" min="1940-01-01" max="2008-12-31">
+      <div class="hint" style="margin-top:6px">если указать — возраст подставится автоматически</div>
     </div>
 
     <div class="field">
@@ -466,6 +481,17 @@ details.expl .body{padding:0 0 16px;font-size:14px;color:#4f5a51}
     </div>
   </div><!-- /results -->
 
+  <div class="faq" style="margin-top:26px">
+    <h2 style="font-family:var(--serif);font-size:20px;text-align:center;margin-bottom:2px">Частые вопросы</h2>
+    <p class="muted small" style="text-align:center;margin-bottom:10px">Коротко о главном — можно показать клиенту</p>
+    <details class="expl"><summary>Что будет с деньгами, если человек уйдёт из жизни рано?</summary><div class="body">В течение гарантийного периода невыплаченный остаток переходит наследникам. После его окончания выплаты прекращаются — такова природа пожизненного аннуитета.<div class="law"><b>Закон:</b> ст. 221, п. 3 Социального кодекса РК.</div></div></details>
+    <details class="expl"><summary>Правда ли выплаты пожизненные, даже если переведённая сумма закончится?</summary><div class="body">Да. Страховая компания обязана платить до конца жизни, даже когда переведённые из ЕНПФ деньги формально исчерпаны — в этом и есть смысл аннуитета.</div></details>
+    <details class="expl"><summary>Можно ли потом сменить страховую компанию?</summary><div class="body">Да, но не ранее чем через два года с даты договора. Выкупная сумма — не меньше уплаченной премии за вычетом уже сделанных выплат и расходов.<div class="law"><b>Закон:</b> ст. 226, п. 8 Социального кодекса РК.</div></div></details>
+    <details class="expl"><summary>Гарантирует ли выплаты государство?</summary><div class="body">Да, через Фонд гарантирования страховых выплат (ФГСВ) — по аналогии с гарантией банковских вкладов, даже если у страховой компании возникнут трудности.</div></details>
+    <details class="expl"><summary>Это окончательная сумма?</summary><div class="body">Нет, расчёт предварительный. Точные цифры и условия подтверждает выбранная страховая компания (КСЖ) при заключении договора.</div></details>
+    <details class="expl"><summary>Сохранится ли государственная пенсия?</summary><div class="body">Да. Базовая и солидарная пенсия назначается отдельно, по стажу; пенсионный аннуитет идёт сверх неё, а не вместо.</div></details>
+  </div>
+
   <details class="expl" style="margin-top:18px">
   <summary>Правовая основа расчёта</summary>
   <div class="body">
@@ -478,8 +504,18 @@ details.expl .body{padding:0 0 16px;font-size:14px;color:#4f5a51}
       <div class="row"><span class="art">Ст. 226, п. 8.</span> Сменить страховую можно <q>не ранее двух лет с даты</q> договора; выкупная сумма — <q>не менее суммы уплаченной страховой премии за вычетом суммы осуществленных страховых выплат и расходов</q>.</div>
       <div class="row"><span class="art">Ст. 226, п. 11.</span> <q>Расчёт страховой премии и страховой выплаты осуществляется страховой организацией в соответствии с методикой, установленной уполномоченным органом по регулированию... финансового рынка</q> (АРРФР).</div>
     </div>
+    <p style="margin:12px 0 4px;color:#8a8073;font-size:12.5px">Методика и правила аннуитета — нормативные акты АРРФР:</p>
+    <div class="lawlist">
+      <div class="row"><span class="art">Пост. № 45.</span> от 7 июня 2023 г. — методика расчёта страховой премии и страховой выплаты по договору пенсионного аннуитета и типовой договор.</div>
+      <div class="row"><span class="art">Пост. № 44.</span> правила осуществления пенсионного аннуитета страховыми организациями.</div>
+    </div>
+    <div class="srcbtns">
+      <a class="srcbtn" href="https://adilet.zan.kz/rus/docs/K2300000224" target="_blank" rel="noopener">Социальный кодекс РК ↗</a>
+      <a class="srcbtn" href="https://adilet.zan.kz/rus/docs/V2300032831" target="_blank" rel="noopener">Методика, № 45 ↗</a>
+      <a class="srcbtn" href="https://adilet.zan.kz/rus/docs/V2300032835" target="_blank" rel="noopener">Правила, № 44 ↗</a>
+    </div>
     <p style="margin:10px 0 0;color:#5b5448;font-size:12px">Размер единовременного бонуса/дивиденда (по умолчанию 11%) — это договорная ставка конкретной страховой компании (КСЖ), а не норма закона; у разных КСЖ она отличается.</p>
-    <p style="margin:10px 0 0;color:#9aa8a1;font-size:11.5px">Цитаты приведены по Социальному кодексу РК в редакции на 2026 год. Точные условия договора подтверждает страховая компания (КСЖ).</p>
+    <p style="margin:10px 0 0;color:#9aa8a1;font-size:11.5px">Статус расчёта: предварительный ориентир для подготовки консультации — не публичная оферта и не официальный расчёт КСЖ. Итоговую сумму, тариф и обязательства сторон определяет договор с выбранной страховой компанией. Цитаты — по Социальному кодексу РК в редакции 2026 года.</p>
   </div>
 </details>
 
@@ -703,14 +739,14 @@ function refLine(yVal,label){return {id:'ref'+Math.random(),afterDraw(c){
   const {ctx,chartArea:{left,right},scales:{y}}=c; if(!y)return; const yy=y.getPixelForValue(yVal);
   ctx.save();ctx.strokeStyle='#9E3B2E';ctx.lineWidth=2;ctx.setLineDash([6,4]);
   ctx.beginPath();ctx.moveTo(left,yy);ctx.lineTo(right,yy);ctx.stroke();
-  ctx.setLineDash([]);ctx.fillStyle='#9E3B2E';ctx.font='600 11px Manrope,sans-serif';ctx.textAlign='right';
+  ctx.setLineDash([]);ctx.fillStyle='#9E3B2E';ctx.font='600 11px system-ui,sans-serif';ctx.textAlign='right';
   ctx.fillText(label,right-4,yy-6);ctx.restore();
 }};}
 function vBar(idx,label){return {id:'vb'+Math.random(),afterDraw(c){
   if(idx<0)return; const {ctx,chartArea:{top,bottom},scales:{x}}=c; if(!x)return; const xx=x.getPixelForValue(idx);
   ctx.save();ctx.strokeStyle='#1B5C42';ctx.lineWidth=2;ctx.setLineDash([4,3]);
   ctx.beginPath();ctx.moveTo(xx,top);ctx.lineTo(xx,bottom);ctx.stroke();
-  ctx.setLineDash([]);ctx.fillStyle='#1B5C42';ctx.font='700 11px Manrope,sans-serif';ctx.textAlign='center';
+  ctx.setLineDash([]);ctx.fillStyle='#1B5C42';ctx.font='700 11px system-ui,sans-serif';ctx.textAlign='center';
   ctx.fillText(label,xx,top+12);ctx.restore();
 }};}
 
@@ -720,7 +756,7 @@ function barLabels(cap){return {id:'barlab',afterDatasetsDraw(c){
     const meta=c.getDatasetMeta(di);
     meta.data.forEach((bar,i)=>{
       const v=ds.data[i];
-      ctx.save();ctx.font='700 11px Manrope,sans-serif';ctx.textBaseline='middle';ctx.textAlign='left';
+      ctx.save();ctx.font='700 11px system-ui,sans-serif';ctx.textBaseline='middle';ctx.textAlign='left';
       ctx.fillStyle=di===1?'#15703F':'#c0413a';
       let t=(v/1e6).toFixed(1)+' млн';
       if(di===1)t+=' ×'+(v/cap).toFixed(1);
@@ -731,7 +767,7 @@ function barLabels(cap){return {id:'barlab',afterDatasetsDraw(c){
 }};}
 function bePoint(idx,label){return {id:'bept',afterDatasetsDraw(c){
   if(idx<0||!label)return;const meta=c.getDatasetMeta(0);const pt=meta.data[idx];if(!pt)return;
-  const ctx=c.ctx;ctx.save();ctx.fillStyle='#15703F';ctx.font='700 11px Manrope,sans-serif';ctx.textAlign='center';
+  const ctx=c.ctx;ctx.save();ctx.fillStyle='#15703F';ctx.font='700 11px system-ui,sans-serif';ctx.textAlign='center';
   let x=pt.x; if(x>c.chartArea.right-60)x=c.chartArea.right-60; if(x<c.chartArea.left+50)x=c.chartArea.left+50;
   ctx.fillText(label, x, pt.y-12);ctx.restore();
 }};}
@@ -739,14 +775,14 @@ function vGpLine(idx,label){return {id:'vgp',afterDraw(c){
   const sc=c.scales.x;if(!sc)return;const xx=sc.getPixelForValue(idx);const {top,bottom}=c.chartArea;
   const ctx=c.ctx;ctx.save();ctx.strokeStyle='#B0832C';ctx.lineWidth=1.5;ctx.setLineDash([4,3]);
   ctx.beginPath();ctx.moveTo(xx,top);ctx.lineTo(xx,bottom);ctx.stroke();
-  ctx.setLineDash([]);ctx.fillStyle='#9a6b16';ctx.font='600 10px Manrope,sans-serif';ctx.textAlign='center';
+  ctx.setLineDash([]);ctx.fillStyle='#9a6b16';ctx.font='600 10px system-ui,sans-serif';ctx.textAlign='center';
   ctx.fillText(label,xx,top+10);ctx.restore();
 }};}
 
 function ptLabels(idxs,col,ds){ds=ds||0;return {id:'ptl'+Math.random(),afterDatasetsDraw(c){
   const meta=c.getDatasetMeta(ds); if(!meta||!meta.data)return; const ctx=c.ctx;
   idxs.forEach(i=>{const pt=meta.data[i]; if(!pt)return; const v=c.data.datasets[ds].data[i]; if(v==null||v===0)return;
-    ctx.save();ctx.fillStyle=col||'#15703F';ctx.font='700 10.5px Manrope,sans-serif';ctx.textAlign='center';ctx.textBaseline='bottom';
+    ctx.save();ctx.fillStyle=col||'#15703F';ctx.font='700 10.5px system-ui,sans-serif';ctx.textAlign='center';ctx.textBaseline='bottom';
     const t=v>=1e6?(v/1e6).toFixed(1)+' млн':(Math.round(v/1000)+'k');
     ctx.fillText(t, pt.x, pt.y-7);ctx.restore();});
 }};}
@@ -889,6 +925,7 @@ syncSpouse();
 
 function fmtField(el){const d=digits(el.value); el.value=d?(+d).toLocaleString('ru-RU').replace(/,/g,' '):'';}
 $('#in-sav').addEventListener('input',e=>fmtField(e.target));
+var _dob=$('#in-dob'); if(_dob)_dob.addEventListener('change',function(){var v=this.value;if(!v)return;var d=new Date(v);if(isNaN(+d))return;var t=new Date(),a=t.getFullYear()-d.getFullYear(),m=t.getMonth()-d.getMonth();if(m<0||(m===0&&t.getDate()<d.getDate()))a--;if(a>=0&&a<=120){$('#in-age').value=a;if(ST.shown){ST._scroll=false;render();}}});
 $('#sp-sav').addEventListener('input',e=>{fmtField(e.target); if(ST.joint&&ST.shown)renderJoint(ST.lastR);});
 $('#sp-age').addEventListener('input',()=>{if(ST.joint&&ST.shown)renderJoint(ST.lastR);});
 
@@ -990,7 +1027,7 @@ function buildReport(r, mode){
     '<div class="row"><span class="art">Ст. 221, п. 1, пп. 4.</span> При вредном стаже — <q>по достижении сорокалетнего возраста</q>, если ОППВ уплачены <q>не менее шестидесяти календарных месяцев</q>.</div>'+
     '<div class="row"><span class="art">Ст. 207, п. 1.</span> Пенсионный возраст: <q>мужчинам по достижении 63 лет</q>; для женщин — поэтапно (с 2023 — 61, с 2031 — 63 года).</div>'+
     '<div class="row"><span class="art">Ст. 226, п. 8.</span> Сменить страховую можно <q>не ранее двух лет</q>; выкупная сумма — <q>не менее суммы уплаченной страховой премии за вычетом... страховых выплат и расходов</q>.</div>'+
-    '<div class="row"><span class="art">Ст. 226, п. 11.</span> <q>Расчёт страховой премии и страховой выплаты осуществляется страховой организацией в соответствии с методикой, установленной уполномоченным органом по регулированию... финансового рынка</q> (АРРФР).</div>'+
+    '<div class="row"><span class="art">Ст. 226, п. 11.</span> <q>Расчёт страховой премии и страховой выплаты осуществляется страховой организацией в соответствии с методикой, установленной уполномоченным органом по регулированию... финансового рынка</q> (АРРФР). Методика — постановление АРРФР № 45 от 7 июня 2023 г.; правила — постановление № 44.</div>'+
     '<p class="muted" style="margin-top:8px">Размер бонуса/дивиденда ('+(r.bon*100)+'%) — это договорная ставка конкретной страховой компании (КСЖ), а не норма закона; у разных КСЖ отличается.</p></div>';
 
   let body=head+consultant+
@@ -1006,9 +1043,10 @@ function buildReport(r, mode){
     gblock('rYears', chY, 'Как растёт ваша выплата', 'Ежемесячная выплата по годам — растёт за счёт индексации.', '')+sumY+
     gblock('rEnpf', chEnpf, 'Аннуитет или выплаты из ЕНПФ по графику', 'Аннуитет платит пожизненно, а выплаты из ЕНПФ по графику со временем заканчиваются.', '<div class="legrow"><span><span class="dot" style="background:#1B5C42"></span>аннуитет — пожизненно</span><span><span class="dot" style="background:#B0832C"></span>ЕНПФ по графику</span></div>')+sumEnpf+
     '<h2>Таблица выплат по годам</h2><table><thead><tr><th>Возраст</th><th>Выплата/мес</th><th>За год</th><th>Получено всего</th><th>Остаток в КСЖ</th></tr></thead><tbody>'+rows+'</tbody></table>'+
+    '<h2>Частые вопросы</h2><div class="expl"><h3>Что будет с деньгами при раннем уходе из жизни?</h3><p>В течение гарантийного периода невыплаченный остаток переходит наследникам; после него выплаты прекращаются — такова природа пожизненного аннуитета.</p><h3>Выплаты действительно пожизненные?</h3><p>Да — страховая платит до конца жизни, даже когда переведённая из ЕНПФ сумма формально исчерпана.</p><h3>Можно ли сменить страховую компанию?</h3><p>Да, не ранее двух лет с даты договора; выкупная сумма — не меньше уплаченной премии за вычетом выплат и расходов.</p><h3>Гарантирует ли выплаты государство?</h3><p>Да, через Фонд гарантирования страховых выплат (ФГСВ), по аналогии с гарантией банковских вкладов.</p><h3>Это окончательная сумма?</h3><p>Нет, расчёт предварительный — точные цифры и условия подтверждает КСЖ в договоре.</p><h3>Сохранится ли государственная пенсия?</h3><p>Да, она назначается отдельно по стажу; аннуитет идёт сверх неё, а не вместо.</p></div>'+
     '<h2>Как оформить</h2><ol><li>Выбрать страховую компанию (КСЖ) и подтвердить расчёт.</li><li>Подготовить документы: удостоверение личности и выписку из ЕНПФ.</li><li>Подписать договор пенсионного аннуитета.</li><li>ЕНПФ переводит сумму в КСЖ.</li><li>Получать аннуитетные выплаты — пожизненно.</li></ol>'+
     explain+legal+
-    '<p class="muted" style="margin-top:24px">Расчёт справочный, по официальной методике пенсионного аннуитета РК (2026). Итоговые суммы подтверждает КСЖ при оформлении.</p>';
+    '<p class="muted" style="margin-top:24px">Расчёт справочный, по официальной методике пенсионного аннуитета РК (2026). Итоговые суммы подтверждает КСЖ при оформлении.</p><p class="muted" style="margin-top:10px;font-size:11px">Официальные источники: <a href="https://adilet.zan.kz/rus/docs/K2300000224">Социальный кодекс РК</a> · <a href="https://adilet.zan.kz/rus/docs/V2300032831">методика № 45</a> · <a href="https://adilet.zan.kz/rus/docs/V2300032835">правила № 44</a>.</p>';
 
   if(mode==='html'){
     let lib=''; try{ lib=document.scripts[0].textContent.replace(/<\/script>/g,'<\\/script>'); }catch(e){}
